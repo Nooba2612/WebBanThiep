@@ -1,0 +1,214 @@
+/* Variables */
+:root {
+    --blackColor: #000;
+    --whiteColor: #fff;
+    --primaryColor: #ababab;
+    --alertColor: rgb(239, 49, 49);
+    --boldFontWeight: bold;
+    --fontSize: 1.2rem;
+    --activeColor: #860a35;
+}
+
+/* CSS reset */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+img,
+picture,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+select,
+textarea {
+    background-color: transparent;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    display: block;
+}
+
+/* Header Styles */
+.header .navbar {
+    width: 100%;
+    background-color: var(--primaryColor);
+}
+
+.navbar--list {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    font-size: var(--fontSize);
+    font-weight: var(--fontWeight);
+}
+
+.navbar--list .navbar--item {
+    border-bottom: 4px solid transparent;
+    padding: 20px 10px;
+    transition: border 0.2s linear;
+    font-size: 1.3rem;
+    margin-right: 10px;
+    color: var(--blackColor);
+    cursor: pointer;
+}
+
+.navbar--list .navbar--item:hover {
+    border-bottom-color: var(--activeColor) !important;
+    color: rgba(0, 0, 0, 0.7);
+}
+
+.navbar--list .navbar--item.active {
+    border-bottom-color: var(--activeColor) !important;
+}
+
+.navbar--list .navbar--item span {
+    font-size: 1rem;
+    margin-left: 5px;
+}
+
+.navbar--list .navbar--group-item__left,
+.navbar--list .navbar--group-item__right {
+    display: flex;
+    align-items: center;
+}
+
+.navbar--list .navbar--group-item__left {
+    justify-content: space-between;
+    flex: 0.45;
+}
+
+.navbar--list .navbar--group-item__right {
+    justify-content: space-evenly;
+    flex: 0.35;
+}
+
+.header .navbar--item__logo {
+    width: 180px;
+}
+
+.navbar--item__recipes,
+.navbar--item__about {
+    position: relative;
+}
+
+.navbar--item__recipes:hover .dropdown,
+.navbar--item__about:hover .dropdown {
+    display: block;
+    animation: slideUp 0.2s linear forwards;
+}
+
+.navbar--item__recipes .dropdown,
+.navbar--item__about .dropdown {
+    display: none;
+    position: absolute;
+    z-index: 1000;
+    top: 77px;
+    left: -40px;
+    padding: 20px;
+    font-size: 1.1rem;
+    font-weight: var(--boldFontWeight);
+    background-color: var(--primaryColor);
+    border-radius: 10px;
+    border: 1px solid var(--blackColor);
+    transition: all 0.1s linear;
+}
+
+.navbar--item__recipes .dropdown::before,
+.navbar--item__about .dropdown::before {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 60px;
+    background-color: transparent;
+    top: -50px;
+    z-index: 99;
+}
+
+.dropdown .dropdown--content {
+    padding: 0;
+}
+
+.navbar--item__recipes .dropdown .dropdown--item,
+.navbar--item__about .dropdown .dropdown--item {
+    width: 220px;
+    border-bottom: 1px solid var(--blackColor);
+    background-color: var(--primaryColor);
+    overflow: hidden;
+    padding-left: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s linear;
+}
+
+.navbar--item__recipes .dropdown .dropdown--item:hover,
+.navbar--item__about .dropdown .dropdown--item:hover {
+    background-color: rgb(240, 248, 255);
+}
+
+.navbar--item__recipes .dropdown .dropdown--item:last-child,
+.navbar--item__about .dropdown .dropdown--item:last-child {
+    border-bottom: none;
+}
+
+.navbar--item__recipes .dropdown .dropdown--item:last-child a {
+    color: #309024;
+}
+
+.navbar--item__recipes .dropdown .dropdown--item a,
+.navbar--item__about .dropdown .dropdown--item a {
+    padding: 15px 0;
+    color: var(--blackColor);
+    transition: all 0.2s linear;
+    width: 100%;
+    height: 100%;
+}
+
+.navbar--item__recipes .dropdown .dropdown--item:hover a,
+.navbar--item__about .dropdown .dropdown--item:hover a {
+    color: var(--activeColor) !important;
+}
+
+/* Animations */
+@keyframes slideUp {
+    0% {
+        transform: translateY(20%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateY(0%);
+        opacity: 1;
+    }
+}
