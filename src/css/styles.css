@@ -141,6 +141,7 @@ a {
 
 .header .navbar--item__logo {
     width: 180px;
+    margin-right: 100px;
 }
 
 .navbar--item__about {
@@ -214,7 +215,7 @@ a {
 
 .search-form {
     flex: 1;
-    max-width: 440px;
+    max-width: 460px;
 }
 
 .navbar--item__search-box {
@@ -271,13 +272,12 @@ a {
 
 .suggest-search--list {
     position: absolute;
+    margin-top: 10px;
     display: flex;
     bottom: -25px;
-    width: 100%;
 }
 
 .suggest-search--list ul {
-    width: 90%;
     display: flex;
     overflow: hidden;
     padding: 0;
@@ -286,16 +286,24 @@ a {
     font-size: 0.9rem;
 }
 
-.suggest-search--item a {
-    transition: all 0.1s linear;
-    text-decoration: underline;
-    text-decoration-color: transparent;
-    color: var(--blackColor);
+.suggest-search--item {
+    flex: 1;
+    margin-right: 15px;
 }
 
-.suggest-search--item:hover a {
-    text-decoration-color: var(--blackColor);
-    cursor: pointer;
+.suggest-search--item i {
+    margin-right: 5px;
+}
+
+.suggest-search--item span {
+    transition: all 0.1s linear;
+    line-height: 20px;
+    color: var(--blackColor);
+    text-wrap: nowrap;
+}
+
+.suggest-search--item:hover span {
+    cursor: default;
     font-weight: bold;
 }
 
@@ -519,8 +527,96 @@ a {
     background-color: transparent;
 }
 
-/* Content styles */
+.header .menu--list {
+    width: 100%;
+    background-color: var(--blackColor);
+    height: 50px;
+}
 
+.header .menu--list ul {
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+.header .menu--list .menu--item {
+    width: 150px;
+    height: 100%;
+    position: relative;
+    transition: all 0.2s linear;
+}
+
+.header .menu--list .menu--item:hover {
+    background-color: var(--whiteColor);
+}
+
+.header .menu--list .menu--item:hover > a {
+    color: var(--blackColor);
+}
+
+.header .menu--list .menu--item > a {
+    font-weight: var(--boldFontWeight);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--whiteColor);
+    text-transform: uppercase;
+}
+
+.header .menu--list .menu--item a i {
+    margin-left: 5px;
+}
+
+.header .menu--list .menu--item .sub-menu {
+    position: absolute;
+    display: none;
+    flex-direction: column;
+    border-top: 1px solid var(--whiteColor);
+    min-width: 200px;
+    height: auto;
+    z-index: 999;
+}
+
+.header .menu--list .menu--item .sub-menu .sub-menu--item {
+    width: 100%;
+    background-color: var(--blackColor);
+    transition: all 0.2s linear;
+    height: 50px;
+    border-bottom: 1px solid var(--whiteColor);
+}
+
+.header .menu--list .menu--item .sub-menu .sub-menu--item:hover {
+    background-color: var(--whiteColor);
+    box-shadow: 0px 0px 10px 4px var(--blackColor) inset;
+}
+
+.header .menu--list .menu--item .sub-menu .sub-menu--item:hover > a {
+    color: var(--blackColor);
+}
+
+.header .menu--list .menu--item .sub-menu .sub-menu--item > a {
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: var(--boldFontWeight);
+    width: 100%;
+    padding: 10px 20px;
+    color: var(--whiteColor);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.header .menu--list .menu--item__category:hover .sub-menu,
+.header .menu--list .menu--item__occasions:hover .sub-menu {
+    display: flex;
+    animation: slideUp 0.2s linear forwards;
+}
+
+/* Body styles */
 
 .banner-carousel {
     margin: 0 auto;
@@ -528,7 +624,7 @@ a {
 }
 
 .banner-carousel .carousel-inner {
-    max-height: 600px;
+    max-height: 500px;
 }
 
 .banner-carousel .carousel-inner .carousel-item img {
