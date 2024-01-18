@@ -71,6 +71,33 @@ a {
 }
 
 /* Header Styles */
+.header .header-top {
+    width: 100%;
+    height: 40px;
+    background-color: var(--blackColor);
+}
+
+.header .header-top .carousel-content {
+    color: var(--whiteColor);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-transform: uppercase;
+    height: 100%;
+}
+
+.header .header-top .carousel-content .content {
+    font-size: 0.9rem;
+    font-weight: var(--boldFontWeight);
+    display: none;
+    transition: all linear;
+    animation: rotateInsideOut 0.5s linear forwards;
+}
+
+.header .header-top .carousel-content .content.active {
+    display: block;
+}
+
 .header .navbar {
     width: 100%;
     background-color: var(--primaryColor);
@@ -649,5 +676,16 @@ a {
     }
     100% {
         transform: translateX(50%);
+    }
+}
+
+@keyframes rotateInsideOut {
+    0% {
+        transform: rotateX(0deg);
+        opacity: 0;
+    }
+    100% {
+        transform: rotateX(360deg);
+        opacity: 1;
     }
 }

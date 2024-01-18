@@ -1,5 +1,6 @@
 /* Variables */
 const $ = document.querySelector.bind(document);
+const $$ = document.querySelectorAll.bind(document);
 
 let cartItemQuantity = 0;
 const seacrhBoxInput = $(".navbar--item__search-box input");
@@ -57,8 +58,27 @@ const handleShoppingCart = () => {
     });
 };
 
+const handleHeaderIntroAnimation = () => {
+    const contentsList = $$(".header .header-top .carousel-content .content");
+    let activeIndex = 0;
+
+    const intervalId = setInterval(() => {
+        if (activeIndex === contentsList.length) {
+            activeIndex = 0;
+        }
+        contentsList[activeIndex].classList.add("active");
+        contentsList.forEach((content, index) => {
+            if (index !== activeIndex) {
+                content.classList.remove("active");
+            }
+        });
+        activeIndex++;
+    }, 6000);
+};
+
 const App = () => {
     localStorage.setItem("cartItemQuantity", cartItemQuantity);
     handleShoppingCart();
+    handleHeaderIntroAnimation();
 };
 App();
