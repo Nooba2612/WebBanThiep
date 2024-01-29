@@ -646,18 +646,80 @@ a {
 /* Body styles */
 
 .banner-carousel {
-    margin: 0 auto;
+    margin: 40px auto 0;
     max-width: 1200px;
+    border: 5px solid var(--blackColor);
+}
+
+.banner-carousel .carousel {
+    display: flex;
 }
 
 .banner-carousel .carousel-inner {
-    max-height: 500px;
+    max-height: 600px;
 }
 
 .banner-carousel .carousel-inner .carousel-item img {
     object-fit: fill;
     max-height: 600px;
 }
+
+.banner-carousel .carousel-control-prev,
+.banner-carousel .carousel-control-next {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    top: unset;
+    bottom: unset;
+    align-self: center;
+    background-color: #ababab99;
+    transition: all 0.3s ease-in-out;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.banner-carousel .carousel-control-prev:hover,
+.banner-carousel .carousel-control-next:hover {
+    background-color: var(--blackColor);
+}
+
+.banner-carousel .carousel-control-prev:hover i,
+.banner-carousel .carousel-control-next:hover i {
+    transition: color 0.2s linear;
+    color: var(--whiteColor);
+}
+
+.banner-carousel:hover .carousel-control-next {
+    transform: translateX(-40%);
+    opacity: 1;
+    visibility: visible;
+}
+
+.banner-carousel:hover .carousel-control-prev {
+    transform: translateX(40%);
+    opacity: 1;
+    visibility: visible;
+}
+
+.banner-carousel:hover .carousel-control-next {
+    animation: buttonRightSlide 0.2s linear forwards;
+}
+
+.banner-carousel:hover .carousel-control-prev {
+    animation: buttonLeftSlide 0.2s linear forwards;
+}
+
+.banner-carousel .carousel-control-prev span,
+.banner-carousel .carousel-control-next span {
+    background-image: none;
+}
+
+.banner-carousel .carousel-control-prev span i,
+.banner-carousel .carousel-control-next span i {
+    color: var(--blackColor);
+    font-size: 2rem;
+}
+
 /* Animations */
 @keyframes slideUp {
     0% {
