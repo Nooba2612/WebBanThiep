@@ -204,7 +204,7 @@ a {
 
 .product-quickview .modal .modal-content .product-info .product-detail:hover a {
     transition: color 0.2s linear;
-    color:  var(--primaryColor);
+    color: var(--primaryColor);
 }
 
 .product-quickview .modal .modal-content .product-info .product-detail a span {
@@ -508,7 +508,7 @@ a {
 .navbar--item__cart .products-list::before {
     content: "";
     position: absolute;
-    width: 81px;
+    width: 125px;
     height: 60px;
     top: -59px;
     background-color: transparent;

@@ -1,9 +1,10 @@
-/* Variables */
-const $ = document.querySelector.bind(document);
-const $$ = document.querySelectorAll.bind(document);
+import { products } from "./products.js";
 
-let cartItemQuantity = 0;
+/* Variables */
+
 const seacrhBoxInput = $(".navbar--item__search-box input");
+let cartItemQuantity;
+let cartProducts;
 
 /* Functions */
 const handleNullFeature = () => {
@@ -12,24 +13,19 @@ const handleNullFeature = () => {
 
 const handleSubmitForm = (e) => {
     e.preventDefault();
-    console.log(seacrhBoxInput.value);
-    seacrhBoxInput.value = "";
+    console.log(seacrhBoxInput.val());
+    seacrhBoxInput.val("");
 };
 
 const handleEnterPressForm = (e) => {
     if (e.keyCode === 13) {
-        console.log(seacrhBoxInput.value);
-        seacrhBoxInput.value = "";
+        console.log(seacrhBoxInput.val());
+        seacrhBoxInput.val("");
     }
 };
 
-const handleSearchSuggestClick = (e) => {
-    seacrhBoxInput.value = e.target.innerText;
-    console.log(seacrhBoxInput.value);
-};
-
 const handleClearInput = () => {
-    seacrhBoxInput.value = "";
+    seacrhBoxInput.val("");
 };
 
 const handleShoppingCart = () => {
@@ -38,28 +34,24 @@ const handleShoppingCart = () => {
     const productsListCart = $(".navbar--item__cart .products-list");
     const cartProductsNumber = $(".navbar--item__cart .items-quantity");
 
-    cartProductsNumber.innerText = cartItemQuantity;
-
-    shoppingCart.addEventListener("mouseenter", () => {
+    shoppingCart.on("mouseenter", () => {
         if (cartItemQuantity === 0) {
-            emptyCart.style.display = "block";
+            emptyCart.css("display", "block");
+            productsListCart.css("display", "none");
         } else {
-            productsListCart.style.display = "block";
+            productsListCart.css("display", "block");
+            emptyCart.css("display", "none");
         }
     });
 
-    shoppingCart.addEventListener("mouseleave", () => {
-        if (cartItemQuantity === 0) {
-            emptyCart.style.display = "none";
-            return;
-        }
-
-        productsListCart.style.display = "none";
+    shoppingCart.on("mouseleave", () => {
+        productsListCart.css("display", "none");
+        emptyCart.css("display", "none");
     });
 };
 
 const handleHeaderIntroAnimation = () => {
-    const contentsList = $$(".header .header-top .carousel-content .content");
+    const contentsList = document.querySelectorAll(".header .header-top .carousel-content .content");
     let activeIndex = 0;
 
     const intervalId = setInterval(() => {
@@ -76,9 +68,317 @@ const handleHeaderIntroAnimation = () => {
     }, 6000);
 };
 
-const App = () => {
-    localStorage.setItem("cartItemQuantity", cartItemQuantity);
+const handleBuyButtonClick = (e) => {
+    const currentProductId = e.currentTarget.getAttribute("data-product-id");
+
+    const currentProduct = products.find((product) => {
+        return product.id === currentProductId ? product : null;
+    });
+
+    $(".product-quickview .modal .modal-content .product-info").html(`
+            <div class="product-info--image">
+                <img src="${currentProduct.image}" alt="" />
+            </div>
+            <div style="flex: 1">
+                <h2 class="product-info--name">${currentProduct.name}</h2>
+                <div class="d-flex">
+                    <div class="product-info--id">Mã sản phẩm: <span>${currentProduct.id}</span></div>
+                    <div class="product-info--status">Trạng thái: <span>${currentProduct.status}</span></div>
+                </div>
+                <div class="product-info--price">Giá: <span>${currentProduct.price}₫</span></div>
+                <div class="product-control">
+                    <div class="product-control--quantity">
+                        Số lượng:
+                        <span>
+                            <button type="button" class="decrease-btn"><i class="fa-solid fa-minus"></i></button>
+                            <input type="number" name="productQuantity" id="productQuantity" value="1" min=1 />
+                            <div
+                                style="
+                                    font-weight: bold;
+                                    font-size: 1.3rem;
+                                    width: 50px;
+                                    border-top: 0.5px solid var(--primaryColor);
+                                    border-bottom: 0.5px solid var(--primaryColor);
+                                "
+                                class="number d-flex justify-content-center align-items-center"
+                            >
+                                1
+                            </div>
+                            <button type="button" class="increase-btn"><i class="fa-solid fa-plus"></i></button>
+                        </span>
+                    </div>
+
+                    <div class="submit-button" data-product-id="${currentProduct.id}">
+                        <button type="button" data-bs-dismiss="modal" aria-label="Close">Thêm vào giỏ hàng</button>
+                    </div>
+                </div>
+                <div class="product-detail">
+                    <a href="./detail-product.html">
+                        Xem chi tiết sản phẩm <span><i class="fa-solid fa-right"></i></span>
+                    </a>
+                </div>
+            </div>
+    `);
+
+    $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span .increase-btn",
+    ).on("click", () => {
+        handleIncreaseQuantityButtonClick();
+    });
+
+    $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span .decrease-btn",
+    ).on("click", () => {
+        handleDecreaseQuantityButtonClick();
+    });
+
+    $(".product-quickview .modal .modal-content .product-info .product-control .submit-button").on("click", (e) => {
+        handleAddToCartButtonClick(e);
+    });
+};
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+
+    return array;
+}
+
+const handleImageList = () => {
+    const newProducts = $(".new-products .products__list");
+    const oustandingProducts = $(".outstanding-products .products__list");
+
+    shuffleArray(products).forEach((product, index) => {
+        return newProducts.append(
+            `<li class="products__item">
+                <a href="#" class="products__item--card">
+                    <img src="${product.image}" alt="product" />
+                    <div class="info">
+                        <div class="occasion">${product.occasion}</div>
+                        <div class="price">${product.price}₫</div>
+                        <div class="name">${product.name}</div>
+                    </div>
+                    <div class="product-id">Mã ${product.id}</div>
+                </a>
+                <div class="buy-button" data-product-id="${product.id}">
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickview">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </div>
+            </li>`,
+        );
+    });
+
+    shuffleArray(products).forEach((product, index) => {
+        return oustandingProducts.append(
+            `<li class="products__item">
+                <a href="#" class="products__item--card">
+                    <img src="${product.image}" alt="product" />
+                    <div class="info">
+                        <div class="occasion">${product.occasion}</div>
+                        <div class="price">${product.price}₫</div>
+                        <div class="name">${product.name}</div>
+                    </div>
+                    <div class="product-id">Mã ${product.id}</div>
+                </a>
+                <div class="buy-button" data-product-id="${product.id}" >
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickview">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </div>
+            </li>`,
+        );
+    });
+
+    $(".products .products__list").slick({
+        slidesToShow: 5,
+        slidesToScroll: 1,
+        touchMove: true,
+        arrow: true,
+        // prev arrow
+        prevArrow:
+            '<button type="button" data-role="none" class="slick-prev"><i class="fa-solid fa-chevron-left"></i></button>',
+        // next arrow
+        nextArrow:
+            '<button type="button" data-role="none" class="slick-next"><i class="fa-solid fa-chevron-right"></i></button>',
+        adaptiveHeight: false,
+        accessibility: true,
+        draggable: true,
+    });
+};
+
+const handleIncreaseQuantityButtonClick = () => {
+    const quantityInput = $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span input",
+    );
+
+    let currentValue = quantityInput.val();
+
+    quantityInput.val((index, currentValue) => parseInt(currentValue) + 1);
+
+    currentValue = quantityInput.val();
+
+    $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span .number",
+    ).text(currentValue);
+};
+
+const handleDecreaseQuantityButtonClick = () => {
+    const quantityInput = $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span input",
+    );
+    let currentValue = quantityInput.val();
+
+    quantityInput.val((index, currentValue) => (currentValue > 1 ? parseInt(currentValue) - 1 : 1));
+
+    currentValue = quantityInput.val();
+
+    $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span .number",
+    ).text(currentValue);
+};
+
+const handleAddToCartButtonClick = (e) => {
+    const quantityInput = $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span input",
+    );
+    let currentValue = quantityInput.val();
+    const currentProductId = e.currentTarget.getAttribute("data-product-id");
+    const productQuantity = $(
+        ".product-quickview .modal .modal-content .product-info .product-control .product-control--quantity span input",
+    ).val();
+
+    let isDuplicateProduct = cartProducts.findIndex((product) => product.id === currentProductId);
+
+    products.forEach((product) => {
+        if (currentProductId === product.id) {
+            if (isDuplicateProduct === -1) {
+                cartProducts.push(product);
+                cartProducts[cartProducts.length - 1].quantity = parseInt(productQuantity);
+                localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+            } else {
+                cartProducts[isDuplicateProduct].quantity =
+                    parseInt(cartProducts[isDuplicateProduct].quantity) + parseInt(productQuantity);
+            }
+        }
+    });
+
+    cartItemQuantity = cartProducts.map((product) => product.quantity).reduce((sum, quantity) => sum + quantity, 0);
+    localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+    handleRenderCartProducts();
+};
+
+const handleDeleteCartProduct = (e) => {
+    const productId = e.currentTarget.getAttribute("data-product-id");
+
+    cartProducts.forEach((product, index) => {
+        if (productId === product.id) {
+            cartProducts.splice(index, 1);
+            cartItemQuantity -= product.quantity;
+        }
+    });
+
+    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+    localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+
+    const emptyCart = $(".navbar--item__cart .empty-cart");
+    const productsListCart = $(".navbar--item__cart .products-list");
+
+    if (cartItemQuantity === 0) {
+        emptyCart.css("display", "none");
+        productsListCart.css("display", "none");
+    }
+    handleRenderCartProducts();
+};
+
+const handleRenderCartProducts = () => {
+    const shoppingCart = $(".navbar--item__cart .products-list .content");
+    const totalCost = $(".navbar--item__cart .products-list .footer .total .price");
+
+    // reset cart items
+    shoppingCart.html("");
+
+    cartProducts.forEach((product) => {
+        shoppingCart.append(`
+            <li class="product-item">
+                <div class="product-item__image">
+                    <img src="${product.image}" alt="" />
+                </div>
+                <div class="product-item__content">
+                    <div class="product-item__name">
+                        ${product.name}
+                    </div>
+                    <div class="product-item__price">Giá: ₫${product.price}</div>
+                </div>
+                <div class="product-item__action">
+                    <div class="product-item__quantity"><i class="fa-solid fa-x"></i>${product.quantity}</div>
+                    <div class="delete-product" data-product-id="${product.id}">
+                        <i class="fa-solid fa-trash"></i>
+                    </div>
+                </div>
+            </li>
+        `);
+    });
+
+    const deleteButton = $(".navbar--item__cart .products-list .product-item__action .delete-product");
+
+    deleteButton.on("click", (e) => {
+        handleDeleteCartProduct(e);
+    });
+
+    const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
+
+    const cost = cartProducts
+        .map((product) => convertToNumber(product.price) * parseInt(product.quantity))
+        .reduce((sum, price) => sum + price, 0);
+
+    totalCost.text(`Tổng tiền: ₫${cost.toFixed(3)}`);
+
+    $(".navbar--item__cart .items-quantity").text(cartItemQuantity);
+};
+
+const handleEvents = () => {
+    // handle click
+    $(".navbar--item__search-box .clear-input-btn").on("click", () => {
+        handleClearInput();
+    });
+
+    $(".navbar--item__search-box .submit-button").on("click", (e) => {
+        handleSubmitForm(e);
+    });
+
+    $(".products .products__list .products__item .buy-button").on("click", (e) => {
+        handleBuyButtonClick(e);
+    });
+
+    $(".footer .list .item").on("click", () => {
+        handleNullFeature();
+    });
+
+    $(".footer .footer__contact .footer__contact--socials a").on("click", () => {
+        handleNullFeature();
+    });
+
+    // handle keydown
+    $(".navbar--item__search-box input").on("keydown", (e) => {
+        handleEnterPressForm(e);
+    });
+};
+
+const handleReloadPage = () => {
+    cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
+    cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
+    localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+    handleRenderCartProducts();
     handleShoppingCart();
     handleHeaderIntroAnimation();
+    handleImageList();
 };
-App();
+
+$(document).ready(function () {
+    handleReloadPage();
+    handleEvents();
+});
