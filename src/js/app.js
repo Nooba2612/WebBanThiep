@@ -3,6 +3,7 @@ import { products } from "./products.js";
 /* Variables */
 
 const seacrhBoxInput = $(".navbar--item__search-box input");
+const toastContainer = $("#toastContainer");
 let cartItemQuantity;
 let cartProducts;
 
@@ -134,7 +135,44 @@ const handleBuyButtonClick = (e) => {
 
     $(".product-quickview .modal .modal-content .product-info .product-control .submit-button").on("click", (e) => {
         handleAddToCartButtonClick(e);
+
+        toastContainer.append(`
+                <div
+                    data-bs-animation="true"
+                    data-bs-delay="3000"
+                    data-bs-autohide="true"
+                    class="toast submit-add-to-cart-toast hide align-items-center"
+                    role="alert"
+                    aria-live="assertive"
+                    aria-atomic="true"
+                    id="submitAddToCartToast"
+                >
+                    <div class="toast-body">
+                        Đã thêm sản phẩm vào giỏ hàng. <span><i class="fa-regular fa-cart-circle-check"></i></span>
+                    </div>
+                </div>
+        `);
+
+        showToasts();
     });
+};
+
+const showToasts = () => {
+    const toastElList = [].slice.call(document.querySelectorAll(".toast"));
+    const toastList = toastElList.map(function (toastEl) {
+        return new bootstrap.Toast(toastEl);
+    });
+
+    // Show each toast
+    toastList.forEach(function (toast) {
+        toast.show();
+    });
+
+    setTimeout(() => {
+        toastList.forEach(function (toast) {
+            toast._element.remove();
+        });
+    }, 3000);
 };
 
 function shuffleArray(array) {

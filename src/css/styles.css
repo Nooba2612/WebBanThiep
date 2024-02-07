@@ -215,6 +215,25 @@ a {
     animation: goToCart 0.5s linear infinite;
 }
 
+/* Toasts styles */
+.toast-container {
+    top: 30px;
+}
+
+.submit-add-to-cart-toast .toast-body {
+    background-color: var(--whiteColor);
+    font-size: 1.1rem;
+    font-weight: var(--boldFontWeight);
+    color: var(--blackColor);
+    padding: 20px;
+    border: 1px solid var(--blackColor);
+    box-shadow: inset 0px 0px 20px 2px;
+}
+
+.submit-add-to-cart-toast .toast-body span {
+    font-size: 1.3rem;
+}
+
 /* Header Styles */
 .header .header-top {
     width: 100%;
