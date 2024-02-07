@@ -1,0 +1,149 @@
+/* Variables */
+:root {
+    --blackColor: #000;
+    --whiteColor: #fff;
+    --primaryColor: #ababab;
+    --alertColor: rgb(239, 49, 49);
+    --boldFontWeight: bold;
+    --fontSize: 1.2rem;
+    --activeColor: #860a35;
+}
+
+/* CSS reset */
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+img,
+picture,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+img {
+    width: 100%;
+    height: 100%;
+}
+
+input,
+select,
+textarea {
+    background-color: transparent;
+    border: none;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+}
+
+body {
+    /* min-height: 100vh; */
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+}
+
+ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--blackColor);
+}
+
+body {
+    background-color: #111111;
+}
+
+.login-menu {
+    width: 400px;
+    padding: 8% 0 0;
+    margin: auto;
+}
+
+.form {
+    position: relative;
+    z-index: 1;
+    background: #ffffff;
+    max-width: 360px;
+    margin: 0 auto;
+    padding: 45px;
+    text-align: center;
+    border-radius: 2rem;
+    box-shadow: inset 0px 0px 20px 6px;
+}
+
+.form .title {
+    font-size: 2rem;
+    padding: 0 24px 24px;
+    font-weight: var(--boldFontWeight);
+    color: var(--primaryColor);
+}
+
+.form input {
+    outline: 0;
+    background: #f2f2f2;
+    width: 100%;
+    border: 0;
+    margin: 0 0 15px;
+    padding: 15px;
+    box-sizing: border-box;
+    font-size: 1rem;
+}
+
+.form button {
+    text-transform: uppercase;
+    outline: 0;
+    background: #696969;
+    width: 100%;
+    border: 0;
+    padding: 15px;
+    color: #ffffff;
+    font-size: 1rem;
+    -webkit-transition: all 0.3 ease;
+    transition: all 0.3 ease;
+    cursor: pointer;
+}
+
+.form button:hover,
+.form button:active,
+.form button:focus {
+    background: #595959;
+    transition: 0.5s;
+}
+
+.form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
+
+.form .message a {
+    color: #696969;
+    text-decoration: none;
+}
+
+.form .message:hover a {
+    text-decoration: underline;
+}
+
+.form .register-form {
+    display: none;
+}

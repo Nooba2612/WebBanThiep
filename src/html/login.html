@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Đăng nhập/Tạo tài khoản của bạn</title>
+        <link rel="shortcut icon" href="../assets/images/favicon.ico?v=0" type="image/x-icon" />
+        <link rel="stylesheet" href="../css/login.css" />
+    </head>
+    <body>
+        <div class="login-menu">
+            <div class="form">
+                <form class="register-form">
+                    <div class="title">Đăng ký</div>
+                    <input class="user-name" type="text" placeholder="Tên người dùng" />
+                    <input class="email" type="email" placeholder="Email" />
+                    <input class="password" type="password" placeholder="Mật khẩu" />
+                    <div class="password-alert"></div>
+                    <button>Tiếp tục</button>
+                    <p class="message">Bạn đã có tài khoản? <a href="#">Đăng nhập</a></p>
+                </form>
+                <form class="login-form">
+                    <div class="title">Đăng nhập</div>
+                    <input class="email" type="email" placeholder="Email" />
+                    <div class="email-alert"></div>
+                    <input class="password" type="password" placeholder="Mật khẩu" />
+                    <div class="password-alert"></div>
+                    <button>Tiếp tục</button>
+                    <p class="message">Bạn chưa có tài khoản? <a href="#">Đăng ký tài khoản</a></p>
+                </form>
+            </div>
+        </div>
+    </body>
+    <script src="../vendor/jquery/jquery-3.7.1.min.js"></script>
+    <script type="module" src="../js/validator.js"></script>
+</html>
