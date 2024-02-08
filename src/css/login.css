@@ -6,7 +6,6 @@
     --alertColor: rgb(239, 49, 49);
     --boldFontWeight: bold;
     --fontSize: 1.2rem;
-    --activeColor: #860a35;
 }
 
 /* CSS reset */
@@ -97,15 +96,51 @@ body {
     color: var(--primaryColor);
 }
 
+.form .input {
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.form .input .btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    padding: 18px;
+    width: 43px;
+    background-color: transparent;
+    z-index: 11;
+    color: var(--blackColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s linear;
+}
+
+.form .input .btn:active {
+    transform: translateY(5px);
+}
+
+.form .input .hide-password-btn {
+    display: none;
+}
+
+.form .input .alert {
+    margin-top: 10px;
+    text-align: start;
+    font-size: 0.9rem;
+    color: var(--alertColor);
+    padding: 0;
+}
+
 .form input {
     outline: 0;
     background: #f2f2f2;
     width: 100%;
-    border: 0;
-    margin: 0 0 15px;
     padding: 15px;
     box-sizing: border-box;
     font-size: 1rem;
+    border: 3px solid transparent;
+    transition: all 0.2s linear;
 }
 
 .form button {
@@ -146,4 +181,28 @@ body {
 
 .form .register-form {
     display: none;
+}
+
+.invalid {
+    border-color: var(--alertColor) !important;
+    box-shadow: 0px 0px 8px 3px var(--alertColor), inset 0px 0px 8px 3px var(--alertColor);
+}
+
+.toast-container {
+    top: 30px;
+}
+
+.submit-add-to-cart-toast .toast-body {
+    background-color: var(--whiteColor);
+    font-size: 1.1rem;
+    font-weight: var(--boldFontWeight);
+    color: var(--blackColor);
+    padding: 20px;
+    border: 1px solid var(--blackColor);
+    box-shadow: inset 0px 0px 20px 2px;
+    text-align: center;
+}
+
+.submit-add-to-cart-toast .toast-body span {
+    font-size: 1.3rem;
 }

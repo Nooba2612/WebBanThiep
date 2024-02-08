@@ -4,6 +4,7 @@ import { products } from "./products.js";
 
 const seacrhBoxInput = $(".navbar--item__search-box input");
 const toastContainer = $("#toastContainer");
+const currentAccount = JSON.parse(localStorage.getItem("currentAccount"));
 let cartItemQuantity;
 let cartProducts;
 
@@ -405,6 +406,18 @@ const handleEvents = () => {
     });
 };
 
+const handleSuccessLogin = () => {
+    if (currentAccount) {
+        $(".navbar--item__login").html(`
+                <a href="#" >${currentAccount.username} <i class="fa-solid fa-face-awesome"></i></a>
+        `);
+    } else {
+        $(".navbar--item__login").html(`
+                <a href="./login.html"> <i class="fa-solid fa-circle-user"></i> <span>ĐĂNG NHẬP</span> </a>
+        `);
+    }
+};
+
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
@@ -414,9 +427,10 @@ const handleReloadPage = () => {
     handleShoppingCart();
     handleHeaderIntroAnimation();
     handleImageList();
+    handleSuccessLogin();
 };
 
-$(document).ready(function () {
+$(document).ready(() => {
     handleReloadPage();
     handleEvents();
 });
