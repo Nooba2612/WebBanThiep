@@ -1,0 +1,213 @@
+*,
+*:before,
+*:after {
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    font: inherit;
+}
+
+img,
+picture,
+svg,
+video {
+    display: block;
+    max-width: 100%;
+}
+
+input,
+select,
+textarea {
+    background-color: transparent;
+    outline: none;
+}
+
+button {
+    cursor: pointer;
+    background-color: transparent;
+    outline: none;
+    border: 0;
+}
+
+body {
+    min-height: 100vh;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1;
+}
+
+.main {
+    margin: 30px 0;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1240px;
+    margin: 0 auto;
+}
+
+.info .info__image {
+    width: 600px;
+}
+
+.info .info__content {
+    flex: 1;
+}
+
+.info .info__content .info__name {
+    font-size: 2.3rem;
+    font-weight: bold;
+}
+
+.info .info__content .info__id {
+    margin-right: 20px;
+    padding-right: 20px;
+    border-right: 3px solid var(--alertColor);
+}
+
+.info .info__content .info__id,
+.info .info__content .info__status {
+    color: var(--blackColor);
+}
+
+.info .info__content .info__id span,
+.info .info__content .info__status span {
+    font-weight: var(--boldFontWeight);
+    color: var(--alertColor);
+}
+
+.info .info__content .info__price {
+    font-size: 1.5rem;
+    background-color: rgba(0, 0, 0, 0.221);
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding-left: 20px;
+    max-width: 500px;
+    margin: 30px 0;
+}
+
+.info .info__content .info__price span {
+    margin-left: 60px;
+    color: var(--alertColor);
+    font-weight: var(--boldFontWeight);
+    font-size: 2.5rem;
+}
+
+.info .info__control {
+    display: flex;
+    width: 300px;
+    font-size: 1.5rem;
+    margin-bottom: 50px;
+}
+
+.info .info__control span {
+    margin-right: 60px;
+    line-height: 40px;
+}
+
+.info .info__control .quantity-input {
+    display: none;
+}
+
+.info .info__control .info__control--decrease,
+.info .info__control .info__control--increase {
+    height: 40px;
+    width: 40px;
+    background-color: var(--whiteColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--primaryColor);
+    transition: all 0.2s linear;
+}
+
+.info .info__control .info__control--decrease:hover,
+.info .info__control .info__control--increase:hover {
+    background-color: var(--blackColor);
+    color: var(--whiteColor);
+}
+
+.info .info__control .info__control--quantity {
+    padding: 6px 20px;
+    border-top: 1px solid var(--primaryColor);
+    border-bottom: 1px solid var(--primaryColor);
+    font-weight: var(--boldFontWeight);
+}
+
+.info .add-to-cart-btn,
+.info .buy-btn {
+    width: 500px;
+    height: 50px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s linear;
+    border-radius: 10px;
+}
+
+.info .add-to-cart-btn {
+    background-color: var(--blackColor);
+    border: 3px solid transparent;
+}
+
+.info .buy-btn {
+    background-color: var(--whiteColor);
+    border: 3px solid var(--blackColor);
+}
+
+.info .add-to-cart-btn:hover {
+    background-color: var(--whiteColor);
+    border-color: var(--blackColor);
+    box-shadow: inset 0px 0px 17px 6px;
+}
+
+.info .add-to-cart-btn:hover button {
+    color: var(--blackColor);
+}
+
+.info .buy-btn:hover {
+    background-color: var(--blackColor);
+    border-color: var(--whiteColor);
+    box-shadow: inset 0px 0px 17px 6px var(--whiteColor);
+}
+
+.info .buy-btn:hover button {
+    color: var(--whiteColor);
+}
+
+.info .add-to-cart-btn button,
+.info .buy-btn button {
+    font-weight: var(--boldFontWeight);
+    transition: all 0.2s linear;
+    width: 100%;
+    height: 100%;
+}
+
+.info .add-to-cart-btn button {
+    color: var(--whiteColor);
+}
+
+.info .buy-btn button {
+    color: var(--blackColor);
+}
+
+.info .info__fledges {
+    width: 100%;
+    font-size: 0.85rem;
+}
+
+.info .info__fledges div span {
+    font-size: 1.1rem;
+    color: var(--primaryColor);
+}
+
+.info .info__fledges div {
+    flex-wrap: nowrap;
+}

@@ -185,14 +185,14 @@ function shuffleArray(array) {
     return array;
 }
 
-const handleImageList = () => {
+const handleCardList = () => {
     const newProducts = $(".new-products .products__list");
     const oustandingProducts = $(".outstanding-products .products__list");
 
     shuffleArray(products).forEach((product, index) => {
         return newProducts.append(
             `<li class="products__item">
-                <a href="#" class="products__item--card">
+                <a href="../html/detail-product.html?id=${product.id}" class="products__item--card">
                     <img src="${product.image}" alt="product" />
                     <div class="info">
                         <div class="occasion">${product.occasion}</div>
@@ -213,7 +213,7 @@ const handleImageList = () => {
     shuffleArray(products).forEach((product, index) => {
         return oustandingProducts.append(
             `<li class="products__item">
-                <a href="#" class="products__item--card">
+                <a href="../html/detail-product.html?id=${product.id}" class="products__item--card">
                     <img src="${product.image}" alt="product" />
                     <div class="info">
                         <div class="occasion">${product.occasion}</div>
@@ -347,7 +347,9 @@ const handleRenderCartProducts = () => {
                 </div>
                 <div class="product-item__content">
                     <div class="product-item__name">
-                        ${product.name}
+                        <a href="../html/detail-product.html?id=${product.id}">
+                            ${product.name}
+                        </a>
                     </div>
                     <div class="product-item__price">Giá: ₫${product.price}</div>
                 </div>
@@ -418,6 +420,65 @@ const handleSuccessLogin = () => {
     }
 };
 
+const handleRenderDetailProduct = () => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const productId = queryParams.get("id");
+
+    products.forEach((product) => {
+        if (product.id === productId) {
+            $(".main .info").html(`
+                    <div class="info__image"><img src="../assets/images/products/product-${productId}.jpg" alt="" /></div>
+                    <div class="info__content">
+                        <div class="info__name">${product.name}</div>
+                        <div class="d-flex mt-3" style="font-size: 1.2rem; width: 100%">
+                            <div class="info__id">Mã sản phẩm: <span>${product.id}</span></div>
+                            <div class="info__status">Tình trạng: <span>Còn hàng</span></div>
+                        </div>
+                        <div class="info__price">Giá: <span>${product.price}₫</span></div>
+                        <div class="info__control">
+                            <span>Số lượng:</span>
+                            <button class="info__control--decrease"><i class="fa-solid fa-minus"></i></button>
+                            <input type="number" id="quantity-input" class="quantity-input" value="1" />
+                            <div class="info__control--quantity">1</div>
+                            <button class="info__control--increase"><i class="fa-solid fa-plus"></i></button>
+                        </div>
+                        <div class="add-to-cart-btn"><button>Thêm vào giỏ</button></div>
+                        <div class="buy-btn"><button>Mua ngay</button></div>
+                        <div class="info__fledges">
+                            <div class="row">
+                                <div class="d-flex col">
+                                    100% Chính hãng <span style="margin-left: 10px;"><i class="fa-regular fa-box"></i></span>
+                                </div>
+                                <div class="d-flex col">
+                                    Miễn phí giao hàng
+                                    <span style="margin-left: 10px;"><i class="fa-solid fa-truck-fast"></i></span>
+                                </div>
+                                <div class="d-flex col">
+                                    Hỗ trợ 24/7
+                                    <span style="margin-left: 10px;"><i class="fa-solid fa-phone-volume"></i></span>
+                                </div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="d-flex col">
+                                    An toàn cho trẻ em
+                                    <span style="margin-left: 10px;"><i class="fa-solid fa-shield-check"></i></span>
+                                </div>
+                                <div class="d-flex col">
+                                    Mở hộp kiểm tra nhận hàng
+                                    <span style="margin-left: 10px;"><i class="fa-solid fa-thumbs-up"></i></span>
+                                </div>
+                                <div class="d-flex col">
+                                    Hoàn trả trong vòng 7 ngày
+                                    <span style="margin-left: 10px;"><i class="fa-solid fa-arrows-repeat"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+            `);
+        }
+    });
+};
+
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
@@ -426,8 +487,9 @@ const handleReloadPage = () => {
     handleRenderCartProducts();
     handleShoppingCart();
     handleHeaderIntroAnimation();
-    handleImageList();
+    handleCardList();
     handleSuccessLogin();
+    handleRenderDetailProduct();
 };
 
 $(document).ready(() => {

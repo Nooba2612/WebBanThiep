@@ -66,7 +66,7 @@ ul {
 
 a {
     text-decoration: none;
-    display: block;
+    display: inherit;
     color: var(--blackColor);
 }
 
@@ -234,7 +234,7 @@ a {
     font-size: 1.3rem;
 }
 
-/* Header Styles */
+/* Header styles */
 .header .header-top {
     width: 100%;
     height: 40px;
@@ -548,7 +548,7 @@ a {
     display: flex;
     padding: 10px;
     font-size: 0.9rem;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     cursor: pointer;
 }
@@ -565,12 +565,16 @@ a {
 .navbar--item__cart .products-list .product-item .product-item__name {
     font-weight: var(--boldFontWeight);
     padding: 15px 20px;
-    transition: all 0.2s linear;
     text-overflow: ellipsis;
-    text-decoration-color: transparent;
 }
 
-.navbar--item__cart .products-list .product-item .product-item__name:hover {
+.navbar--item__cart .products-list .product-item .product-item__name a {
+    text-decoration-color: transparent;
+    transition: all 0.2s linear;
+    line-height: 20px;
+}
+
+.navbar--item__cart .products-list .product-item .product-item__name:hover a {
     color: #7eb742;
     text-decoration: underline;
     text-decoration-color: inherit;
@@ -1100,7 +1104,6 @@ a {
 }
 
 /* ---------------------------------------------------------------- */
-
 
 /* Animations */
 @keyframes slideUp {
