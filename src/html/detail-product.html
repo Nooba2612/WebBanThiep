@@ -133,8 +133,15 @@
         </header>
 
         <main class="main">
-            <div class="info">
+            <div class="product-info">
                 <!-- Product info -->
+            </div>
+
+            <div class="relate-products products">
+                <h2 class="products__title">SẢN PHẨM LIÊN QUAN</h2>
+                <ul class="products__list">
+                    <!-- products__item -->
+                </ul>
             </div>
         </main>
 
@@ -191,6 +198,34 @@
                 Copyright © 2024 Thiep Vip Pro. Powered by <span>DangPhucNguyen</span> <i class="fa-solid fa-check"></i>
             </div>
         </footer>
+
+        <div class="modal-quickview product-quickview">
+            <div
+                class="modal fade"
+                id="productQuickview"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="exampleModalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <button type="button" class="close-button" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><i class="fa-solid fa-xmark"></i></span>
+                        </button>
+                        <div class="product-info">
+                            <!-- Product info -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div aria-live="polite" aria-atomic="true" class="position-relative">
+            <div id="toastContainer" class="toast-container position-fixed start-50 translate-middle-x">
+                <!-- Toast content -->
+            </div>
+        </div>
     </body>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../vendor/jquery/jquery-3.7.1.min.js"></script>

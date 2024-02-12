@@ -33,7 +33,7 @@ button {
 }
 
 body {
-    min-height: 100vh;
+    /* min-height: 100vh; */
     font-weight: 400;
     font-size: 16px;
     line-height: 1;
@@ -43,45 +43,46 @@ body {
     margin: 30px 0;
 }
 
-.info {
+.product-info {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1240px;
+    max-width: 1300px;
     margin: 0 auto;
 }
 
-.info .info__image {
+.product-info .product-info__image {
     width: 600px;
+    margin-right: 20px;
 }
 
-.info .info__content {
+.product-info .product-info__content {
     flex: 1;
 }
 
-.info .info__content .info__name {
+.product-info .product-info__content .product-info__name {
     font-size: 2.3rem;
     font-weight: bold;
 }
 
-.info .info__content .info__id {
+.product-info .product-info__content .product-info__id {
     margin-right: 20px;
     padding-right: 20px;
     border-right: 3px solid var(--alertColor);
 }
 
-.info .info__content .info__id,
-.info .info__content .info__status {
+.product-info .product-info__content .product-info__id,
+.product-info .product-info__content .product-info__status {
     color: var(--blackColor);
 }
 
-.info .info__content .info__id span,
-.info .info__content .info__status span {
+.product-info .product-info__content .product-info__id span,
+.product-info .product-info__content .product-info__status span {
     font-weight: var(--boldFontWeight);
     color: var(--alertColor);
 }
 
-.info .info__content .info__price {
+.product-info .product-info__content .product-info__price {
     font-size: 1.5rem;
     background-color: rgba(0, 0, 0, 0.221);
     height: 60px;
@@ -92,31 +93,31 @@ body {
     margin: 30px 0;
 }
 
-.info .info__content .info__price span {
+.product-info .product-info__content .product-info__price span {
     margin-left: 60px;
     color: var(--alertColor);
     font-weight: var(--boldFontWeight);
     font-size: 2.5rem;
 }
 
-.info .info__control {
+.product-info .product-info__control {
     display: flex;
     width: 300px;
     font-size: 1.5rem;
     margin-bottom: 50px;
 }
 
-.info .info__control span {
+.product-info .product-info__control span {
     margin-right: 60px;
     line-height: 40px;
 }
 
-.info .info__control .quantity-input {
+.product-info .product-info__control .quantity-input {
     display: none;
 }
 
-.info .info__control .info__control--decrease,
-.info .info__control .info__control--increase {
+.product-info .product-info__control .product-info__control--decrease,
+.product-info .product-info__control .product-info__control--increase {
     height: 40px;
     width: 40px;
     background-color: var(--whiteColor);
@@ -127,21 +128,21 @@ body {
     transition: all 0.2s linear;
 }
 
-.info .info__control .info__control--decrease:hover,
-.info .info__control .info__control--increase:hover {
+.product-info .product-info__control .product-info__control--decrease:hover,
+.product-info .product-info__control .product-info__control--increase:hover {
     background-color: var(--blackColor);
     color: var(--whiteColor);
 }
 
-.info .info__control .info__control--quantity {
+.product-info .product-info__control .product-info__control--quantity {
     padding: 6px 20px;
     border-top: 1px solid var(--primaryColor);
     border-bottom: 1px solid var(--primaryColor);
     font-weight: var(--boldFontWeight);
 }
 
-.info .add-to-cart-btn,
-.info .buy-btn {
+.product-info .add-to-cart-btn,
+.product-info .buy-btn {
     width: 500px;
     height: 50px;
     margin-bottom: 20px;
@@ -152,62 +153,63 @@ body {
     border-radius: 10px;
 }
 
-.info .add-to-cart-btn {
+.product-info .add-to-cart-btn {
     background-color: var(--blackColor);
     border: 3px solid transparent;
 }
 
-.info .buy-btn {
+.product-info .buy-btn {
     background-color: var(--whiteColor);
     border: 3px solid var(--blackColor);
 }
 
-.info .add-to-cart-btn:hover {
+.product-info .add-to-cart-btn:hover {
     background-color: var(--whiteColor);
     border-color: var(--blackColor);
     box-shadow: inset 0px 0px 17px 6px;
 }
 
-.info .add-to-cart-btn:hover button {
+.product-info .add-to-cart-btn:hover button {
     color: var(--blackColor);
 }
 
-.info .buy-btn:hover {
+.product-info .buy-btn:hover {
     background-color: var(--blackColor);
     border-color: var(--whiteColor);
     box-shadow: inset 0px 0px 17px 6px var(--whiteColor);
 }
 
-.info .buy-btn:hover button {
+.product-info .buy-btn:hover button a {
+    transition: color 0.2s linear;
     color: var(--whiteColor);
 }
 
-.info .add-to-cart-btn button,
-.info .buy-btn button {
+.product-info .add-to-cart-btn button,
+.product-info .buy-btn button {
     font-weight: var(--boldFontWeight);
     transition: all 0.2s linear;
     width: 100%;
     height: 100%;
 }
 
-.info .add-to-cart-btn button {
+.product-info .add-to-cart-btn button {
     color: var(--whiteColor);
 }
 
-.info .buy-btn button {
+.product-info .buy-btn button {
     color: var(--blackColor);
 }
 
-.info .info__fledges {
+.product-info .product-info__fledges {
     width: 100%;
     font-size: 0.85rem;
 }
 
-.info .info__fledges div span {
+.product-info .product-info__fledges div span {
     font-size: 1.1rem;
     color: var(--primaryColor);
 }
 
-.info .info__fledges div {
+.product-info .product-info__fledges div {
     flex-wrap: nowrap;
 }

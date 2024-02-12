@@ -188,6 +188,7 @@ function shuffleArray(array) {
 const handleCardList = () => {
     const newProducts = $(".new-products .products__list");
     const oustandingProducts = $(".outstanding-products .products__list");
+    const relateProducts = $(".relate-products .products__list");
 
     shuffleArray(products).forEach((product, index) => {
         return newProducts.append(
@@ -223,6 +224,27 @@ const handleCardList = () => {
                     <div class="product-id">Mã ${product.id}</div>
                 </a>
                 <div class="buy-button" data-product-id="${product.id}" >
+                    <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickview">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </button>
+                </div>
+            </li>`,
+        );
+    });
+
+    shuffleArray(products).forEach((product, index) => {
+        return relateProducts.append(
+            `<li class="products__item">
+                <a href="../html/detail-product.html?id=${product.id}" class="products__item--card">
+                    <img src="${product.image}" alt="product" />
+                    <div class="info">
+                        <div class="occasion">${product.occasion}</div>
+                        <div class="price">${product.price}₫</div>
+                        <div class="name">${product.name}</div>
+                    </div>
+                    <div class="product-id">Mã ${product.id}</div>
+                </a>
+                <div class="buy-button" data-product-id="${product.id}">
                     <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickview">
                         <i class="fa-solid fa-cart-shopping"></i>
                     </button>
@@ -426,25 +448,27 @@ const handleRenderDetailProduct = () => {
 
     products.forEach((product) => {
         if (product.id === productId) {
-            $(".main .info").html(`
-                    <div class="info__image"><img src="../assets/images/products/product-${productId}.jpg" alt="" /></div>
-                    <div class="info__content">
-                        <div class="info__name">${product.name}</div>
+            document.title = `Chi tiết sản phẩm - ${product.name}`;
+
+            $(".main .product-info").html(`
+                    <div class="product-info__image"><img src="../assets/images/products/product-${productId}.jpg" alt="" /></div>
+                    <div class="product-info__content">
+                        <div class="product-info__name">${product.name}</div>
                         <div class="d-flex mt-3" style="font-size: 1.2rem; width: 100%">
-                            <div class="info__id">Mã sản phẩm: <span>${product.id}</span></div>
-                            <div class="info__status">Tình trạng: <span>Còn hàng</span></div>
+                            <div class="product-info__id">Mã sản phẩm: <span>${product.id}</span></div>
+                            <div class="product-info__status">Tình trạng: <span>Còn hàng</span></div>
                         </div>
-                        <div class="info__price">Giá: <span>${product.price}₫</span></div>
-                        <div class="info__control">
+                        <div class="product-info__price">Giá: <span>${product.price}₫</span></div>
+                        <div class="product-info__control">
                             <span>Số lượng:</span>
-                            <button class="info__control--decrease"><i class="fa-solid fa-minus"></i></button>
+                            <button class="product-info__control--decrease"><i class="fa-solid fa-minus"></i></button>
                             <input type="number" id="quantity-input" class="quantity-input" value="1" />
-                            <div class="info__control--quantity">1</div>
-                            <button class="info__control--increase"><i class="fa-solid fa-plus"></i></button>
+                            <div class="product-info__control--quantity">1</div>
+                            <button class="product-info__control--increase"><i class="fa-solid fa-plus"></i></button>
                         </div>
                         <div class="add-to-cart-btn"><button>Thêm vào giỏ</button></div>
-                        <div class="buy-btn"><button>Mua ngay</button></div>
-                        <div class="info__fledges">
+                        <div class="buy-btn"><button><a href="./cart.html">Mua ngay</a></button></div>
+                        <div class="product-info__fledges">
                             <div class="row">
                                 <div class="d-flex col">
                                     100% Chính hãng <span style="margin-left: 10px;"><i class="fa-regular fa-box"></i></span>
@@ -477,6 +501,102 @@ const handleRenderDetailProduct = () => {
             `);
         }
     });
+
+    let inputValue = $(".product-info .product-info__control .quantity-input");
+    const increaseButton = $(".product-info .product-info__control .product-info__control--increase");
+    const decreaseButton = $(".product-info .product-info__control .product-info__control--decrease");
+    const addToCartButton = $(".product-info .add-to-cart-btn");
+    const buyButton = $(".product-info .buy-btn");
+
+    decreaseButton.on("click", () => {
+        parseInt(inputValue.val()) > 1 ? inputValue.val(parseInt(inputValue.val()) - 1) : 1;
+        $(".product-info .product-info__control .product-info__control--quantity").text(inputValue.val());
+    });
+
+    increaseButton.on("click", () => {
+        inputValue.val(parseInt(inputValue.val()) + 1);
+        $(".product-info .product-info__control .product-info__control--quantity").text(inputValue.val());
+    });
+
+    addToCartButton.on("click", () => {
+        products.forEach((product) => {
+            if (productId === product.id) {
+                let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
+
+                products.forEach((product) => {
+                    if (productId === product.id) {
+                        if (isDuplicateProduct === -1) {
+                            cartProducts.push(product);
+                            cartProducts[cartProducts.length - 1].quantity = parseInt(inputValue.val());
+                            localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+                        } else {
+                            cartProducts[isDuplicateProduct].quantity =
+                                parseInt(cartProducts[isDuplicateProduct].quantity) + parseInt(inputValue.val());
+                        }
+                    }
+                });
+
+                cartItemQuantity = cartProducts
+                    .map((product) => product.quantity)
+                    .reduce((sum, quantity) => sum + quantity, 0);
+
+                toastContainer.append(`
+                            <div
+                                data-bs-animation="true"
+                                data-bs-delay="3000"
+                                data-bs-autohide="true"
+                                class="toast submit-add-to-cart-toast hide align-items-center"
+                                role="alert"
+                                aria-live="assertive"
+                                aria-atomic="true"
+                                id="submitAddToCartToast"
+                            >
+                                <div class="toast-body">
+                                    Đã thêm sản phẩm vào giỏ hàng. <span><i class="fa-regular fa-cart-circle-check"></i></span>
+                                </div>
+                            </div>
+                `);
+
+                showToasts();
+
+                handleRenderCartProducts();
+
+                inputValue.val(1);
+                $(".product-info .product-info__control .product-info__control--quantity").text(inputValue.val());
+
+                localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+                localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+            }
+        });
+    });
+
+    buyButton.on("click", () => {
+        products.forEach((product) => {
+            if (productId === product.id) {
+                let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
+
+                products.forEach((product) => {
+                    if (productId === product.id) {
+                        if (isDuplicateProduct === -1) {
+                            cartProducts.push(product);
+                            cartProducts[cartProducts.length - 1].quantity = parseInt(inputValue.val());
+                            localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+                        } else {
+                            cartProducts[isDuplicateProduct].quantity =
+                                parseInt(cartProducts[isDuplicateProduct].quantity) + parseInt(inputValue.val());
+                        }
+                    }
+                });
+
+                cartItemQuantity = cartProducts
+                    .map((product) => product.quantity)
+                    .reduce((sum, quantity) => sum + quantity, 0);
+
+                localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+                localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+            }
+        });
+    })
 };
 
 const handleReloadPage = () => {
