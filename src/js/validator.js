@@ -43,7 +43,7 @@ const validateLoginForm = () => {
         validLoginEmail();
     });
 
-    submitButton.on("click", () => {
+    const handleSubmitForm = () => {
         validLoginEmail();
         validLoginPassword();
 
@@ -63,6 +63,16 @@ const validateLoginForm = () => {
                 // go to home
                 window.location.href = "/WebBanThiep/src/html/index.html";
             }, 900);
+        }
+    };
+
+    submitButton.on("click", () => {
+        handleSubmitForm();
+    });
+
+    $(".login-form").on("keydown", (e) => {
+        if (e.keyCode === 13) {
+            handleSubmitForm();
         }
     });
 };
@@ -135,7 +145,7 @@ const validateRegisterForm = () => {
         validRegisterPassword();
     });
 
-    submitButton.on("click", () => {
+    const handleSubmitForm = () => {
         validRegisterUsername();
         validRegisterEmail();
         validRegisterPassword();
@@ -154,6 +164,16 @@ const validateRegisterForm = () => {
             localStorage.setItem("registerAccounts", JSON.stringify(registerAccounts));
             showToast("Đăng ký tài khoản thành công.");
             reloadPage(900);
+        }
+    };
+
+    submitButton.on("click", () => {
+        handleSubmitForm();
+    });
+
+    $(".register-form").on("keydown", (e) => {
+        if (e.keyCode === 13) {
+            handleSubmitForm();
         }
     });
 };
