@@ -221,6 +221,7 @@ a {
 }
 
 .submit-add-to-cart-toast .toast-body {
+    border-radius: 10px;
     background-color: var(--whiteColor);
     font-size: 1.1rem;
     font-weight: var(--boldFontWeight);
@@ -402,6 +403,62 @@ a {
 
 .navbar--item__about .dropdown .dropdown--item:hover a {
     color: var(--activeColor) !important;
+}
+
+.navbar--item.navbar--item__login {
+    position: relative;
+}
+
+.navbar--item.navbar--item__login .account-manipulation {
+    position: absolute;
+    display: flex;
+    opacity: 0;
+    background-color: var(--whiteColor);
+    z-index: 100;
+    bottom: -110px;
+    border: 1px solid var(--blackColor);
+    border-radius: 6px;
+    padding: 10px;
+    flex-direction: column;
+    height: 100px;
+    visibility: hidden;
+    transition: all 0.4s;
+}
+
+.navbar--item.navbar--item__login:hover .account-manipulation {
+    animation: slideUp 0.2s forwards;
+    visibility: visible !important;
+}
+
+.navbar--item.navbar--item__login:hover .account-manipulation::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 14px;
+    background-color: transparent;
+    top: -10px;
+    left: 0;
+}
+
+.navbar--item.navbar--item__login .account-manipulation li {
+    flex: 1;
+    padding: 10px;
+    transition: all 0.2s;
+    border-radius: 6px;
+    width: 200px;
+}
+
+.navbar--item.navbar--item__login .account-manipulation li:hover {
+    background-color: #00000038;
+}
+
+.navbar--item.navbar--item__login .account-manipulation li a,
+.navbar--item.navbar--item__login .account-manipulation li button {
+    display: block;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
 }
 
 .search-form {

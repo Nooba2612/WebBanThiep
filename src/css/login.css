@@ -206,3 +206,26 @@ body {
 .submit-add-to-cart-toast .toast-body span {
     font-size: 1.3rem;
 }
+
+.back-button {
+    top: 30px;
+    left: 30px;
+    position: absolute;
+    border: 1px solid var(--whiteColor);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: all 0.2s;
+}
+
+.back-button i {
+    color: var(--whiteColor);
+}
+
+.back-button:hover {
+    background-color: var(--whiteColor);
+}
+
+.back-button:hover i {
+    color: var(--blackColor);
+}

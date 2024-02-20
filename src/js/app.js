@@ -430,11 +430,29 @@ const handleEvents = () => {
     });
 };
 
+const handleLogoutAccount = () => {
+    $(".navbar--item.navbar--item__login .account-manipulation li .logout-button").on("click", () => {
+        localStorage.removeItem("currentAccount");
+
+        window.location.reload();
+    });
+};
+
 const handleSuccessLogin = () => {
     if (currentAccount) {
         $(".navbar--item__login").html(`
-                <a href="#" >${currentAccount.username} <i class="fa-solid fa-face-awesome"></i></a>
+                <a href="#" ><i class="fa-solid fa-face-awesome"></i> <span>${currentAccount.username}</span></a>
+                <ul class="account-manipulation">
+                    <li>
+                        <a href="#"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
+                    </li>
+                    <li>
+                        <button class="logout-button"><i class="fa-solid fa-power-off"></i><span>Đăng xuất</span></button>
+                    </li>
+                </ul>
         `);
+
+        handleLogoutAccount();
     } else {
         $(".navbar--item__login").html(`
                 <a href="./login.html"> <i class="fa-solid fa-circle-user"></i> <span>ĐĂNG NHẬP</span> </a>
@@ -596,7 +614,7 @@ const handleRenderDetailProduct = () => {
                 localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
             }
         });
-    })
+    });
 };
 
 const handleReloadPage = () => {

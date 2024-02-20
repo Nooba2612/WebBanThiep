@@ -312,6 +312,12 @@ const handleShowPassword = () => {
     });
 };
 
+const handleBackButtonClick = () => {
+    $(".back-button").on("click", () => {
+        history.back();
+    });
+};
+
 $(document).ready(() => {
     emailLoginInput.focus();
 
@@ -319,4 +325,5 @@ $(document).ready(() => {
     validateLoginForm();
     validateRegisterForm();
     handleShowPassword();
+    handleBackButtonClick();
 });
