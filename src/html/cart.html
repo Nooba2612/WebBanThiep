@@ -115,7 +115,7 @@
         </header>
         <main class="main">
             <div class="main__background">
-                <div class="wrapper container-lg">
+                <div class="wrapper container-lg cart-page">
                     <div class="row w-100">
                         <div class="cart col-lg-8 col-sm-12">
                             <header class="cart__header">
@@ -143,7 +143,9 @@
                             </div>
                             <div class="order-summary__info">
                                 <div class="order-summary__info--header">Thông tin đơn hàng</div>
-                                <div class="order-summary__info--temp-price">Tạm tính(1 sản phẩm) <span>100.000₫</span></div>
+                                <div class="order-summary__info--temp-price">
+                                    Tạm tính(1 sản phẩm) <span>100.000₫</span>
+                                </div>
                                 <div class="order-summary__info--shipping-fee">Phí vận chuyển <span>30.000₫</span></div>
                             </div>
                             <div class="order-summary__voucher">
@@ -157,7 +159,14 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="empty-cart-page">
+                    <div class="content">
+                        <i class="fa-solid fa-cart-xmark"></i> Không có sản phẩm nào trong giỏ hàng
+                    </div>
+                    <div class="go-to-home">
+                        <a href="./index.html">ĐI MUA SẮM <i class="fa-solid fa-right"></i></a>
+                    </div>
+                </div>
                 <div class="products-suggest">
                     <div class="container-lg">
                         <div class="products-suggest__title">DÀNH CHO BẠN</div>
@@ -278,7 +287,7 @@
         <div aria-live="polite" aria-atomic="true" class="position-relative">
             <div
                 id="toastContainer"
-                style="max-height: 235px; overflow: hidden;"
+                style="max-height: 235px; overflow: hidden"
                 class="toast-container position-fixed start-50 translate-middle-x"
             >
                 <!-- Toast content -->

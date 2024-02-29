@@ -397,6 +397,12 @@ const handleRenderCartProducts = () => {
     totalCost.text(`Tổng tiền: ₫${cost.toFixed(3)}`);
 
     $(".navbar--item__cart .items-quantity").text(cartItemQuantity);
+
+    if (currentAccount) {
+        $(".navbar--item__cart .products-list .footer .go-to-cart a").attr("href", "./cart.html");
+    } else {
+        $(".navbar--item__cart .products-list .footer .go-to-cart a").attr("href", "./login.html");
+    }
 };
 
 const handleRenderCartProductInCartPage = () => {
@@ -404,6 +410,14 @@ const handleRenderCartProductInCartPage = () => {
     const shoppingCart = $(".navbar--item__cart .products-list .content");
     const selectAllCheckBox = $(".cart .cart__header .select-all input");
     let selectProductCheckBox = $(".cart__product-list--item .select-product input");
+
+    if (cartItemQuantity === 0) {
+        $(".empty-cart-page").css("display", "flex");
+        $(".cart-page").css("display", "none");
+    } else {
+        $(".empty-cart-page").css("display", "none");
+        $(".cart-page").css("display", "block");
+    }
 
     const renderCartItems = () => {
         // reset cart items
@@ -549,6 +563,7 @@ const handleRenderCartProductInCartPage = () => {
                             if (product.id === quantityInput[index].getAttribute("data-product-id")) {
                                 product.quantity = quantityInput[index].value;
                                 updateLocalStorage();
+                                handleDisplayOrderSummary();
                             }
                         });
                     }
@@ -573,6 +588,7 @@ const handleRenderCartProductInCartPage = () => {
                             }
                         });
                         updateLocalStorage();
+                        handleDisplayOrderSummary();
                     }
                 });
             });
@@ -597,6 +613,7 @@ const handleRenderCartProductInCartPage = () => {
                             }
                         });
                         updateLocalStorage();
+                        handleDisplayOrderSummary();
                     }
                 });
             });
@@ -604,17 +621,20 @@ const handleRenderCartProductInCartPage = () => {
     };
     handleDecreaseQuantityProduct();
 
-    const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
-    const shippingFee = 30;
-    const cost = cartProducts
-        .map((product) => convertToNumber(product.price) * parseInt(product.quantity))
-        .reduce((sum, price) => sum + price, 0);
-    $(".order-summary__info--temp-price").html(
-        `Tạm tính(${cartItemQuantity} sản phẩm) <span>${cost.toFixed(3)}₫</span>`,
-    );
+    const handleDisplayOrderSummary = () => {
+        const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
+        const shippingFee = 30;
+        const cost = cartProducts
+            .map((product) => convertToNumber(product.price) * parseInt(product.quantity))
+            .reduce((sum, price) => sum + price, 0);
+        $(".order-summary__info--temp-price").html(
+            `Tạm tính(${cartItemQuantity} sản phẩm) <span>${cost.toFixed(3)}₫</span>`,
+        );
 
-    $(".order-summary__total span").text(`${(cost + shippingFee).toFixed(3)}₫`);
-    $(".order-summary__accept span").text(`${cartItemQuantity}`);
+        $(".order-summary__total span").text(`${(cost + shippingFee).toFixed(3)}₫`);
+        $(".order-summary__accept span").text(`${cartItemQuantity}`);
+    };
+    handleDisplayOrderSummary();
 };
 
 const updateLocalStorage = () => {
