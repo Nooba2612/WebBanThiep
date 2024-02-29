@@ -58,7 +58,7 @@ const products = [
         type: "womanday",
         status: "Còn hàng",
         image: "../assets/images/products/product-007.jpg",
-        name: "Thiệp Chúc Mừng Ngày Phụ Nữ Việt Nam - Happy Women Day 20.10",
+        name: "Thiệp Chúc Mừng Ngày Phụ Nữ Việt Nam - 20.10",
         occasion: "Ngày Phụ Nữ Việt Nam",
         price: "5.500",
     },

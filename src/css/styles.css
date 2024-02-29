@@ -70,6 +70,53 @@ a {
     color: var(--blackColor);
 }
 
+/* Customize check-box */
+input[type="checkbox"] {
+    /* Add if not using autoprefixer */
+    -webkit-appearance: none;
+    appearance: none;
+    /* For iOS < 15 to remove gradient background */
+    background-color: #fff;
+    /* Not removed via appearance */
+    margin: 0;
+    cursor: pointer;
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    background-color: var(--whiteColor);
+    margin: 0;
+    font: inherit;
+    color: var(--whiteColor);
+    width: 1.2em;
+    height: 1.2em;
+    padding: 1px;
+    border: 0.2em solid var(--blackColor);
+    border-radius: 0.15em;
+}
+
+.form-control + .form-control {
+    margin-top: 1em;
+}
+
+input[type="checkbox"] {
+    display: grid;
+    place-content: center;
+}
+
+input[type="checkbox"]::before {
+    content: "";
+    width: 0.5em;
+    height: 0.5em;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 0em 0em 1em 1em var(--blackColor);
+}
+
+input[type="checkbox"]:checked::before {
+    transform: scale(1);
+}
+
 /* Modal styles */
 .product-quickview .modal .modal-dialog {
     max-width: 835px;
@@ -221,7 +268,7 @@ a {
 }
 
 .submit-add-to-cart-toast .toast-body {
-    border-radius: 10px;
+    border-radius: 5px;
     background-color: var(--whiteColor);
     font-size: 1.1rem;
     font-weight: var(--boldFontWeight);
@@ -334,75 +381,6 @@ a {
 .header .navbar--item__logo {
     width: 180px;
     margin-right: 100px;
-}
-
-.navbar--item__about {
-    position: relative;
-}
-
-.navbar--item__about:hover .dropdown {
-    display: block;
-    animation: slideUp 0.2s linear forwards;
-}
-
-.navbar--item__about .dropdown {
-    display: none;
-    position: absolute;
-    z-index: 1000;
-    top: 75px;
-    left: 0;
-    padding: 15px;
-    font-size: 0.8rem;
-    font-weight: var(--boldFontWeight);
-    background-color: var(--primaryColor);
-    border-radius: 5px;
-    border: 1px solid var(--blackColor);
-    transition: all 0.1s linear;
-}
-
-.navbar--item__about .dropdown::before {
-    content: "";
-    position: absolute;
-    width: 180px;
-    height: 60px;
-    background-color: transparent;
-    top: -50px;
-    z-index: 99;
-}
-
-.dropdown .dropdown--content {
-    padding: 0;
-}
-
-.navbar--item__about .dropdown .dropdown--item {
-    width: 150px;
-    border-bottom: 1px solid var(--blackColor);
-    background-color: var(--primaryColor);
-    overflow: hidden;
-    padding-left: 10px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.2s linear;
-}
-
-.navbar--item__about .dropdown .dropdown--item:hover {
-    background-color: rgb(240, 248, 255);
-}
-
-.navbar--item__about .dropdown .dropdown--item:last-child {
-    border-bottom: none;
-}
-
-.navbar--item__about .dropdown .dropdown--item a {
-    padding: 15px 0;
-    color: var(--blackColor);
-    transition: all 0.2s linear;
-    width: 100%;
-    height: 100%;
-}
-
-.navbar--item__about .dropdown .dropdown--item:hover a {
-    color: var(--activeColor) !important;
 }
 
 .navbar--item.navbar--item__login {
@@ -574,7 +552,7 @@ a {
     min-height: 220px;
     height: 350px;
     bottom: -380px;
-    left: -20px;
+    left: -90px;
     cursor: default;
     background-color: var(--whiteColor);
     box-shadow: 0px 0px 2px 0px var(--primaryColor);
@@ -584,7 +562,7 @@ a {
 .navbar--item__cart .products-list::before {
     content: "";
     position: absolute;
-    width: 125px;
+    width: 230px;
     height: 60px;
     top: -59px;
     background-color: transparent;
@@ -764,7 +742,7 @@ a {
     transition: all 0.2s linear;
     border: 1px solid var(--blackColor);
     bottom: -85px;
-    left: -25px;
+    left: -90px;
     cursor: default;
     border-radius: 5px;
     font-weight: var(--boldFontWeight);
@@ -774,7 +752,7 @@ a {
 .navbar--item__cart .empty-cart::before {
     content: "";
     position: absolute;
-    width: 62px;
+    width: 230px;
     height: 60px;
     top: -59px;
     background-color: transparent;
@@ -864,7 +842,7 @@ a {
 }
 
 .header .menu--list .menu--item__category:hover .sub-menu,
-.header .menu--list .menu--item__occasions:hover .sub-menu {
+.header .menu--list .menu--item__contact:hover .sub-menu {
     display: flex;
     animation: slideUp 0.2s linear forwards;
 }
