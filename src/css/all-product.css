@@ -1,0 +1,380 @@
+/* Breadcrumb styles */
+.breadcrumb {
+    margin-left: 45px;
+    --bs-breadcrumb-divider: ">";
+    font-weight: 600;
+    padding: 10px 26px;
+    text-align: left;
+    font-size: 1.1rem;
+}
+
+.breadcrumb-item:not(.active) {
+    transition: text-decoration-color 0.4s;
+    text-decoration-color: transparent;
+}
+
+.breadcrumb-item:not(.active):hover {
+    text-decoration: underline;
+    text-decoration-color: var(--whiteColor);
+}
+
+.breadcrumb-item + .breadcrumb-item::before {
+    color: var(--whiteColor);
+}
+
+.breadcrumb-item.active {
+    color: var(--activeColor);
+}
+
+.main .heading {
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center space-between;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 1245px;
+}
+
+.heading__arrange-products {
+    font-size: 1.1rem;
+    color: var(--primaryColor);
+    font-weight: 300;
+}
+
+.heading__arrange-products .text {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.heading__arrange-products .text .text__content {
+    margin-left: 20px;
+    border: 1px solid var(--primaryColor);
+    padding: 10px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    place-content: center space-between;
+    width: 180px;
+    border-radius: 4px;
+}
+
+.heading__arrange-products .text .text__content i {
+    margin-left: 20px;
+}
+
+.heading__arrange-products--select {
+    padding: 10px 0;
+    margin-top: 4px;
+    position: absolute;
+    border: 1px solid var(--primaryColor);
+    right: 0;
+    z-index: 99;
+    background-color: var(--whiteColor);
+    top: 40px;
+    width: 180px;
+    border-radius: 4px;
+    transition: all 0.3s;
+    display: none;
+}
+
+.heading__arrange-products--select::before {
+    content: "";
+    width: 100%;
+    height: 41px;
+    top: -42px;
+    position: absolute;
+}
+
+.heading__arrange-products .text .text__content:hover + .heading__arrange-products--select,
+.heading__arrange-products--select:hover {
+    display: block;
+    animation: appear 0.3s forwards;
+}
+
+.heading__arrange-products .heading__arrange-products--select .option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s, font-weight 0.1s;
+}
+
+.heading__arrange-products--select .option:hover {
+    background-color: rgb(218, 218, 218);
+    font-weight: bold;
+}
+
+.main {
+    margin-bottom: 150px;
+}
+
+.main .content {
+    margin: 0 50px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    place-content: center;
+}
+
+.main .content .row.product-list {
+    max-height: 1988px;
+    overflow: hidden;
+    transition: max-height 0.6s;
+}
+
+.main .content .product-item {
+    border: 3px solid var(--primaryColor);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s;
+}
+
+.main .content .product-item:hover {
+    border-color: var(--activeColor);
+}
+
+.main .content .product-item .product-item__card {
+    text-align: center;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    min-height: 385px;
+}
+
+.main .content .product-item .product-item__card img {
+    object-fit: fill;
+    width: 100%;
+    height: unset;
+}
+
+.main .content .product-item .product-item__card .product-id {
+    position: absolute;
+    background-color: var(--primaryColor);
+    top: 0;
+    left: 0;
+    padding: 5px;
+    color: var(--whiteColor);
+    font-weight: var(--boldFontWeight);
+}
+
+.main .content .product-item .quick-view-button {
+    position: absolute;
+    top: 35%;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.main .content .product-item .quick-view-button button {
+    background-color: var(--blackColor);
+    color: var(--whiteColor);
+    transition: all 0.3s linear;
+    z-index: 999;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    border: 1px solid transparent;
+    opacity: 0;
+    visibility: hidden;
+}
+
+.main .content .product-item .quick-view-button button:hover {
+    background-color: var(--whiteColor);
+    color: var(--primaryColor);
+    border-color: var(--blackColor);
+}
+
+.main .content .product-item:hover .quick-view-button button {
+    opacity: 1;
+    visibility: visible;
+}
+
+.main .content .product-item .info {
+    width: 100%;
+    font-weight: var(--boldFontWeight);
+    padding: 5px;
+}
+
+.main .content .product-item .info .occasion {
+    color: var(--primaryColor);
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin: 5px 0;
+}
+
+.main .content .product-item .info .price {
+    margin: 9px 0;
+    color: var(--activeColor);
+}
+
+.main .content .product-item .info .name {
+    overflow: hidden;
+    text-wrap: wrap;
+    line-height: 17px;
+    font-size: 0.85rem;
+    text-overflow: ellipsis;
+    max-width: 100%;
+}
+
+.main .content .product-item .product-operator {
+    margin: 10px 0;
+}
+
+.main .content .product-item .product-operator .buy-button {
+    padding: 12px;
+    width: 70%;
+    border-radius: 5px;
+    border: 1px solid var(--primaryColor);
+    font-weight: bold;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.7s;
+}
+
+.main .content .product-item .product-operator .buy-button::before {
+    content: "";
+    color: var(--whiteColor);
+    position: absolute;
+    width: 0;
+    transform: skew(70deg);
+    left: -55px;
+    top: 0;
+    z-index: -1;
+    height: 100%;
+    background-color: var(--blackColor);
+    transition: width 0.7s;
+}
+
+.main .content .product-item .product-operator .buy-button:hover {
+    color: var(--whiteColor);
+}
+
+.main .content .product-item .product-operator .buy-button:hover::before {
+    width: 200%;
+}
+
+.main .content .product-item .product-operator .add-to-cart-btn {
+    padding: 12px;
+    border-radius: 5px;
+    border: 1px solid var(--primaryColor);
+    margin-left: 10px;
+    transition: all 0.5s;
+}
+
+.main .content .product-item .product-operator .add-to-cart-btn:hover {
+    background-color: var(--blackColor);
+    color: var(--whiteColor);
+}
+
+.main .content__show-more-btn {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    bottom: -30px;
+    display: flex;
+    flex-direction: column;
+    place-content: center;
+    cursor: pointer;
+}
+
+.main .content__show-more-btn .chevron {
+    position: absolute;
+    width: 28px;
+    height: 8px;
+    opacity: 0;
+    transform: scale3d(0.5, 0.5, 0.5);
+    animation: move 3s ease-out infinite;
+}
+
+.main .content__show-more-btn .chevron:first-child {
+    animation: move 3s ease-out 1s infinite;
+}
+
+.main .content__show-more-btn .chevron:nth-child(2) {
+    animation: move 3s ease-out 2s infinite;
+}
+
+.main .content__show-more-btn .chevron:before,
+.main .content__show-more-btn .chevron:after {
+    content: " ";
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 51%;
+    background: var(--blackColor);
+}
+
+.main .content__show-more-btn .chevron:before {
+    left: 0;
+    transform: skew(0deg, 30deg);
+}
+
+.main .content__show-more-btn .chevron:after {
+    right: 0;
+    width: 50%;
+    transform: skew(0deg, -30deg);
+}
+
+.main .content__show-more-btn .text {
+    position: absolute;
+    left: -35px;
+    font-family: "Helvetica Neue", "Helvetica", Arial, sans-serif;
+    font-size: 1.2rem;
+    text-align: center;
+    color: var(--blackColor);
+    text-transform: uppercase;
+    white-space: nowrap;
+    opacity: 0.25;
+    animation: pulse 2s linear alternate infinite;
+}
+
+.main .content__show-more-btn .text::before {
+    content: "";
+    position: absolute;
+    bottom: -52px;
+    width: 100%;
+    height: 55px;
+    background-color: transparent;
+    z-index: -1;
+}
+
+/* Animations */
+@keyframes appear {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px);
+    }
+}
+
+@keyframes pulse {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes move {
+    25% {
+        opacity: 1;
+    }
+    33% {
+        opacity: 1;
+        transform: translateY(30px);
+    }
+    67% {
+        opacity: 1;
+        transform: translateY(40px);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(55px) scale3d(0.5, 0.5, 0.5);
+    }
+}

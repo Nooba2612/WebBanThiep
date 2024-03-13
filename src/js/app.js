@@ -6,6 +6,7 @@ const seacrhBoxInput = $(".navbar--item__search-box input");
 const currentAccount = JSON.parse(localStorage.getItem("currentAccount"));
 let cartItemQuantity;
 let cartProducts;
+const currentPageURL = window.location.href;
 
 /* Functions */
 const handleNullFeature = () => {
@@ -348,7 +349,9 @@ const handleDeleteCartProductItem = (e) => {
         productsListCart.css("display", "none");
     }
     handleRenderCartProducts();
-    handleRenderCartProductInCartPage();
+    if (currentPageURL.endsWith("cart.html")) {
+        handleRenderCartProductInCartPage();
+    }
 };
 
 const handleRenderCartProducts = () => {
@@ -803,6 +806,10 @@ const handleEvents = () => {
         handleQuickViewButtonClick(e);
     });
 
+    $(".main .content .product-item .quick-view-button").on("click", (e) => {
+        handleQuickViewButtonClick(e);
+    });
+
     $(".footer .list .item").on("click", () => {
         handleNullFeature();
     });
@@ -1014,9 +1021,191 @@ const handleRenderSuggestProducts = () => {
     });
 };
 
+const handleRenderAllProductPage = (productArray) => {
+    const productList = $(".main .content .row");
+    productList.html("");
+
+    // handle render all product
+    productArray.forEach((product) => {
+        productList.append(`
+            <div class="col-3 p-3">
+                <div class="product-item">
+                    <a href="../html/detail-product.html?id=${product.id}" class="product-item__card">
+                        <img src="../assets/images/products/product-${product.id}.jpg" alt="product" />
+                        <div class="info">
+                            <div class="occasion">${product.occasion}</div>
+                            <div class="price">${product.price}₫</div>
+                            <div class="name">${product.name}</div>
+                        </div>
+                        <div class="product-id">Mã ${product.id}</div>
+                    </a>
+                    <div class="product-operator">
+                        <button type="button" data-product-id="${product.id}" class="buy-button">Mua ngay</button>
+                        <button type="button" data-product-id="${product.id}" class="add-to-cart-btn">
+                            <i class="fa-solid fa-cart-circle-plus"></i>
+                        </button>
+                    </div>
+                    <div class="quick-view-button" data-product-id="${product.id}">
+                        <button type="button" data-bs-toggle="modal" data-bs-target="#productQuickview">
+                            <i class="fa-solid fa-cart-shopping"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `);
+    });
+};
+
+const handleEventAllProductPage = () => {
+    const addToCartBtn = $(".main .content .product-item .product-operator .add-to-cart-btn");
+    const buyBtn = $(".main .content .product-item .product-operator .buy-button");
+
+    // handle add to cart
+    addToCartBtn.on("click", (e) => {
+        const productId = e.target.getAttribute("data-product-id");
+
+        products.forEach((product) => {
+            if (productId === product.id) {
+                let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
+
+                products.forEach((product) => {
+                    if (productId === product.id) {
+                        if (isDuplicateProduct === -1) {
+                            cartProducts.push(product);
+
+                            cartProducts[cartProducts.length - 1].quantity = 1;
+                        } else {
+                            cartProducts[isDuplicateProduct].quantity =
+                                parseInt(cartProducts[isDuplicateProduct].quantity) + 1;
+                        }
+                    }
+                });
+
+                cartItemQuantity = cartProducts
+                    .map((product) => product.quantity)
+                    .reduce((sum, quantity) => sum + quantity, 0);
+
+                showToasts(`Đã thêm sản phẩm vào giỏ hàng. <span><i class="fa-regular fa-cart-circle-check"></i>`);
+
+                handleRenderCartProducts();
+
+                updateLocalStorage();
+            }
+        });
+    });
+
+    // handle buy product
+    buyBtn.on("click", (e) => {
+        const productId = e.target.getAttribute("data-product-id");
+
+        products.forEach((product) => {
+            if (productId === product.id) {
+                let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
+
+                products.forEach((product) => {
+                    if (productId === product.id) {
+                        if (isDuplicateProduct === -1) {
+                            cartProducts.push(product);
+
+                            cartProducts[cartProducts.length - 1].quantity = 1;
+                            updateLocalStorage();
+                        } else {
+                            cartProducts[isDuplicateProduct].quantity =
+                                parseInt(cartProducts[isDuplicateProduct].quantity) + 1;
+                        }
+                    }
+                });
+
+                cartItemQuantity = cartProducts
+                    .map((product) => product.quantity)
+                    .reduce((sum, quantity) => sum + quantity, 0);
+
+                updateLocalStorage();
+            }
+        });
+
+        window.location.href = "./cart.html";
+    });
+
+    // arrange product occasion A-Z
+    const sortAZButton = $('.heading__arrange-products .heading__arrange-products--select .option[value="A-Z"]');
+    sortAZButton.on("click", () => {
+        const productsSortedAZ = products.slice().sort((a, b) => {
+            return a.occasion.localeCompare(b.occasion);
+        });
+        handleRenderAllProductPage(productsSortedAZ);
+    });
+
+    // arrange product occasion Z-A
+    const sortZAButton = $('.heading__arrange-products .heading__arrange-products--select .option[value="Z-A"]');
+    sortZAButton.on("click", () => {
+        const productsSortedZA = products.slice().sort((a, b) => {
+            return b.occasion.localeCompare(a.occasion);
+        });
+        handleRenderAllProductPage(productsSortedZA);
+    });
+
+    // arrange descending product prices
+    const sortDescendingPriceBtn = $(
+        '.heading__arrange-products .heading__arrange-products--select .option[value="descendingPrice"]',
+    );
+    sortDescendingPriceBtn.on("click", () => {
+        const descendingPriceProducts = products.slice().sort((a, b) => {
+            return parseFloat(b.price) - parseFloat(a.price);
+        });
+        handleRenderAllProductPage(descendingPriceProducts);
+    });
+
+    // arrange ascending product prices
+    const sortAscendingPriceBtn = $(
+        '.heading__arrange-products .heading__arrange-products--select .option[value="ascendingPrice"]',
+    );
+    sortAscendingPriceBtn.on("click", () => {
+        const ascendingPriceProducts = products.slice().sort((a, b) => {
+            return parseFloat(a.price) - parseFloat(b.price);
+        });
+        handleRenderAllProductPage(ascendingPriceProducts);
+    });
+
+    // arrange outstanding products
+    const outstandingProductsButton = $(
+        '.heading__arrange-products .heading__arrange-products--select .option[value="outstandingProducts"]',
+    );
+    const outstandingProducts = shuffleArray(products).slice();
+    outstandingProductsButton.on("click", () => {
+        handleRenderAllProductPage(outstandingProducts);
+    });
+
+    // handle show more products button
+    const showMoreProductsBtn = $(".main .content__show-more-btn");
+    showMoreProductsBtn.on("click", () => {
+        const productList = $(".main .content .row.product-list");
+        const currentMaxHeight = parseInt(productList.css("max-height"));
+        const aProductHeight = 493;
+        const rowWillShow = 3;
+
+        // if not remain products the show more button will be hidden
+        if (Math.ceil(currentMaxHeight / aProductHeight) >= Math.ceil(products.length / 4)) {
+            showMoreProductsBtn.css("display", "none");
+        }
+
+        productList.css("max-height", `${parseInt(currentMaxHeight) + aProductHeight * rowWillShow}px`);
+    });
+};
+
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
+    const spinnerLoading = $(".loading.spinner");
+
+    window.addEventListener("beforeunload", () => {
+        spinnerLoading.css("display", "flex");
+    });
+
+    window.addEventListener("load", () => {
+        spinnerLoading.css("display", "none");
+    });
+
     updateLocalStorage();
     handleShoppingCartNone();
     handleHeaderIntroAnimation();
@@ -1025,8 +1214,14 @@ const handleReloadPage = () => {
     handleRenderDetailProduct();
     handleRenderSuggestProducts();
     handleRenderCartProducts();
-    handleRenderCartProductInCartPage();
     handleDeleteSelectedProducts();
+    if (currentPageURL.endsWith("cart.html")) {
+        handleRenderCartProductInCartPage();
+    }
+    if (currentPageURL.endsWith("all-product.html")) {
+        handleRenderAllProductPage(shuffleArray(products));
+        handleEventAllProductPage();
+    }
 };
 
 $(document).ready(() => {

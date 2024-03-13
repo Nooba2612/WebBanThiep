@@ -7,6 +7,13 @@
     --boldFontWeight: bold;
     --fontSize: 1.2rem;
     --activeColor: #860a35;
+
+    --hue: 223;
+    --bg: hsl(var(--hue), 10%, 90%);
+    --fg: hsl(var(--hue), 10%, 10%);
+    --trans-dur: 0.3s;
+    --ease-in: cubic-bezier(0.12, 0, 0.39, 0);
+    --ease-out: cubic-bezier(0.61, 1, 0.88, 1);
 }
 
 /* CSS reset */
@@ -20,6 +27,10 @@
     margin: 0;
     padding: 0;
     font: inherit;
+}
+
+html {
+    scroll-behavior: smooth;
 }
 
 img,
@@ -51,11 +62,10 @@ button {
 }
 
 body {
-    /* min-height: 100vh; */
-    /* height: 2000px; */
     font-weight: 400;
     font-size: 16px;
     line-height: 1;
+    position: relative;
 }
 
 ul {
@@ -115,6 +125,207 @@ input[type="checkbox"]::before {
 
 input[type="checkbox"]:checked::before {
     transform: scale(1);
+}
+
+/* Loading spinner styles */
+.loading.spinner {
+    position: fixed;
+    z-index: 9999;
+    width: 100%;
+    height: 100vh;
+    display: none;
+    place-content: center center;
+    align-items: center;
+    top: 0;
+}
+
+.pl {
+    filter: drop-shadow(0 0.1875em 0.0625em hsla(var(--hue), 10%, 10%, 0.5));
+    position: relative;
+    width: 12em;
+    height: 12em;
+}
+
+.pl__eye {
+    top: 50%;
+    left: 50%;
+    width: 2em;
+    height: 2em;
+}
+
+.pl__eye,
+.pl__eye:before,
+.pl__eye:after {
+    position: absolute;
+}
+
+.pl__eye:before,
+.pl__eye:after {
+    animation-duration: 0.72s;
+    animation-iteration-count: infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 0 1em var(--fg) inset;
+    content: "";
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.pl__eye:before {
+    animation-name: ring-out;
+    animation-timing-function: var(--ease-in);
+}
+
+.pl__eye:after {
+    animation-name: circle-in;
+    animation-timing-function: var(--ease-out);
+    transform-origin: 50% 25%;
+}
+
+.pl__eye:nth-child(1) {
+    transform: translate3d(-50%, -50%, 0) rotate(0deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(1):before,
+.pl__eye:nth-child(1):after {
+    animation-delay: 0s;
+}
+
+.pl__eye:nth-child(2) {
+    transform: translate3d(-50%, -50%, 0) rotate(-30deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(2):before,
+.pl__eye:nth-child(2):after {
+    animation-delay: -0.12s;
+}
+
+.pl__eye:nth-child(3) {
+    transform: translate3d(-50%, -50%, 0) rotate(-60deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(3):before,
+.pl__eye:nth-child(3):after {
+    animation-delay: -0.24s;
+}
+
+.pl__eye:nth-child(4) {
+    transform: translate3d(-50%, -50%, 0) rotate(-90deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(4):before,
+.pl__eye:nth-child(4):after {
+    animation-delay: -0.36s;
+}
+
+.pl__eye:nth-child(5) {
+    transform: translate3d(-50%, -50%, 0) rotate(-120deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(5):before,
+.pl__eye:nth-child(5):after {
+    animation-delay: -0.48s;
+}
+
+.pl__eye:nth-child(6) {
+    transform: translate3d(-50%, -50%, 0) rotate(-150deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(6):before,
+.pl__eye:nth-child(6):after {
+    animation-delay: -0.6s;
+}
+
+.pl__eye:nth-child(7) {
+    transform: translate3d(-50%, -50%, 0) rotate(-180deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(7):before,
+.pl__eye:nth-child(7):after {
+    animation-delay: -0.72s;
+}
+
+.pl__eye:nth-child(8) {
+    transform: translate3d(-50%, -50%, 0) rotate(-210deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(8):before,
+.pl__eye:nth-child(8):after {
+    animation-delay: -0.84s;
+}
+
+.pl__eye:nth-child(9) {
+    transform: translate3d(-50%, -50%, 0) rotate(-240deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(9):before,
+.pl__eye:nth-child(9):after {
+    animation-delay: -0.96s;
+}
+
+.pl__eye:nth-child(10) {
+    transform: translate3d(-50%, -50%, 0) rotate(-270deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(10):before,
+.pl__eye:nth-child(10):after {
+    animation-delay: -1.08s;
+}
+
+.pl__eye:nth-child(11) {
+    transform: translate3d(-50%, -50%, 0) rotate(-300deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(11):before,
+.pl__eye:nth-child(11):after {
+    animation-delay: -1.2s;
+}
+
+.pl__eye:nth-child(12) {
+    transform: translate3d(-50%, -50%, 0) rotate(-330deg) translate3d(0, 5em, 0);
+}
+
+.pl__eye:nth-child(12):before,
+.pl__eye:nth-child(12):after {
+    animation-delay: -1.32s;
+}
+
+/* Dark theme */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: hsl(var(--hue), 10%, 20%);
+        --fg: hsl(var(--hue), 10%, 90%);
+    }
+}
+
+/* Animations */
+@keyframes ring-out {
+    from {
+        box-shadow: 0 0 0 1em var(--fg) inset;
+        transform: translate3d(0, 0, 0);
+    }
+    55%,
+    to {
+        box-shadow: 0 0 0 0 var(--fg) inset;
+        transform: translate3d(0, -40%, 0);
+    }
+}
+
+@keyframes circle-in {
+    from {
+        animation-timing-function: steps(1);
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+    1%,
+    45% {
+        animation-timing-function: var(--ease-out);
+        transform: translate3d(0, -37.5%, 0) scale(0);
+    }
+    to {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
 }
 
 /* Modal styles */
@@ -353,11 +564,16 @@ input[type="checkbox"]:checked::before {
 
 .navbar--list .navbar--group-item {
     display: flex;
+    flex: 0.3;
     justify-content: space-evenly;
 }
 
 .navbar--list .navbar--group-item a {
+    text-overflow: ellipsis;
     overflow: hidden;
+    white-space: nowrap;
+    display: block;
+    max-width: 170px;
 }
 
 .navbar--group-item .navbar--item__cart {
@@ -385,6 +601,8 @@ input[type="checkbox"]:checked::before {
 
 .navbar--item.navbar--item__login {
     position: relative;
+    z-index: 999;
+    overflow: hidden;
 }
 
 .navbar--item.navbar--item__login .account-manipulation {
@@ -420,10 +638,10 @@ input[type="checkbox"]:checked::before {
 
 .navbar--item.navbar--item__login .account-manipulation li {
     flex: 1;
-    padding: 10px;
+    padding: 8px;
     transition: all 0.2s;
     border-radius: 6px;
-    width: 200px;
+    width: 210px;
 }
 
 .navbar--item.navbar--item__login .account-manipulation li:hover {
@@ -552,7 +770,7 @@ input[type="checkbox"]:checked::before {
     min-height: 220px;
     height: 350px;
     bottom: -380px;
-    left: -90px;
+    left: -175px;
     cursor: default;
     background-color: var(--whiteColor);
     box-shadow: 0px 0px 2px 0px var(--primaryColor);
