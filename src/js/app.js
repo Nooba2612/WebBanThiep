@@ -323,6 +323,9 @@ const handleAddToCartButtonClick = (e) => {
         }
     });
 
+    if (window.location.href.includes("/cart.html")) {
+        $(".cart .cart__header .select-all input").prop("checked", false);
+    }
     updateLocalStorage();
     handleRenderCartProducts();
     handleRenderCartProductInCartPage();
@@ -391,8 +394,6 @@ const handleRenderCartProducts = () => {
         handleDeleteCartProductItem(e);
     });
 
-    const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
-
     const cost = cartProducts
         .map((product) => convertToNumber(product.price) * parseInt(product.quantity))
         .reduce((sum, price) => sum + price, 0);
@@ -407,6 +408,8 @@ const handleRenderCartProducts = () => {
         $(".navbar--item__cart .products-list .footer .go-to-cart a").attr("href", "./login.html");
     }
 };
+
+const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
 
 const handleRenderCartProductInCartPage = () => {
     const cartList = $(".cart .cart__product-list");
@@ -508,18 +511,46 @@ const handleRenderCartProductInCartPage = () => {
         return value;
     };
 
+    const handleDisplayOrderSummary = () => {
+        const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
+        let shippingFee = 0;
+        let cost = 0;
+        let itemQuantity = 0;
+
+        selectProductCheckBox.each((key, checkbox) => {
+            if (checkbox.checked) {
+                const product = cartProducts[key];
+                const productCost = convertToNumber(product.price) * parseInt(product.quantity);
+                cost += productCost;
+                shippingFee = 30;
+                itemQuantity += product.quantity;
+            }
+        });
+
+        $(".order-summary__info--temp-price").html(
+            `Tạm tính(${itemQuantity} sản phẩm) <span>${cost.toFixed(3)}₫</span>`,
+        );
+
+        $(".order-summary__info--shipping-fee span").text(`${shippingFee.toFixed(3)}₫`);
+        $(".order-summary__total span").text(`${(cost + shippingFee).toFixed(3)}₫`);
+        $(".order-summary__accept span").text(`${itemQuantity}`);
+    };
+
     const handleSelectAllProduct = () => {
         selectProductCheckBox = $(".cart__product-list--item .select-product input");
         selectAllCheckBox.on("change", () => {
             if (selectAllCheckBox.prop("checked")) {
                 selectProductCheckBox.each((index) => {
                     selectProductCheckBox[index].checked = true;
+                    cartProducts[index].checked = true;
                 });
             } else {
                 selectProductCheckBox.each((index) => {
                     selectProductCheckBox[index].checked = false;
+                    cartProducts[index].checked = false;
                 });
             }
+            handleDisplayOrderSummary();
         });
 
         selectProductCheckBox.each((index) => {
@@ -530,9 +561,27 @@ const handleRenderCartProductInCartPage = () => {
                     selectAllCheckBox.prop("checked", false);
                 }
             });
+            handleDisplayOrderSummary();
         });
     };
     handleSelectAllProduct();
+
+    const handleSelectProduct = () => {
+        selectProductCheckBox.each((index) => {
+            selectProductCheckBox[index].addEventListener("change", () => {
+                handleDisplayOrderSummary();
+                selectProductCheckBox.each((key) => {
+                    if (selectProductCheckBox[key].checked) {
+                        cartProducts[key].checked = true;
+                    } else {
+                        cartProducts[key].checked = false;
+                    }
+                    updateLocalStorage();
+                });
+            });
+        });
+    };
+    handleSelectProduct();
 
     const handleProductQuantityInput = () => {
         const quantityInput = $(".cart__product-list--item .product-quantity input");
@@ -624,20 +673,26 @@ const handleRenderCartProductInCartPage = () => {
     };
     handleDecreaseQuantityProduct();
 
-    const handleDisplayOrderSummary = () => {
-        const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
-        const shippingFee = 30;
-        const cost = cartProducts
-            .map((product) => convertToNumber(product.price) * parseInt(product.quantity))
-            .reduce((sum, price) => sum + price, 0);
-        $(".order-summary__info--temp-price").html(
-            `Tạm tính(${cartItemQuantity} sản phẩm) <span>${cost.toFixed(3)}₫</span>`,
-        );
+    const handleAcceptOrderButtonClick = () => {
+        const acceptBtn = $(".order-summary__accept");
+        let hasCheckedProduct = false;
 
-        $(".order-summary__total span").text(`${(cost + shippingFee).toFixed(3)}₫`);
-        $(".order-summary__accept span").text(`${cartItemQuantity}`);
+        acceptBtn.on("click", () => {
+            cartProducts.forEach((product) => {
+                if (product.checked) {
+                    hasCheckedProduct = true;
+                    return;
+                }
+            });
+            if (hasCheckedProduct) {
+                updateLocalStorage();
+                window.location.href = "./payment.html";
+            } else {
+                showToasts("Hãy chọn ít nhất một sản phẩm!");
+            }
+        });
     };
-    handleDisplayOrderSummary();
+    handleAcceptOrderButtonClick();
 };
 
 const updateLocalStorage = () => {
@@ -839,6 +894,9 @@ const handleSuccessLogin = () => {
                 <ul class="account-manipulation">
                     <li>
                         <a href="#"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa-duotone fa-box"></i><span>Đơn hàng</span></a>
                     </li>
                     <li>
                         <button class="logout-button"><i class="fa-solid fa-power-off"></i><span>Đăng xuất</span></button>
@@ -1193,6 +1251,172 @@ const handleEventAllProductPage = () => {
     });
 };
 
+const handlePayOrderProducts = () => {
+    const paymentMethodElList = $(".main .payment-methods__list .payment-methods__item");
+    const checkMarkList = $(".main .payment-methods__list .payment-methods__item--content > .check-mark");
+    const uncheckMarkList = $(".main .payment-methods__list .payment-methods__item--content > .uncheck-mark");
+    const checkoutOrderProductsButton = $(".main .order-total .checkout-accept-button");
+    let hasPaymentMethod = false;
+    const paymentModal = new bootstrap.Modal(document.getElementById("confirmOrderProductModal"), {
+        keyboard: false,
+    });
+
+    const renderOrderProductList = () => {};
+    renderOrderProductList();
+
+    paymentMethodElList.each((index) => {
+        paymentMethodElList[index].addEventListener("click", () => {
+            paymentMethodElList.each((key) => {
+                paymentMethodElList[key].classList.remove("selected");
+                checkMarkList[key].style.display = "none";
+                uncheckMarkList[key].style.display = "block";
+            });
+            paymentMethodElList[index].classList.add("selected");
+            checkMarkList[index].style.display = "block";
+            uncheckMarkList[index].style.display = "none";
+        });
+    });
+
+    const renderOrderProductsList = () => {
+        const productList = $(".bill-detail__content--product-list");
+
+        productList.html("");
+
+        cartProducts.forEach((product) => {
+            if (product.checked) {
+                productList.append(`
+                    <div class="bill-detail__content--product-item">
+                        <div class="image">
+                            <img src="../assets/images/products/product-${product.id}.jpg" alt="product" />
+                        </div>
+                        <div style="flex: 1; margin-left:20px;">
+                            <div class="name">${product.name}</div>
+                            <div class="type">Loại: <span>${product.occasion}</span></div>
+                        </div>
+                        <div class="cost">${product.price}₫</div>
+                        <div class="quantity">${product.quantity}</div>
+                        <div class="price">${(parseFloat(product.price) * product.quantity).toFixed(3)}₫</div>
+                    </div>
+                `);
+            }
+        });
+    };
+    renderOrderProductsList();
+
+    // render summary order products
+    const displayOrderSummary = () => {
+        const priceEl = $(
+            ".main .order-total .order-total__summary--list .order-total__summary--item.price span:not(.title)",
+        );
+        const shippingFeeEl = $(
+            ".main .order-total .order-total__summary--list .order-total__summary--item.shipping-fee span:not(.title)",
+        );
+        const checkoutEl = $(
+            ".main .order-total .order-total__summary--list .order-total__summary--item.checkout span:not(.title)",
+        );
+
+        let shippingFee = 0;
+        let price = 0;
+        cartProducts.forEach((product) => {
+            if (product.checked) {
+                shippingFee = 30;
+                price += convertToNumber(product.price) * parseInt(product.quantity);
+            }
+        });
+
+        priceEl.text(`${price.toFixed(3)}₫`);
+
+        shippingFeeEl.text(`${shippingFee.toFixed(3)}₫`);
+
+        checkoutEl.text(`${(price + shippingFee).toFixed(3)}₫`);
+    };
+    displayOrderSummary();
+
+    // handle checkout order products click
+    const handlePay = () => {
+        const paidButton = $(".order-product-confirm .paid-button");
+
+        paidButton.on("click", () => {
+            setTimeout(() => {
+                window.location.href = "./purchase.html";
+            }, 1000);
+        });
+    };
+
+    const handleCheckoutOrderButtonClick = () => {
+        checkoutOrderProductsButton.on("click", () => {
+            const qrCodeImg = $(".order-product-confirm .qr-code img");
+            const transactionCode = Math.floor(Math.random() * 10000);
+            const transactionCodeEL = $(".order-product-confirm .transaction-code");
+
+            // change QR code
+            paymentMethodElList.each((index) => {
+                if (
+                    paymentMethodElList[index].classList.contains("momo") &&
+                    paymentMethodElList[index].classList.contains("selected")
+                ) {
+                    qrCodeImg.attr("src", "../assets/images/qr-codes/qr-momo.png");
+                    return;
+                }
+
+                if (
+                    paymentMethodElList[index].classList.contains("zalopay") &&
+                    paymentMethodElList[index].classList.contains("selected")
+                ) {
+                    qrCodeImg.attr("src", "../assets/images/qr-codes/qr-zalopay.png");
+                    return;
+                }
+
+                if (
+                    paymentMethodElList[index].classList.contains("banking") &&
+                    paymentMethodElList[index].classList.contains("selected")
+                ) {
+                    qrCodeImg.attr("src", "../assets/images/qr-codes/qr-banking.png");
+                    return;
+                }
+
+                if (
+                    paymentMethodElList[index].classList.contains("shopeepay") &&
+                    paymentMethodElList[index].classList.contains("selected")
+                ) {
+                    qrCodeImg.attr("src", "../assets/images/qr-codes/qr-shopeepay.jpg");
+                    return;
+                }
+
+                if (
+                    paymentMethodElList[index].classList.contains("viettelmoney") &&
+                    paymentMethodElList[index].classList.contains("selected")
+                ) {
+                    qrCodeImg.attr("src", "../assets/images/qr-codes/qr-viettelmoney.png");
+                    return;
+                }
+            });
+
+            paymentMethodElList.each((index) => {
+                if (paymentMethodElList[index].classList.contains("selected")) {
+                    hasPaymentMethod = true;
+                    return;
+                }
+            });
+
+            if (!hasPaymentMethod) {
+                showToasts(`Chưa chọn phương thức thanh toán!`);
+            } else {
+                if (!paymentMethodElList[0].classList.contains("selected")) {
+                    paymentModal.show();
+                    transactionCodeEL.text(transactionCode);
+                    handlePay();
+                } else {
+                    setTimeout(() => {
+                        window.location.href = "./purchase.html";
+                    }, 1000);
+                }
+            }
+        });
+    };
+    handleCheckoutOrderButtonClick();
+};
+
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
@@ -1221,6 +1445,9 @@ const handleReloadPage = () => {
     if (currentPageURL.endsWith("all-product.html")) {
         handleRenderAllProductPage(shuffleArray(products));
         handleEventAllProductPage();
+    }
+    if (currentPageURL.endsWith("payment.html")) {
+        handlePayOrderProducts();
     }
 };
 

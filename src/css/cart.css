@@ -264,7 +264,9 @@
     background-color: var(--blackColor);
     font-weight: 500;
     border: 1px solid transparent;
-    transition: all 0.3s;
+    transition: all 0.5s;
+    color: var(--whiteColor);
+    padding: 10px;
 }
 
 .order-summary__accept:hover {
@@ -273,21 +275,14 @@
     box-shadow: inset 0px 0px 12px 5px var(--blackColor);
 }
 
-.order-summary__accept a {
-    transition: all 0.3s;
-    color: var(--whiteColor);
-    padding: 10px;
-    width: 100%;
-}
-
-.order-summary__accept:hover a {
+.order-summary__accept:hover {
     color: var(--blackColor);
 }
 
 .products-suggest {
     max-width: 1200px;
     margin: 25px auto 0;
-    max-height: 965px;
+    max-height: 996px;
     overflow: hidden;
 }
 
