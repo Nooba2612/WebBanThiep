@@ -1,0 +1,268 @@
+/* Custom radio input */
+[type="radio"]:checked,
+[type="radio"]:not(:checked) {
+    position: absolute;
+    left: -9999px;
+}
+[type="radio"]:checked + label,
+[type="radio"]:not(:checked) + label {
+    position: relative;
+    padding-left: 28px;
+    cursor: pointer;
+    line-height: 20px;
+    display: inline-block;
+    color: #666;
+}
+[type="radio"]:checked + label:before,
+[type="radio"]:not(:checked) + label:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 19px;
+    height: 19px;
+    border: 1px solid #ddd;
+    border-radius: 100%;
+    background: #fff;
+}
+[type="radio"]:checked + label:after,
+[type="radio"]:not(:checked) + label:after {
+    content: "";
+    width: 13px;
+    height: 13px;
+    background: #e60e4e;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    border-radius: 100%;
+    -webkit-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+[type="radio"]:not(:checked) + label:after {
+    opacity: 0;
+    -webkit-transform: scale(0);
+    transform: scale(0);
+}
+[type="radio"]:checked + label:after {
+    opacity: 1;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+}
+
+.main {
+    height: 1000px !important;
+    padding-top: 50px;
+    background-color: #ebebeb;
+}
+.category .title {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.category .title span {
+    margin-left: 10px;
+}
+
+.category ul {
+    margin-left: 30px;
+}
+
+.category ul li.item {
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: all 0.3s;
+}
+
+.category ul li.item:hover {
+    color: var(--activeColor);
+}
+
+.category ul li.item.selected {
+    color: var(--activeColor);
+    font-weight: bold;
+}
+
+.form {
+    background-color: var(--whiteColor);
+    padding: 0 25px 25px;
+    flex: 0.9;
+    max-width: 700px;
+}
+
+.form > .title {
+    font-size: 1.3rem;
+    padding: 20px;
+    border-bottom: 1px solid rgb(205, 205, 205);
+    margin-bottom: 20px;
+}
+
+.form table {
+    width: 100%;
+}
+
+.form table tr td {
+    height: 50px;
+}
+
+.form table tr td:first-child {
+    width: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.form table tr td:nth-child(2) {
+    padding-left: 30px;
+}
+
+.form table tr td:nth-child(2) > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.form table tr td:nth-child(2) > div input {
+    border: 1px solid var(--blackColor);
+    padding: 5px;
+    transition: display 0.3s, opacity 0.3s;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.3s;
+}
+
+.form table tr td:nth-child(2) > div .email,
+.form table tr td:nth-child(2) > div .phone {
+    position: absolute;
+    transition: all 0.2s;
+}
+
+.form table tr td:nth-child(2) > div .email.hidden,
+.form table tr td:nth-child(2) > div .phone.hidden,
+.form table tr td:nth-child(2) > div input.hidden {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.form table tr td:nth-child(2) > div .email.appear,
+.form table tr td:nth-child(2) > div .phone.appear,
+.form table tr td:nth-child(2) > div input.appear {
+    opacity: 1;
+    visibility: visible;
+}
+
+.form table tr td:nth-child(2) > div button {
+    margin-left: 10px;
+    color: rgb(50, 93, 187);
+    text-decoration: underline;
+}
+
+.form table tr td:nth-child(2) .gender-select {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.form table tr td:nth-child(2) .gender-select .radio-select {
+    margin-right: 10px;
+}
+
+.form .date-of-birth-input-group > .select {
+    position: relative;
+    border: 3px solid var(--blackColor);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex: 1;
+    margin-right: 20px;
+    transition: border-color 0.3s;
+}
+
+.form .date-of-birth-input-group > .select:hover {
+    border-color: var(--alertColor);
+    cursor: pointer;
+}
+
+.form .date-of-birth-input-group .select .box {
+    position: absolute;
+    top: 43px;
+    left: 0;
+    display: none;
+    text-align: left;
+    border: 1px solid var(--blackColor);
+    width: 100%;
+    z-index: 999;
+    max-height: 200px;
+    overflow: hidden auto;
+    background-color: var(--whiteColor);
+    padding: 10px 0;
+}
+
+.form .date-of-birth-input-group .select .box > div[value] {
+    padding: 5px 10px;
+    transition: all 0.2s;
+}
+
+.form .date-of-birth-input-group .select .box > div[value]:hover {
+    background-color: #e2e2e2;
+    color: var(--alertColor);
+    cursor: pointer;
+}
+
+.form .date-of-birth-input-group .select .box::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    background-color: transparent;
+    z-index: 999;
+    height: 15px;
+    top: -10px;
+}
+
+.form .save-change-btn {
+    padding: 15px 20px;
+    border: 1px solid var(--blackColor);
+    margin-top: 30px;
+    margin-right: 20px;
+    float: right;
+    font-weight: bold;
+    color: var(--whiteColor);
+    background-color: var(--blackColor);
+    border-radius: 3px;
+}
+
+.main .avatar-upload {
+    align-self: flex-start;
+    text-align: center;
+}
+
+.main .avatar-upload .avatar-input {
+    display: none;
+}
+
+.main .avatar-upload .select-avatar {
+    width: 80%;
+    padding: 10px 15px;
+    border: 1px solid var(--blackColor);
+    margin-top: 30px;
+    transition: background-color 0.3s;
+    border-radius: 3px;
+}
+
+.main .avatar-upload .select-avatar:hover {
+    background-color: #cecece;
+}
+
+.main .avatar-upload .avatar-img {
+    background-position: center;
+    background-size: cover;
+    height: 150px;
+    width: 150px;
+    border-radius: 100%;
+    cursor: pointer;
+    object-fit: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

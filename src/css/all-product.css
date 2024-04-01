@@ -120,7 +120,7 @@
 }
 
 .main .content .row.product-list {
-    max-height: 1988px;
+    max-height: 2088px;
     overflow: hidden;
     transition: max-height 0.6s;
 }
@@ -142,7 +142,7 @@
     overflow: hidden;
     position: relative;
     cursor: pointer;
-    min-height: 385px;
+    min-height: 415px;
 }
 
 .main .content .product-item .product-item__card img {

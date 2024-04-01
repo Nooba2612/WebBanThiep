@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Chi tiết sản phẩm -</title>
         <link rel="stylesheet" href="../assets/icons/fontawesome-pro-6.5.1-web/css/all.min.css" />
         <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../vendor/jquery/slick/slick.css" />
         <link rel="stylesheet" href="../vendor/jquery/slick/slick-theme.css" />
         <link rel="shortcut icon" href="../assets/images/favicon.ico?v=0" type="image/x-icon" />
-        <link rel="stylesheet" href="../css/detail-product.css" />
         <link rel="stylesheet" href="../css/styles.css" />
+        <link rel="stylesheet" href="../css/profile.css" />
+        <title>Thông tin người dùng</title>
     </head>
     <body>
         <header class="header">
@@ -89,7 +89,9 @@
 
             <div class="menu--list">
                 <ul>
-                    <li class="menu--item menu--item__all"><a href="./all-product.html">Tất cả</a></li>
+                    <li class="menu--item menu--item__all">
+                        <a href="./all-product.html">Tất cả</a>
+                    </li>
                     <li class="menu--item menu--item__category">
                         <a href="">Nhân dịp<i class="fa-duotone fa-chevron-down"></i></a>
                         <ul class="sub-menu">
@@ -113,20 +115,115 @@
                 </ul>
             </div>
         </header>
-
         <main class="main">
-            <div class="product-info">
-                <!-- Product info -->
-            </div>
-
-            <div class="relate-products products">
-                <h2 class="products__title">SẢN PHẨM LIÊN QUAN</h2>
-                <ul class="products__list">
-                    <!-- products__item -->
-                </ul>
+            <div
+                style="
+                    max-width: 1150px;
+                    margin: 0 auto;
+                    display: flex;
+                    align-items: flex-start;
+                    justify-content: space-between;
+                "
+            >
+                <div class="category">
+                    <div class="title"><i class="fa-solid fa-user"></i> <span>Tài khoản của tôi</span></div>
+                    <ul>
+                        <li class="item info selected">Thông tin</li>
+                        <li class="item address">Địa chỉ</li>
+                        <li class="item password">Đổi mật khẩu</li>
+                    </ul>
+                </div>
+                <form class="form">
+                    <div class="title">Thông tin của tôi</div>
+                    <div class="detail-profile">
+                        <table>
+                            <tr>
+                                <td>Tên người dùng</td>
+                                <td class="name">name</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <div class="email-control">
+                                        <div class="email">email</div>
+                                        <input type="email" class="email-input" value="" />
+                                        <button type="button" class="change-email-btn">Thay đổi</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại</td>
+                                <td>
+                                    <div class="phone-control">
+                                        <div class="phone">phone number</div>
+                                        <input type="text" class="phone-input" value="" />
+                                        <button type="button" class="change-phone-btn">Thay đổi</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Giới tính</td>
+                                <td>
+                                    <div class="gender-select">
+                                        <div class="radio-select">
+                                            <input type="radio" id="male" value="male" name="gender" />
+                                            <label for="male">Nam</label>
+                                        </div>
+                                        <div class="radio-select">
+                                            <input type="radio" id="female" value="female" name="gender" />
+                                            <label for="female">Nữ</label>
+                                        </div>
+                                        <div class="radio-select">
+                                            <input
+                                                type="radio"
+                                                id="different-gender"
+                                                value="different-gender"
+                                                name="gender"
+                                            />
+                                            <label for="different-gender">Khác</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ngày sinh</td>
+                                <td>
+                                    <div class="date-of-birth-input-group">
+                                        <div class="day-select select">
+                                            <span class="content">Chọn ngày</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="day-box box">
+                                                <!-- days -->
+                                            </div>
+                                        </div>
+                                        <div class="month-select select">
+                                            <span class="content">Chọn tháng</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="month-box box">
+                                                <!-- months -->
+                                            </div>
+                                        </div>
+                                        <div class="year-select select">
+                                            <span class="content">Chọn năm</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="year-box box">
+                                                <!-- years -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button type="button" class="save-change-btn">Lưu thay đổi</button>
+                </form>
+                <div class="avatar-upload">
+                    <div class="avatar-img">Chưa có ảnh đại diện</div>
+                    <input type="file" class="avatar-input" accept=".jpg,.jpeg,.png" />
+                    <button type="button" class="select-avatar">Chọn ảnh</button>
+                </div>
             </div>
         </main>
-
         <footer class="footer">
             <div class="footer__heading"></div>
             <div class="footer__content">
@@ -183,7 +280,7 @@
 
         <div class="modal-quickview product-quickview">
             <div
-                class="modal fade"
+                class="productQuickview modal fade"
                 id="productQuickview"
                 tabindex="-1"
                 role="dialog"
@@ -204,7 +301,11 @@
         </div>
 
         <div aria-live="polite" aria-atomic="true" class="position-relative">
-            <div id="toastContainer" class="toast-container position-fixed start-50 translate-middle-x">
+            <div
+                id="toastContainer"
+                style="max-height: 235px; overflow: hidden"
+                class="toast-container position-fixed start-50 translate-middle-x"
+            >
                 <!-- Toast content -->
             </div>
         </div>
@@ -230,4 +331,5 @@
     <script src="../vendor/jquery/jquery-3.7.1.min.js"></script>
     <script src="../vendor/jquery/slick/slick.min.js"></script>
     <script type="module" src="../js/app.js"></script>
+    <script></script>
 </html>

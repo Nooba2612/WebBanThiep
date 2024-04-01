@@ -548,6 +548,8 @@ input[type="checkbox"]:checked::before {
     margin-right: 10px;
     color: var(--blackColor);
     cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 .navbar--list .navbar--item:hover {
@@ -559,8 +561,8 @@ input[type="checkbox"]:checked::before {
 }
 
 .navbar--list .navbar--item span {
-    font-size: 1rem;
-    margin-left: 5px;
+    font-size: 1.1rem;
+    margin-left: 10px;
 }
 
 .navbar--list .navbar--group-item {
@@ -575,7 +577,6 @@ input[type="checkbox"]:checked::before {
 
 .navbar--list .navbar--group-item a {
     text-overflow: ellipsis;
-    overflow: hidden;
     white-space: nowrap;
     display: block;
     max-width: 170px;
@@ -593,7 +594,7 @@ input[type="checkbox"]:checked::before {
     line-height: 20px;
     width: 20px;
     text-align: center;
-    top: 6px;
+    top: 21px;
     right: 0px;
     font-size: 0.8rem;
     font-weight: var(--boldFontWeight);
@@ -608,6 +609,25 @@ input[type="checkbox"]:checked::before {
     position: relative;
     z-index: 999;
     padding: 0;
+}
+
+.navbar--item.navbar--item__login > a {
+    display: flex;
+    align-items: center;
+}
+
+.navbar--item.navbar--item__login > a span {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.navbar--item.navbar--item__login > a > .avatar {
+    background-size: cover;
+    min-height: 45px;
+    min-width: 45px;
+    border-radius: 100%;
+    background-repeat: no-repeat;
 }
 
 .navbar--item.navbar--item__login .account-manipulation {

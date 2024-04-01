@@ -4,6 +4,7 @@ import { products } from "./products.js";
 
 const seacrhBoxInput = $(".navbar--item__search-box input");
 const currentAccount = JSON.parse(localStorage.getItem("currentAccount"));
+let registerAccounts;
 let cartItemQuantity;
 let cartProducts;
 const currentPageURL = window.location.href;
@@ -696,10 +697,18 @@ const handleRenderCartProductInCartPage = () => {
 };
 
 const updateLocalStorage = () => {
+    // update register accounts when current account change
+    registerAccounts.forEach((account, index) => {
+        if (account.id === currentAccount.id) {
+            registerAccounts[index] = { ...currentAccount };
+        }
+    });
     cartItemQuantity = cartProducts.map((product) => product.quantity).reduce((sum, quantity) => sum + quantity, 0);
     $(".navbar--item__cart .items-quantity").text(cartItemQuantity);
     localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
     localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+    localStorage.setItem("registerAccounts", JSON.stringify(registerAccounts));
+    localStorage.setItem("currentAccount", JSON.stringify(currentAccount));
 };
 
 const handleDeleteSelectedProducts = () => {
@@ -890,13 +899,13 @@ const handleLogoutAccount = () => {
 const handleSuccessLogin = () => {
     if (currentAccount) {
         $(".navbar--item__login").html(`
-                <a href="#" ><i class="fa-solid fa-face-awesome"></i> <span>${currentAccount.username}</span></a>
+                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar})"></div> <span>${currentAccount.username}</span></a>
                 <ul class="account-manipulation">
                     <li>
-                        <a href="#"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
+                        <a href="./profile.html"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
                     </li>
                     <li>
-                        <a href="#"><i class="fa-duotone fa-box"></i><span>Đơn hàng</span></a>
+                        <a href="./purchase.html"><i class="fa-duotone fa-box"></i><span>Đơn hàng</span></a>
                     </li>
                     <li>
                         <button class="logout-button"><i class="fa-solid fa-power-off"></i><span>Đăng xuất</span></button>
@@ -1417,9 +1426,268 @@ const handlePayOrderProducts = () => {
     handleCheckoutOrderButtonClick();
 };
 
+const profilePage = () => {
+    const dayBox = $(".form .date-of-birth-input-group .select .day-box.box");
+    const monthBox = $(".form .date-of-birth-input-group .select .month-box.box");
+    const yearBox = $(".form .date-of-birth-input-group .select .year-box.box");
+    const currentDate = new Date();
+
+    // update username
+    $(".form table .name").text(currentAccount.username);
+
+    // update user email
+    $(".form table .email").text(currentAccount.email);
+
+    // update phone number
+    if (currentAccount?.phone) {
+        $(".form table .phone").text(currentAccount.phone);
+    } else {
+        $(".form table .phone").text("Chưa thêm số điện thoại");
+    }
+
+    // update user gender
+    const genderRadioList = $(".form table tr td:nth-child(2) .gender-select .radio-select input");
+
+    genderRadioList.each((index) => {
+        if (currentAccount.gender === genderRadioList[index].getAttribute("value")) {
+            genderRadioList[index].checked = true;
+        }
+
+        genderRadioList[index].addEventListener("change", () => {
+            if (genderRadioList[index].checked) {
+                currentAccount.gender = genderRadioList[index].value;
+            }
+        });
+    });
+
+    const handleChangeEmail = () => {
+        const changeEmailButton = $(".form table tr td:nth-child(2) > div .change-email-btn");
+        const email = $(".form table tr td:nth-child(2) > div .email");
+        const emailInput = $(".form table tr td:nth-child(2) > div .email-input");
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+        changeEmailButton.on("click", () => {
+            emailInput.focus();
+
+            if (currentAccount.email) {
+                emailInput.val(currentAccount.email);
+            }
+
+            emailInput.on("change", (e) => {
+                if (emailRegex.test(e.target.value)) {
+                    currentAccount.email = e.target.value;
+                    email.text(e.target.value);
+                } else {
+                    showToasts("Vui lòng nhập đúng email!");
+                }
+            });
+
+            if (!email.hasClass("hidden")) {
+                email.removeClass("appear");
+                email.addClass("hidden");
+                emailInput.removeClass("hidden");
+                emailInput.addClass("appear");
+                changeEmailButton.text("Đồng ý");
+            } else {
+                email.removeClass("hidden");
+                email.addClass("appear");
+                emailInput.removeClass("appear");
+                emailInput.addClass("hidden");
+                changeEmailButton.text("Thay đổi");
+            }
+        });
+    };
+    handleChangeEmail();
+
+    const handleChangePhoneNumber = () => {
+        const phoneNumberRegex = /(0|\+84)((3[2-9]|5[25689]|7[06-9]|8[1-689]|9\d)\d{7}|(1\d{9}))/;
+        const changePhoneButton = $(".form table tr td:nth-child(2) > div .change-phone-btn");
+        const phone = $(".form table tr td:nth-child(2) > div .phone");
+        const phoneInput = $(".form table tr td:nth-child(2) > div .phone-input");
+
+        changePhoneButton.on("click", () => {
+            phoneInput.focus();
+
+            if (currentAccount.phone) {
+                phoneInput.val(currentAccount.phone);
+            } else {
+                phoneInput.val("");
+            }
+
+            phoneInput.on("change", (e) => {
+                if (phoneNumberRegex.test(e.target.value)) {
+                    currentAccount.phone = e.target.value;
+                    phone.text(e.target.value);
+                } else {
+                    showToasts("Vui lòng nhập đúng số điện thoại!");
+                }
+            });
+
+            if (!phone.hasClass("hidden")) {
+                phone.removeClass("appear");
+                phone.addClass("hidden");
+                phoneInput.removeClass("hidden");
+                phoneInput.addClass("appear");
+                changePhoneButton.text("Đồng ý");
+            } else {
+                phone.removeClass("hidden");
+                phone.addClass("appear");
+                phoneInput.removeClass("appear");
+                phoneInput.addClass("hidden");
+                changePhoneButton.text("Thay đổi");
+            }
+        });
+    };
+    handleChangePhoneNumber();
+
+    const renderDateOfBirthOptions = () => {
+        const daySelect = $(".form .date-of-birth-input-group .day-select");
+        const monthSelect = $(".form .date-of-birth-input-group .month-select");
+        const yearSelect = $(".form .date-of-birth-input-group .year-select");
+        const dayBox = $(".form .date-of-birth-input-group .day-select .day-box");
+        const monthBox = $(".form .date-of-birth-input-group .month-select .month-box");
+        const yearBox = $(".form .date-of-birth-input-group .year-select .year-box");
+
+        daySelect.on("click", () => {
+            if (dayBox.css("display") === "none") {
+                dayBox.css("display", "block");
+            } else {
+                dayBox.css("display", "none");
+            }
+        });
+
+        monthSelect.on("click", () => {
+            if (monthBox.css("display") === "none") {
+                monthBox.css("display", "block");
+            } else {
+                monthBox.css("display", "none");
+            }
+        });
+
+        yearSelect.on("click", () => {
+            if (yearBox.css("display") === "none") {
+                yearBox.css("display", "block");
+            } else {
+                yearBox.css("display", "none");
+            }
+        });
+
+        for (let i = 1; i <= 31; i++) {
+            dayBox.append(`<div value="d${i}">${i}</div>`);
+
+            const currentDayEl = $(`.form .date-of-birth-input-group .select .box > div[value=d${i}]`);
+            const selectDayContent = $(".form .date-of-birth-input-group > .day-select .content");
+
+            if (currentAccount?.dateOfBirth?.day) {
+                selectDayContent.text(currentAccount.dateOfBirth.day);
+            } else {
+                selectDayContent.text("Chọn ngày");
+            }
+
+            currentDayEl.on("click", () => {
+                selectDayContent.text(i);
+                currentAccount.dateOfBirth = {
+                    ...currentAccount.dateOfBirth,
+                    day: i,
+                };
+            });
+        }
+        for (let i = 1; i <= 12; i++) {
+            monthBox.append(`<div value="m${i}">${i}</div>`);
+
+            const currentMonthEl = $(`.form .date-of-birth-input-group .select .box > div[value=m${i}]`);
+            const selectMonthContent = $(".form .date-of-birth-input-group > .month-select .content");
+
+            if (currentAccount?.dateOfBirth?.month) {
+                selectMonthContent.text(currentAccount.dateOfBirth.month);
+            } else {
+                selectMonthContent.text("Chọn tháng");
+            }
+
+            currentMonthEl.on("click", () => {
+                selectMonthContent.text(i);
+                currentAccount.dateOfBirth = {
+                    ...currentAccount.dateOfBirth,
+                    month: i,
+                };
+            });
+        }
+        for (let i = currentDate.getFullYear(); i >= 1920; i--) {
+            yearBox.append(`<div value="y${i}">${i}</div>`);
+
+            const currentYearEl = $(`.form .date-of-birth-input-group .select .box > div[value=y${i}]`);
+            const selectYearContent = $(".form .date-of-birth-input-group > .year-select .content");
+
+            if (currentAccount?.dateOfBirth?.year) {
+                selectYearContent.text(currentAccount.dateOfBirth.year);
+            } else {
+                selectYearContent.text("Chọn năm");
+            }
+
+            currentYearEl.on("click", () => {
+                selectYearContent.text(i);
+                currentAccount.dateOfBirth = {
+                    ...currentAccount.dateOfBirth,
+                    year: i,
+                };
+            });
+        }
+    };
+    renderDateOfBirthOptions();
+
+    const handleSetUserAvatar = () => {
+        const avatarInput = $(".main .avatar-upload .avatar-input");
+        const selectAvatarButton = $(".main .avatar-upload .select-avatar");
+        const avatarImage = $(".main .avatar-upload .avatar-img");
+        const reader = new FileReader();
+
+        if (!currentAccount.avatar) {
+            avatarImage.text("Chưa có ảnh đại diện");
+        } else {
+            avatarImage.text("");
+            avatarImage.css("background-image", `url("${currentAccount.avatar}")`);
+        }
+
+        selectAvatarButton.on("click", () => {
+            avatarInput.click();
+        });
+
+        avatarImage.on("click", () => {
+            avatarInput.click();
+        });
+
+        avatarInput.on("change", () => {
+            const file = avatarInput[0].files[0];
+
+            reader.readAsDataURL(file);
+
+            reader.onload = (e) => {
+                currentAccount.avatar = e.target.result;
+                avatarImage.css("background-image", `url("${e.target.result}")`);
+                avatarImage.text("");
+            };
+        });
+    };
+    handleSetUserAvatar();
+
+    const handleSaveChangeButton = () => {
+        const saveChangeButton = $(".form .save-change-btn");
+
+        saveChangeButton.on("click", () => {
+            updateLocalStorage();
+
+            setTimeout(() => {
+                location.reload();
+            }, 500);
+        });
+    };
+    handleSaveChangeButton();
+};
+
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
+    registerAccounts = JSON.parse(localStorage.getItem("registerAccounts")) || [];
     const spinnerLoading = $(".loading.spinner");
 
     window.addEventListener("beforeunload", () => {
@@ -1448,6 +1716,9 @@ const handleReloadPage = () => {
     }
     if (currentPageURL.endsWith("payment.html")) {
         handlePayOrderProducts();
+    }
+    if (currentPageURL.endsWith("profile.html")) {
+        profilePage();
     }
 };
 

@@ -157,6 +157,7 @@ const validateRegisterForm = () => {
 
         if (isValidAccount) {
             registerAccounts.push({
+                id: registerAccounts.length + 1,
                 username: usernameRegisterInput.val(),
                 email: emailRegisterInput.val(),
                 password: passwordRegisterInput.val(),
