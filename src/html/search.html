@@ -9,8 +9,8 @@
         <link rel="stylesheet" href="../vendor/jquery/slick/slick-theme.css" />
         <link rel="shortcut icon" href="../assets/images/favicon.ico?v=0" type="image/x-icon" />
         <link rel="stylesheet" href="../css/styles.css" />
-        <link rel="stylesheet" href="../css/profile.css" />
-        <title>Thông tin người dùng</title>
+        <link rel="stylesheet" href="../css/all-product.css" />
+        <title>Kết quả tìm kiếm cho "..."</title>
     </head>
     <body>
         <header class="header">
@@ -89,16 +89,24 @@
 
             <div class="menu--list">
                 <ul>
-                    <li class="menu--item menu--item__all">
-                        <a href="./all-product.html">Tất cả</a>
+                    <li class="menu--item menu--item__all" style="background-color: var(--whiteColor)">
+                        <a style="color: var(--blackColor)" href="./all-product.html">Tất cả</a>
                     </li>
                     <li class="menu--item menu--item__category">
                         <a href="">Nhân dịp<i class="fa-duotone fa-chevron-down"></i></a>
                         <ul class="sub-menu">
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20giáng%20sinh">giáng sinh</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20sinh%20nhật">sinh nhật</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20đám%20cưới">đám cưới</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20valentine">valentine</a></li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20giáng%20sinh">giáng sinh</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20sinh%20nhật">sinh nhật</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20đám%20cưới">đám cưới</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20valentine">valentine</a>
+                            </li>
                             <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20cảm%20ơn">cảm ơn</a></li>
                         </ul>
                     </li>
@@ -114,27 +122,44 @@
                     </li>
                 </ul>
             </div>
+
+            <div style="background-color: var(--primaryColor)">
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a style="color: var(--whiteColor)" href="./index.html">Home</a></li>
+                    <li class="breadcrumb-item active" aria-current="all-product">Tất cả sản phẩm</li>
+                </ul>
+            </div>
         </header>
         <main class="main">
-            <div
-                style="
-                    max-width: 1150px;
-                    margin: 0 auto;
-                    display: flex;
-                    align-items: flex-start;
-                    justify-content: space-between;
-                "
-            >
-                <div class="category">
-                    <div class="title"><i class="fa-solid fa-user"></i> <span>Tài khoản của tôi</span></div>
-                    <ul>
-                        <li class="item info selected">Thông tin</li>
-                        <li class="item address">Địa chỉ</li>
-                        <li class="item password">Đổi mật khẩu</li>
-                    </ul>
+            <div class="heading">
+                <h4 class="heading__title">Kết quả tìm kiếm cho "<span>...</span>"</h4>
+                <div class="heading__arrange-products">
+                    <div class="text">
+                        <span>Sắp xếp theo:</span>
+                        <div class="text__content">Nổi bật <i class="fa-regular fa-chevron-down"></i></div>
+                        <div class="heading__arrange-products--select">
+                            <div class="option" value="outstandingProducts">Nổi bật</div>
+                            <div class="option" value="A-Z">Nhân dịp: A-Z</div>
+                            <div class="option" value="Z-A">Nhân dịp: Z-A</div>
+                            <div class="option" value="ascendingPrice">Giá tăng dần</div>
+                            <div class="option" value="descendingPrice">Giá giảm dần</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="content">
-                    <!-- main content -->
+            </div>
+            <div class="content text-center">
+                <div class="row g-2 product-list">
+                    <!-- <div class="col-3 p-3">
+                        product-item
+                    </div> -->
+                </div>
+                <div class="content__show-more-btn">
+                    <div class="text">Xem thêm</div>
+                    <div>
+                        <div class="chevron"></div>
+                        <div class="chevron"></div>
+                        <div class="chevron"></div>
+                    </div>
                 </div>
             </div>
         </main>
@@ -214,106 +239,6 @@
             </div>
         </div>
 
-        <div class="address-form-modal">
-            <div
-                class="modal fade"
-                id="addressFormModal"
-                data-bs-backdrop="static"
-                data-bs-keyboard="true"
-                tabindex="-1"
-                aria-labelledby="staticBackdropLabel"
-                aria-hidden="true"
-            >
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <div class="modal-title">Địa chỉ mới</div>
-                        </div>
-                        <div class="modal-body">
-                            <form class="input-address-form">
-                                <div class="input-group d-flex align-items-center justify-content-between">
-                                    <div class="name-input input">
-                                        <input type="text" name="username" id="username" placeholder="Họ và tên" />
-                                        <div class="alert-message"></div>
-                                    </div>
-                                    <div class="phone-input input">
-                                        <input type="text" name="phone" id="phone" placeholder="Số điện thoại" />
-                                        <div class="alert-message"></div>
-                                    </div>
-                                </div>
-                                <div class="address-select-group d-flex align-items-center justify-content-between">
-                                    <div class="province-select select">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <span>Tỉnh/Thành phố</span><i class="fa-solid fa-caret-down"></i>
-                                        </div>
-                                        <div class="alert-message"></div>
-                                    </div>
-                                    <div class="district-select select">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <span>Quận/Huyện</span><i class="fa-solid fa-caret-down"></i>
-                                        </div>
-                                        <div class="alert-message"></div>
-                                    </div>
-                                    <div class="ward-select select">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <span>Xã/Phường</span><i class="fa-solid fa-caret-down"></i>
-                                        </div>
-                                        <div class="alert-message"></div>
-                                    </div>
-                                    <ul class="option-box province-option-box">
-                                        <!-- province selections -->
-                                    </ul>
-                                    <ul class="option-box district-option-box">
-                                        <!-- district selections -->
-                                    </ul>
-                                    <ul class="option-box ward-option-box">
-                                        <!-- ward selections -->
-                                    </ul>
-                                </div>
-                                <div class="address-description">
-                                    <textarea
-                                        name="addressDescription"
-                                        id="addressDescription"
-                                        placeholder="Địa chỉ cụ thể"
-                                    ></textarea>
-                                    <div class="alert-message"></div>
-                                </div>
-                                <div class="set-default-address-btn d-flex align-items-center">
-                                    <input type="checkbox" name="isDefaultAddress" id="isDefaultAddress" />
-                                    <span class="ms-2">Đặt làm địa chỉ mặc định</span>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="close-modal-btn modal-btn"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                Quay về
-                            </button>
-                            <button type="button" class="confirm-btn modal-btn" aria-label="Confirm">Hoàn thành</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="confirm-delete-address-modal">
-            <div class="modal fade" id="confirmDeleteAddressModal">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">Bạn có chắc muốn xóa địa chỉ này không?</div>
-                        <div class="modal-body">
-                            <button class="back-btn" type="button" data-bs-dismiss="modal">TRỞ LẠI</button>
-                            <button class="confirm-btn" type="button" data-bs-dismiss="modal">XÓA</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <div aria-live="polite" aria-atomic="true" class="position-relative">
             <div
                 id="toastContainer"
@@ -345,5 +270,4 @@
     <script src="../vendor/jquery/jquery-3.7.1.min.js"></script>
     <script src="../vendor/jquery/slick/slick.min.js"></script>
     <script type="module" src="../js/app.js"></script>
-    <script></script>
 </html>

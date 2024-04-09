@@ -14,6 +14,10 @@ const handleNullFeature = () => {
     alert("Chức năng đang được chúng tôi phát triển");
 };
 
+const containsNumber = (str) => /\d/.test(str);
+const containsUppercase = (str) => /[A-Z]/.test(str);
+const containsLowercase = (str) => /[a-z]/.test(str);
+
 const handleSubmitForm = (e) => {
     e.preventDefault();
     console.log(seacrhBoxInput.val());
@@ -699,7 +703,7 @@ const handleRenderCartProductInCartPage = () => {
 const updateLocalStorage = () => {
     // update register accounts when current account change
     registerAccounts.forEach((account, index) => {
-        if (account.id === currentAccount.id) {
+        if (account.id === currentAccount?.id) {
             registerAccounts[index] = { ...currentAccount };
         }
     });
@@ -899,7 +903,9 @@ const handleLogoutAccount = () => {
 const handleSuccessLogin = () => {
     if (currentAccount) {
         $(".navbar--item__login").html(`
-                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar})"></div> <span>${currentAccount.username}</span></a>
+                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar})"></div> ${
+            currentAccount.avatar ? "" : '<i class="fa-solid fa-face-awesome"></i>'
+        } <span>${currentAccount.username}</span></a>
                 <ul class="account-manipulation">
                     <li>
                         <a href="./profile.html"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
@@ -1427,261 +1433,1274 @@ const handlePayOrderProducts = () => {
 };
 
 const profilePage = () => {
-    const dayBox = $(".form .date-of-birth-input-group .select .day-box.box");
-    const monthBox = $(".form .date-of-birth-input-group .select .month-box.box");
-    const yearBox = $(".form .date-of-birth-input-group .select .year-box.box");
-    const currentDate = new Date();
+    const mainContent = $(".main .content");
 
-    // update username
-    $(".form table .name").text(currentAccount.username);
+    const changeUserInfo = () => {
+        const dayBox = $(".form .date-of-birth-input-group .select .day-box.box");
+        const monthBox = $(".form .date-of-birth-input-group .select .month-box.box");
+        const yearBox = $(".form .date-of-birth-input-group .select .year-box.box");
+        const currentDate = new Date();
+        mainContent.html(`
+                <form class="info-form form">
+                    <div class="title">Thông tin của tôi</div>
+                    <div class="detail-profile">
+                        <table>
+                            <tr>
+                                <td>Tên người dùng</td>
+                                <td class="name">name</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>
+                                    <div class="email-control">
+                                        <div class="email">email</div>
+                                        <input type="email" class="email-input" value="" />
+                                        <button type="button" class="change-email-btn change-button">Thay đổi</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Số điện thoại</td>
+                                <td>
+                                    <div class="phone-control">
+                                        <div class="phone">phone number</div>
+                                        <input type="text" class="phone-input" value="" />
+                                        <button type="button" class="change-phone-btn change-button">Thay đổi</button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Giới tính</td>
+                                <td>
+                                    <div class="gender-select">
+                                        <div class="radio-select">
+                                            <input type="radio" id="male" value="male" name="gender" />
+                                            <label for="male">Nam</label>
+                                        </div>
+                                        <div class="radio-select">
+                                            <input type="radio" id="female" value="female" name="gender" />
+                                            <label for="female">Nữ</label>
+                                        </div>
+                                        <div class="radio-select">
+                                            <input
+                                                type="radio"
+                                                id="different-gender"
+                                                value="different-gender"
+                                                name="gender"
+                                            />
+                                            <label for="different-gender">Khác</label>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Ngày sinh</td>
+                                <td>
+                                    <div class="date-of-birth-input-group">
+                                        <div class="day-select select">
+                                            <span class="content">Chọn ngày</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="day-box box">
+                                                <!-- days -->
+                                            </div>
+                                        </div>
+                                        <div class="month-select select">
+                                            <span class="content">Chọn tháng</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="month-box box">
+                                                <!-- months -->
+                                            </div>
+                                        </div>
+                                        <div class="year-select select">
+                                            <span class="content">Chọn năm</span
+                                            ><i class="fa-solid fa-chevron-down"></i>
+                                            <div class="year-box box">
+                                                <!-- years -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <button type="button" class="save-change-btn">Lưu thay đổi</button>
+                </form>
+                <div class="avatar-upload">
+                    <div class="avatar-img">Chưa có ảnh đại diện</div>
+                    <input type="file" class="avatar-input" accept=".jpg,.jpeg,.png" />
+                    <button type="button" class="select-avatar">Chọn ảnh</button>
+                </div>
+        `);
 
-    // update user email
-    $(".form table .email").text(currentAccount.email);
+        // update username
+        $(".form table .name").text(currentAccount.username);
 
-    // update phone number
-    if (currentAccount?.phone) {
-        $(".form table .phone").text(currentAccount.phone);
-    } else {
-        $(".form table .phone").text("Chưa thêm số điện thoại");
-    }
+        // update user email
+        $(".form table .email").text(currentAccount.email);
 
-    // update user gender
-    const genderRadioList = $(".form table tr td:nth-child(2) .gender-select .radio-select input");
-
-    genderRadioList.each((index) => {
-        if (currentAccount.gender === genderRadioList[index].getAttribute("value")) {
-            genderRadioList[index].checked = true;
-        }
-
-        genderRadioList[index].addEventListener("change", () => {
-            if (genderRadioList[index].checked) {
-                currentAccount.gender = genderRadioList[index].value;
-            }
-        });
-    });
-
-    const handleChangeEmail = () => {
-        const changeEmailButton = $(".form table tr td:nth-child(2) > div .change-email-btn");
-        const email = $(".form table tr td:nth-child(2) > div .email");
-        const emailInput = $(".form table tr td:nth-child(2) > div .email-input");
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-
-        changeEmailButton.on("click", () => {
-            emailInput.focus();
-
-            if (currentAccount.email) {
-                emailInput.val(currentAccount.email);
-            }
-
-            emailInput.on("change", (e) => {
-                if (emailRegex.test(e.target.value)) {
-                    currentAccount.email = e.target.value;
-                    email.text(e.target.value);
-                } else {
-                    showToasts("Vui lòng nhập đúng email!");
-                }
-            });
-
-            if (!email.hasClass("hidden")) {
-                email.removeClass("appear");
-                email.addClass("hidden");
-                emailInput.removeClass("hidden");
-                emailInput.addClass("appear");
-                changeEmailButton.text("Đồng ý");
-            } else {
-                email.removeClass("hidden");
-                email.addClass("appear");
-                emailInput.removeClass("appear");
-                emailInput.addClass("hidden");
-                changeEmailButton.text("Thay đổi");
-            }
-        });
-    };
-    handleChangeEmail();
-
-    const handleChangePhoneNumber = () => {
-        const phoneNumberRegex = /(0|\+84)((3[2-9]|5[25689]|7[06-9]|8[1-689]|9\d)\d{7}|(1\d{9}))/;
-        const changePhoneButton = $(".form table tr td:nth-child(2) > div .change-phone-btn");
-        const phone = $(".form table tr td:nth-child(2) > div .phone");
-        const phoneInput = $(".form table tr td:nth-child(2) > div .phone-input");
-
-        changePhoneButton.on("click", () => {
-            phoneInput.focus();
-
-            if (currentAccount.phone) {
-                phoneInput.val(currentAccount.phone);
-            } else {
-                phoneInput.val("");
-            }
-
-            phoneInput.on("change", (e) => {
-                if (phoneNumberRegex.test(e.target.value)) {
-                    currentAccount.phone = e.target.value;
-                    phone.text(e.target.value);
-                } else {
-                    showToasts("Vui lòng nhập đúng số điện thoại!");
-                }
-            });
-
-            if (!phone.hasClass("hidden")) {
-                phone.removeClass("appear");
-                phone.addClass("hidden");
-                phoneInput.removeClass("hidden");
-                phoneInput.addClass("appear");
-                changePhoneButton.text("Đồng ý");
-            } else {
-                phone.removeClass("hidden");
-                phone.addClass("appear");
-                phoneInput.removeClass("appear");
-                phoneInput.addClass("hidden");
-                changePhoneButton.text("Thay đổi");
-            }
-        });
-    };
-    handleChangePhoneNumber();
-
-    const renderDateOfBirthOptions = () => {
-        const daySelect = $(".form .date-of-birth-input-group .day-select");
-        const monthSelect = $(".form .date-of-birth-input-group .month-select");
-        const yearSelect = $(".form .date-of-birth-input-group .year-select");
-        const dayBox = $(".form .date-of-birth-input-group .day-select .day-box");
-        const monthBox = $(".form .date-of-birth-input-group .month-select .month-box");
-        const yearBox = $(".form .date-of-birth-input-group .year-select .year-box");
-
-        daySelect.on("click", () => {
-            if (dayBox.css("display") === "none") {
-                dayBox.css("display", "block");
-            } else {
-                dayBox.css("display", "none");
-            }
-        });
-
-        monthSelect.on("click", () => {
-            if (monthBox.css("display") === "none") {
-                monthBox.css("display", "block");
-            } else {
-                monthBox.css("display", "none");
-            }
-        });
-
-        yearSelect.on("click", () => {
-            if (yearBox.css("display") === "none") {
-                yearBox.css("display", "block");
-            } else {
-                yearBox.css("display", "none");
-            }
-        });
-
-        for (let i = 1; i <= 31; i++) {
-            dayBox.append(`<div value="d${i}">${i}</div>`);
-
-            const currentDayEl = $(`.form .date-of-birth-input-group .select .box > div[value=d${i}]`);
-            const selectDayContent = $(".form .date-of-birth-input-group > .day-select .content");
-
-            if (currentAccount?.dateOfBirth?.day) {
-                selectDayContent.text(currentAccount.dateOfBirth.day);
-            } else {
-                selectDayContent.text("Chọn ngày");
-            }
-
-            currentDayEl.on("click", () => {
-                selectDayContent.text(i);
-                currentAccount.dateOfBirth = {
-                    ...currentAccount.dateOfBirth,
-                    day: i,
-                };
-            });
-        }
-        for (let i = 1; i <= 12; i++) {
-            monthBox.append(`<div value="m${i}">${i}</div>`);
-
-            const currentMonthEl = $(`.form .date-of-birth-input-group .select .box > div[value=m${i}]`);
-            const selectMonthContent = $(".form .date-of-birth-input-group > .month-select .content");
-
-            if (currentAccount?.dateOfBirth?.month) {
-                selectMonthContent.text(currentAccount.dateOfBirth.month);
-            } else {
-                selectMonthContent.text("Chọn tháng");
-            }
-
-            currentMonthEl.on("click", () => {
-                selectMonthContent.text(i);
-                currentAccount.dateOfBirth = {
-                    ...currentAccount.dateOfBirth,
-                    month: i,
-                };
-            });
-        }
-        for (let i = currentDate.getFullYear(); i >= 1920; i--) {
-            yearBox.append(`<div value="y${i}">${i}</div>`);
-
-            const currentYearEl = $(`.form .date-of-birth-input-group .select .box > div[value=y${i}]`);
-            const selectYearContent = $(".form .date-of-birth-input-group > .year-select .content");
-
-            if (currentAccount?.dateOfBirth?.year) {
-                selectYearContent.text(currentAccount.dateOfBirth.year);
-            } else {
-                selectYearContent.text("Chọn năm");
-            }
-
-            currentYearEl.on("click", () => {
-                selectYearContent.text(i);
-                currentAccount.dateOfBirth = {
-                    ...currentAccount.dateOfBirth,
-                    year: i,
-                };
-            });
-        }
-    };
-    renderDateOfBirthOptions();
-
-    const handleSetUserAvatar = () => {
-        const avatarInput = $(".main .avatar-upload .avatar-input");
-        const selectAvatarButton = $(".main .avatar-upload .select-avatar");
-        const avatarImage = $(".main .avatar-upload .avatar-img");
-        const reader = new FileReader();
-
-        if (!currentAccount.avatar) {
-            avatarImage.text("Chưa có ảnh đại diện");
+        // update phone number
+        if (currentAccount?.phone) {
+            $(".form table .phone").text(currentAccount.phone);
         } else {
-            avatarImage.text("");
-            avatarImage.css("background-image", `url("${currentAccount.avatar}")`);
+            $(".form table .phone").text("Chưa thêm số điện thoại");
         }
 
-        selectAvatarButton.on("click", () => {
-            avatarInput.click();
+        // update user gender
+        const genderRadioList = $(".form table tr td:nth-child(2) .gender-select .radio-select input");
+
+        genderRadioList.each((index) => {
+            if (currentAccount.gender === genderRadioList[index].getAttribute("value")) {
+                genderRadioList[index].checked = true;
+            }
+
+            genderRadioList[index].addEventListener("change", () => {
+                if (genderRadioList[index].checked) {
+                    currentAccount.gender = genderRadioList[index].value;
+                }
+            });
         });
 
-        avatarImage.on("click", () => {
-            avatarInput.click();
-        });
+        const handleChangeEmail = () => {
+            const changeEmailButton = $(".form table tr td:nth-child(2) > div .change-email-btn");
+            const email = $(".form table tr td:nth-child(2) > div .email");
+            const emailInput = $(".form table tr td:nth-child(2) > div .email-input");
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-        avatarInput.on("change", () => {
-            const file = avatarInput[0].files[0];
+            changeEmailButton.on("click", () => {
+                emailInput.focus();
 
-            reader.readAsDataURL(file);
+                if (currentAccount.email) {
+                    emailInput.val(currentAccount.email);
+                }
 
-            reader.onload = (e) => {
-                currentAccount.avatar = e.target.result;
-                avatarImage.css("background-image", `url("${e.target.result}")`);
+                emailInput.on("change", (e) => {
+                    if (emailRegex.test(e.target.value)) {
+                        currentAccount.email = e.target.value;
+                        email.text(e.target.value);
+                    } else {
+                        showToasts("Vui lòng nhập đúng email!");
+                    }
+                });
+
+                if (!email.hasClass("hidden")) {
+                    email.removeClass("appear");
+                    email.addClass("hidden");
+                    emailInput.removeClass("hidden");
+                    emailInput.addClass("appear");
+                    changeEmailButton.text("Đồng ý");
+                } else {
+                    email.removeClass("hidden");
+                    email.addClass("appear");
+                    emailInput.removeClass("appear");
+                    emailInput.addClass("hidden");
+                    changeEmailButton.text("Thay đổi");
+                }
+            });
+        };
+        handleChangeEmail();
+
+        const handleChangePhoneNumber = () => {
+            const phoneNumberRegex = /^(0|\+84)\d{9,10}$/;
+            const changePhoneButton = $(".form table tr td:nth-child(2) > div .change-phone-btn");
+            const phone = $(".form table tr td:nth-child(2) > div .phone");
+            const phoneInput = $(".form table tr td:nth-child(2) > div .phone-input");
+
+            changePhoneButton.on("click", () => {
+                phoneInput.focus();
+
+                if (currentAccount.phone) {
+                    phoneInput.val(currentAccount.phone);
+                } else {
+                    phoneInput.val("");
+                }
+
+                phoneInput.on("change", (e) => {
+                    if (phoneNumberRegex.test(e.target.value)) {
+                        currentAccount.phone = e.target.value;
+                        phone.text(e.target.value);
+                    } else {
+                        showToasts("Vui lòng nhập đúng số điện thoại!");
+                    }
+                });
+
+                if (!phone.hasClass("hidden")) {
+                    phone.removeClass("appear");
+                    phone.addClass("hidden");
+                    phoneInput.removeClass("hidden");
+                    phoneInput.addClass("appear");
+                    changePhoneButton.text("Đồng ý");
+                } else {
+                    phone.removeClass("hidden");
+                    phone.addClass("appear");
+                    phoneInput.removeClass("appear");
+                    phoneInput.addClass("hidden");
+                    changePhoneButton.text("Thay đổi");
+                }
+            });
+        };
+        handleChangePhoneNumber();
+
+        const renderDateOfBirthOptions = () => {
+            const daySelect = $(".form .date-of-birth-input-group .day-select");
+            const monthSelect = $(".form .date-of-birth-input-group .month-select");
+            const yearSelect = $(".form .date-of-birth-input-group .year-select");
+            const dayBox = $(".form .date-of-birth-input-group .day-select .day-box");
+            const monthBox = $(".form .date-of-birth-input-group .month-select .month-box");
+            const yearBox = $(".form .date-of-birth-input-group .year-select .year-box");
+
+            daySelect.on("click", () => {
+                if (dayBox.css("display") === "none") {
+                    dayBox.css("display", "block");
+                } else {
+                    dayBox.css("display", "none");
+                }
+            });
+
+            monthSelect.on("click", () => {
+                if (monthBox.css("display") === "none") {
+                    monthBox.css("display", "block");
+                } else {
+                    monthBox.css("display", "none");
+                }
+            });
+
+            yearSelect.on("click", () => {
+                if (yearBox.css("display") === "none") {
+                    yearBox.css("display", "block");
+                } else {
+                    yearBox.css("display", "none");
+                }
+            });
+
+            // handleClickOutside date input
+            document.addEventListener("click", (e) => {
+                if (!daySelect[0].contains(e.target)) {
+                    dayBox.css("display", "none");
+                }
+                if (!monthSelect[0].contains(e.target)) {
+                    monthBox.css("display", "none");
+                }
+                if (!yearSelect[0].contains(e.target)) {
+                    yearBox.css("display", "none");
+                }
+            });
+
+            for (let i = 1; i <= 31; i++) {
+                dayBox.append(`<div value="d${i}">${i}</div>`);
+
+                const currentDayEl = $(`.form .date-of-birth-input-group .select .box > div[value=d${i}]`);
+                const selectDayContent = $(".form .date-of-birth-input-group > .day-select .content");
+
+                if (currentAccount?.dateOfBirth?.day) {
+                    selectDayContent.text(currentAccount.dateOfBirth.day);
+                } else {
+                    selectDayContent.text("Chọn ngày");
+                }
+
+                currentDayEl.on("click", () => {
+                    selectDayContent.text(i);
+                    currentAccount.dateOfBirth = {
+                        ...currentAccount.dateOfBirth,
+                        day: i,
+                    };
+                });
+            }
+            for (let i = 1; i <= 12; i++) {
+                monthBox.append(`<div value="m${i}">${i}</div>`);
+
+                const currentMonthEl = $(`.form .date-of-birth-input-group .select .box > div[value=m${i}]`);
+                const selectMonthContent = $(".form .date-of-birth-input-group > .month-select .content");
+
+                if (currentAccount?.dateOfBirth?.month) {
+                    selectMonthContent.text(currentAccount.dateOfBirth.month);
+                } else {
+                    selectMonthContent.text("Chọn tháng");
+                }
+
+                currentMonthEl.on("click", () => {
+                    selectMonthContent.text(i);
+                    currentAccount.dateOfBirth = {
+                        ...currentAccount.dateOfBirth,
+                        month: i,
+                    };
+                });
+            }
+            for (let i = currentDate.getFullYear(); i >= 1920; i--) {
+                yearBox.append(`<div value="y${i}">${i}</div>`);
+
+                const currentYearEl = $(`.form .date-of-birth-input-group .select .box > div[value=y${i}]`);
+                const selectYearContent = $(".form .date-of-birth-input-group > .year-select .content");
+
+                if (currentAccount?.dateOfBirth?.year) {
+                    selectYearContent.text(currentAccount.dateOfBirth.year);
+                } else {
+                    selectYearContent.text("Chọn năm");
+                }
+
+                currentYearEl.on("click", () => {
+                    selectYearContent.text(i);
+                    currentAccount.dateOfBirth = {
+                        ...currentAccount.dateOfBirth,
+                        year: i,
+                    };
+                });
+            }
+        };
+        renderDateOfBirthOptions();
+
+        const handleSetUserAvatar = () => {
+            const avatarInput = $(".main .avatar-upload .avatar-input");
+            const selectAvatarButton = $(".main .avatar-upload .select-avatar");
+            const avatarImage = $(".main .avatar-upload .avatar-img");
+            const reader = new FileReader();
+
+            if (!currentAccount.avatar) {
+                avatarImage.text("Chưa có ảnh đại diện");
+            } else {
                 avatarImage.text("");
+                avatarImage.css("background-image", `url("${currentAccount.avatar}")`);
+            }
+
+            selectAvatarButton.on("click", () => {
+                avatarInput.click();
+            });
+
+            avatarImage.on("click", () => {
+                avatarInput.click();
+            });
+
+            avatarInput.on("change", () => {
+                const file = avatarInput[0].files[0];
+
+                reader.readAsDataURL(file);
+
+                reader.onload = (e) => {
+                    currentAccount.avatar = e.target.result;
+                    avatarImage.css("background-image", `url("${e.target.result}")`);
+                    avatarImage.text("");
+                };
+            });
+        };
+        handleSetUserAvatar();
+
+        const handleSaveChangeButton = () => {
+            const saveChangeButton = $(".form .save-change-btn");
+
+            saveChangeButton.on("click", () => {
+                updateLocalStorage();
+
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            });
+        };
+        handleSaveChangeButton();
+    };
+    changeUserInfo();
+
+    const changeUserAddress = () => {
+        mainContent.html(`
+            <form class="address-form form">
+                <div class="heading">
+                    <div class="title">Địa chỉ của tôi</div>
+                    <button type="button" data-bs-target="#addressFormModal" data-bs-toggle="modal" class="add-address-btn">
+                        <i class="fa-sharp fa-regular fa-plus"></i>
+                        <span>Thêm địa chỉ</span>
+                    </button>
+                </div>
+                <ul class="address-list">
+                    
+                </ul>
+            </form>
+        `);
+
+        const addressModal = new bootstrap.Modal("#addressFormModal");
+        const provinceSelectionBtn = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .province-select",
+        );
+        const districtSelectionBtn = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .district-select",
+        );
+        const wardSelectionBtn = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .ward-select",
+        );
+        const addressSelectionBtnList = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .select",
+        );
+        const provinceSelectionsBox = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .province-option-box",
+        );
+        const districtSelectionsBox = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .district-option-box",
+        );
+        const wardSelectionsBox = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .ward-option-box",
+        );
+        const selectionsBoxList = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .option-box",
+        );
+        const provinceBtnContent = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .province-select span",
+        );
+        const districtBtnContent = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .district-select span",
+        );
+        const wardBtnContent = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .ward-select span",
+        );
+        const nameInputAlert = $(
+            ".address-form-modal .modal-body .input-address-form .input-group .name-input .alert-message",
+        );
+        const phoneInputAlert = $(
+            ".address-form-modal .modal-body .input-address-form .input-group .phone-input .alert-message",
+        );
+        const addressSelectAlertList = $(
+            ".address-form-modal .modal-body .input-address-form .address-select-group .select .alert-message",
+        );
+        const confirmBtn = $(".address-form-modal .modal-footer .confirm-btn");
+
+        const detailAddressInputAlert = $(".address-form-modal .modal-body .address-description .alert-message");
+        const defaultAddressCheckBox = $(".address-form-modal .modal-body .set-default-address-btn input");
+        const nameInputEl = $(".address-form-modal .modal-body .input-address-form .input-group .name-input input");
+        const phoneInputEl = $(".address-form-modal .modal-body .input-address-form .input-group .phone-input input");
+        const detailAddressInput = $(".address-form-modal .modal-body .address-description textarea");
+
+        let provinceOptionList, districtOptionList, wardOptionList;
+        let provinceCode, districtCode, wardCode;
+        let addressObject = {};
+
+        const activeSelectionEl = (currentIndex) => {
+            selectionsBoxList.each((index) => {
+                if (index === currentIndex) {
+                    selectionsBoxList[index].classList.add("active");
+                    addressSelectionBtnList[index].classList.add("active");
+                    addressSelectionBtnList[index].classList.remove("invalid");
+                } else {
+                    selectionsBoxList[index].classList.remove("active");
+                    addressSelectionBtnList[index].classList.remove("active");
+                }
+            });
+        };
+
+        const findAddress = (addressId) => {
+            let address = currentAccount?.addresses?.find((address) => address.addressId === addressId);
+            return address;
+        };
+
+        const clearInput = () => {
+            nameInputEl.val("");
+            phoneInputEl.val("");
+            detailAddressInput.val("");
+            provinceBtnContent.text("Tỉnh/Thành phố");
+            districtBtnContent.text("Quận/Huyện");
+            wardBtnContent.text("Xã/Phường");
+            provinceCode = districtCode = wardCode = undefined;
+            nameInputAlert.text("");
+            nameInputAlert.parent().removeClass("invalid");
+            phoneInputAlert.text("");
+            phoneInputAlert.parent().removeClass("invalid");
+            addressSelectAlertList[0].innerText = "";
+            addressSelectionBtnList[0].classList.remove("invalid");
+            addressSelectAlertList[1].innerText = "";
+            addressSelectionBtnList[1].classList.remove("invalid");
+            addressSelectAlertList[2].innerText = "";
+            addressSelectionBtnList[2].classList.remove("invalid");
+            detailAddressInput.parent().removeClass("invalid");
+            detailAddressInputAlert.text("");
+            defaultAddressCheckBox.prop("checked", false);
+        };
+
+        // show province selections address box
+        const handleDisplayProvinceSelectionBox = async () => {
+            try {
+                const response = await fetch(
+                    "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/tinh_tp.json",
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+
+                // sort name from A to Z
+                const provinces = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                provinceSelectionsBox.html("");
+                for (const key in provinces) {
+                    const province = provinces[key][1];
+                    provinceSelectionsBox.append(`
+                        <li class="province-option option" province-code="${province.code}">${province.name_with_type}</li>
+                    `);
+                }
+
+                provinceOptionList = $(
+                    ".address-form-modal .modal-body .input-address-form .address-select-group .province-option-box .province-option",
+                );
+
+                provinceOptionList.each((index) => {
+                    const provinceEl = provinceOptionList[index];
+                    provinceEl.addEventListener("click", () => {
+                        provinceCode = provinceEl.getAttribute("province-code");
+                        addressSelectionBtnList[1].style.cursor = "pointer";
+                        provinceBtnContent.text(provinceEl.innerText);
+                        activeSelectionEl(1);
+                        handleDisplayDistrictSelectionsBox();
+                    });
+                });
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        handleDisplayProvinceSelectionBox();
+
+        // show district selections address box
+        const handleDisplayDistrictSelectionsBox = async () => {
+            try {
+                const response = await fetch(
+                    "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/quan_huyen.json",
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+
+                // sort name from A to Z
+                const districts = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                districtSelectionsBox.html("");
+                for (const key in districts) {
+                    const district = districts[key][1];
+
+                    if (district.parent_code === provinceCode) {
+                        districtSelectionsBox.append(`
+                            <li class="district-option option" district-code="${district.code}">${district.name_with_type}</li>
+                        `);
+                    }
+                }
+                districtOptionList = $(
+                    ".address-form-modal .modal-body .input-address-form .address-select-group .district-option-box .district-option",
+                );
+
+                if (provinceCode) {
+                    districtOptionList.each((index) => {
+                        const districtEl = districtOptionList[index];
+                        districtEl.addEventListener("click", () => {
+                            districtCode = districtEl.getAttribute("district-code");
+                            addressSelectionBtnList[2].style.cursor = "pointer";
+                            districtBtnContent.text(districtEl.innerText);
+                            activeSelectionEl(2);
+                            handleDisplayWardSelectionsBox();
+                        });
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        // show ward selections address box
+        const handleDisplayWardSelectionsBox = async () => {
+            try {
+                const response = await fetch(
+                    "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/xa_phuong.json",
+                );
+
+                if (!response.ok) {
+                    throw new Error("Network response was not ok");
+                }
+
+                const data = await response.json();
+
+                // sort name from A to Z
+                const wards = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                wardSelectionsBox.html("");
+                for (const key in wards) {
+                    const ward = wards[key][1];
+
+                    if (ward.parent_code === districtCode) {
+                        wardSelectionsBox.append(`
+                            <li class="ward-option option" ward-code="${ward.code}">${ward.name_with_type}</li>
+                        `);
+                    }
+                }
+                wardOptionList = $(
+                    ".address-form-modal .modal-body .input-address-form .address-select-group .ward-option-box .ward-option",
+                );
+
+                if (districtCode) {
+                    wardOptionList.each((index) => {
+                        const wardEl = wardOptionList[index];
+                        wardEl.addEventListener("click", () => {
+                            wardCode = wardEl.getAttribute("ward-code");
+                            wardBtnContent.text(wardEl.innerText);
+                            addressSelectionBtnList[2].classList.remove("active");
+                            selectionsBoxList[2].classList.remove("active");
+                        });
+                    });
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        };
+
+        const handleAddressSelectionButtonClick = () => {
+            handleDisplayProvinceSelectionBox();
+            handleDisplayDistrictSelectionsBox();
+            handleDisplayWardSelectionsBox();
+
+            addressSelectionBtnList.each((index) => {
+                addressSelectionBtnList[index].addEventListener("click", () => {
+                    if (addressSelectionBtnList[index].classList.contains("province-select")) {
+                        activeSelectionEl(index);
+                        handleDisplayProvinceSelectionBox();
+                    } else if (addressSelectionBtnList[index].classList.contains("district-select") && provinceCode) {
+                        activeSelectionEl(index);
+                        handleDisplayDistrictSelectionsBox();
+                    } else if (addressSelectionBtnList[index].classList.contains("ward-select") && districtCode) {
+                        activeSelectionEl(index);
+                        handleDisplayWardSelectionsBox();
+                    }
+                });
+            });
+        };
+        handleAddressSelectionButtonClick();
+
+        const addressFormModalValidator = () => {
+            const regexName = /[A-Za-z]+(?: [A-Za-z'-]+)*/;
+            const regexPhone = /^0\d{9,}$/;
+            const regexSpecialCharacters = /.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~-].*/;
+
+            const isValidName = () => {
+                nameInputEl.on("change", () => {
+                    if (nameInputEl.val() === "") {
+                        nameInputAlert.text("Họ và Tên không được để trống");
+                        nameInputAlert.parent().addClass("invalid");
+                    } else if (regexSpecialCharacters.test(nameInputEl.val())) {
+                        nameInputAlert.text("Họ và Tên không được để trống");
+                        nameInputAlert.parent().addClass("invalid");
+                    } else {
+                        nameInputAlert.text("");
+                        nameInputAlert.parent().removeClass("invalid");
+                    }
+                });
+
+                nameInputEl.on("input", () => {
+                    nameInputAlert.text("");
+                    nameInputAlert.parent().removeClass("invalid");
+                });
+
+                if (nameInputEl.val() === "") {
+                    nameInputAlert.text("Họ và Tên không được để trống");
+                    nameInputAlert.parent().addClass("invalid");
+                    return false;
+                } else if (regexSpecialCharacters.test(nameInputEl.val())) {
+                    nameInputAlert.text("Họ và Tên không được để trống");
+                    nameInputAlert.parent().addClass("invalid");
+                    return false;
+                } else {
+                    nameInputAlert.text("");
+                    nameInputAlert.parent().removeClass("invalid");
+                    return true;
+                }
             };
+
+            isValidName();
+
+            const isValidPhone = () => {
+                phoneInputEl.on("change", () => {
+                    if (phoneInputEl.val() === "") {
+                        phoneInputAlert.text("Số điện thoại không được để trống");
+                        phoneInputAlert.parent().addClass("invalid");
+                    } else if (!regexPhone.test(phoneInputEl.val())) {
+                        phoneInputAlert.text("Số điện thoại không hợp lệ");
+                        phoneInputAlert.parent().addClass("invalid");
+                    } else {
+                        phoneInputAlert.text("");
+                        phoneInputAlert.parent().removeClass("invalid");
+                    }
+                });
+
+                phoneInputEl.on("input", () => {
+                    phoneInputAlert.text("");
+                    phoneInputAlert.parent().removeClass("invalid");
+                });
+
+                if (phoneInputEl.val() === "") {
+                    phoneInputAlert.text("Số điện thoại không được để trống");
+                    phoneInputAlert.parent().addClass("invalid");
+                    return false;
+                } else if (!regexPhone.test(phoneInputEl.val())) {
+                    phoneInputAlert.text("Số điện thoại không hợp lệ");
+                    phoneInputAlert.parent().addClass("invalid");
+                    return false;
+                } else {
+                    phoneInputAlert.text("");
+                    phoneInputAlert.parent().removeClass("invalid");
+                    return true;
+                }
+            };
+            isValidPhone();
+
+            const isValidAddress = () => {
+                if (!provinceCode) {
+                    addressSelectAlertList[0].innerText = "Không được bỏ trống";
+                    addressSelectionBtnList[0].classList.add("invalid");
+                } else {
+                    addressSelectAlertList[0].innerText = "";
+                    addressSelectionBtnList[0].classList.remove("invalid");
+                }
+                if (!districtCode) {
+                    addressSelectAlertList[1].innerText = "Không được bỏ trống";
+                    addressSelectionBtnList[1].classList.add("invalid");
+                } else {
+                    addressSelectAlertList[1].innerText = "";
+                    addressSelectionBtnList[1].classList.remove("invalid");
+                }
+                if (!wardCode) {
+                    addressSelectAlertList[2].innerText = "Không được bỏ trống";
+                    addressSelectionBtnList[2].classList.add("invalid");
+                } else {
+                    addressSelectAlertList[2].innerText = "";
+                    addressSelectionBtnList[2].classList.remove("invalid");
+                }
+                if (provinceCode && districtCode && wardCode) {
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+            isValidAddress();
+
+            const isValidDetailAddress = () => {
+                detailAddressInput.on("change", () => {
+                    if (detailAddressInput.val().length < 5) {
+                        detailAddressInput.parent().addClass("invalid");
+                        detailAddressInputAlert.text("Địa chỉ quá ngắn. Địa chỉ phải từ 5 ký tự trở lên");
+                    } else {
+                        detailAddressInput.parent().removeClass("invalid");
+                        detailAddressInputAlert.text("");
+                    }
+                });
+
+                detailAddressInput.on("input", () => {
+                    detailAddressInput.parent().removeClass("invalid");
+                    detailAddressInputAlert.text("");
+                });
+
+                if (detailAddressInput.val().length < 5) {
+                    detailAddressInput.parent().addClass("invalid");
+                    detailAddressInputAlert.text("Địa chỉ quá ngắn. Địa chỉ phải từ 5 ký tự trở lên");
+                    return false;
+                } else {
+                    detailAddressInput.parent().removeClass("invalid");
+                    detailAddressInputAlert.text("");
+                    return true;
+                }
+            };
+            isValidDetailAddress();
+
+            const isDefaultAddress = () => {
+                const setDefaultRadioInput = $(".address-form-modal .modal-body .set-default-address-btn input");
+                const addressArr = currentAccount?.addresses || [];
+                addressArr.forEach((address, index) => {
+                    if (setDefaultRadioInput.prop("checked")) {
+                        addressArr[index].isDefault = false;
+                    }
+                });
+                return currentAccount?.addresses ? setDefaultRadioInput.prop("checked") : true;
+            };
+            isDefaultAddress();
+
+            if (isValidAddress() && isValidDetailAddress() && isValidName() && isValidPhone()) {
+                addressObject = {
+                    addressId: (currentAccount.addresses?.length || 0) + 1,
+                    name: nameInputEl.val(),
+                    phone: phoneInputEl.val(),
+                    isDefault: isDefaultAddress(),
+                    location: {
+                        province: provinceBtnContent.text(),
+                        district: districtBtnContent.text(),
+                        ward: wardBtnContent.text(),
+                        provinceCode: provinceCode,
+                        districtCode: districtCode,
+                        wardCode: wardCode,
+                    },
+                    detailAddressDesc: detailAddressInput.val(),
+                };
+                return true;
+            } else {
+                return false;
+            }
+        };
+
+        const displayAddressList = () => {
+            const addressListEl = $(".form.address-form .address-list");
+            const defaultAddress =
+                currentAccount?.addresses &&
+                currentAccount?.addresses.find((address) => {
+                    return address.isDefault === true;
+                });
+
+            const addressList =
+                currentAccount?.addresses &&
+                currentAccount?.addresses.filter((address) => {
+                    return address.isDefault !== true;
+                });
+
+            if (currentAccount) {
+                currentAccount?.addresses.length !== 0
+                    ? addressListEl.html(`<div class="heading">Danh sách địa chỉ</div>`)
+                    : addressListEl.html(`<div class="heading">Bạn chưa thêm địa chỉ</div>`);
+                defaultAddress &&
+                    addressListEl.append(`
+                            <li class="default-address adrress-card">
+                                <div class="info">
+                                    <div class="d-flex">
+                                        <div class="name">${defaultAddress.name}</div>
+                                        <div class="phone">${defaultAddress.phone}</div>
+                                    </div>
+                                    <div class="address">
+                                        <span class="detail">${defaultAddress.detailAddressDesc},</span>
+                                        <span class="wards">${defaultAddress.location.ward}</span>, <span class="district">${defaultAddress.location.district}</span>,
+                                        <span class="province">${defaultAddress.location.province}</span>
+                                    </div>
+                                    <div class="default-tag">Mặc định</div>
+                                </div>
+                                <div class="address-control">
+                                    <div>
+                                        <button class="update-address-btn" type="button" data-bs-target="#addressFormModal" data-bs-toggle="modal" data-address-id="${defaultAddress.addressId}">Cập nhật</button>
+                                    </div>
+                                    <button class="set-default-btn disabled" type="button" data-address-id="${defaultAddress.addressId}">Thiết lập mặc định</button>
+                                </div>
+                            </li>
+                        `);
+
+                addressList &&
+                    addressList.forEach((address) => {
+                        addressListEl.append(`
+                            <li class="adrress-card">
+                                <div class="info">
+                                    <div class="d-flex">
+                                        <div class="name">${address.name}</div>
+                                        <div class="phone">${address.phone}</div>
+                                    </div>
+                                    <div class="address">
+                                        <span class="detail">${address.detailAddressDesc}</span>
+                                        <span class="wards">${address.location.ward}</span>, <span class="district">${address.location.district}</span>,
+                                        <span class="province">${address.location.district}</span>
+                                    </div>
+                                </div>
+                                <div class="address-control">
+                                <div>
+                                    <button class="update-address-btn" type="button" data-bs-target="#addressFormModal" data-bs-toggle="modal" data-address-id="${address.addressId}">Cập nhật</button>
+                                    <button class="delete-address-btn" type="button" data-address-id="${address.addressId}" data-bs-toggle="modal" data-bs-target="#confirmDeleteAddressModal">Xóa</button>
+                                </div>
+                                    <button class="set-default-btn" type="button" data-address-id="${address.addressId}">Thiết lập mặc định</button>
+                                </div>
+                            </li>
+                        `);
+                    });
+
+                const handleDeleteAddressBtnClick = () => {
+                    const deleteAddressBtnList = $(
+                        ".form.address-form .address-list .adrress-card .address-control .delete-address-btn",
+                    );
+                    const confirmDeleteAddressModal = new bootstrap.Modal("#confirmDeleteAddressModal");
+                    const confirmDeleteBtn = $(
+                        ".confirm-delete-address-modal .modal-dialog .modal-content .modal-body .confirm-btn",
+                    );
+                    const backBtn = $(
+                        ".confirm-delete-address-modal .modal-dialog .modal-content .modal-body .back-btn",
+                    );
+
+                    deleteAddressBtnList.each((index) => {
+                        deleteAddressBtnList[index].addEventListener("click", (e) => {
+                            currentAccount?.addresses &&
+                                currentAccount?.addresses.forEach((address, index) => {
+                                    confirmDeleteAddressModal.show();
+                                    confirmDeleteBtn.on("click", () => {
+                                        if (address.addressId === parseInt(e.target.getAttribute("data-address-id"))) {
+                                            currentAccount.addresses.splice(index, 1);
+                                            displayAddressList();
+                                            // refresh address id
+                                            currentAccount?.addresses.forEach((address, i) => {
+                                                currentAccount.addresses[i].addressId = i + 1;
+                                            });
+                                            updateLocalStorage();
+                                            location.reload();
+                                            confirmDeleteAddressModal.hide();
+                                        }
+                                    });
+                                    backBtn.on("click", () => {
+                                        confirmDeleteAddressModal.hide();
+                                    });
+                                });
+                        });
+                    });
+                };
+                handleDeleteAddressBtnClick();
+
+                const handleSetDefaultAddressBtn = () => {
+                    const setDefaultAddressBtnList = $(
+                        ".form.address-form .address-list .adrress-card .address-control .set-default-btn",
+                    );
+
+                    setDefaultAddressBtnList.each((index) => {
+                        setDefaultAddressBtnList[index].addEventListener("click", (e) => {
+                            currentAccount.addresses.forEach((address, i) => {
+                                if (address.addressId === parseInt(e.target.getAttribute("data-address-id"))) {
+                                    currentAccount.addresses[i].isDefault = true;
+                                } else {
+                                    currentAccount.addresses[i].isDefault = false;
+                                }
+                                displayAddressList();
+                                updateLocalStorage();
+                            });
+                        });
+                    });
+                };
+                handleSetDefaultAddressBtn();
+            }
+
+            const handleUpdateAddress = () => {
+                const updateAddressBtnList = $(
+                    ".form.address-form .address-list .adrress-card .address-control .update-address-btn",
+                );
+                const modalTitle = $(".address-form-modal .modal-header .modal-title");
+
+                updateAddressBtnList.each((index) => {
+                    updateAddressBtnList[index].addEventListener("click", (e) => {
+                        $(".address-form-modal").addClass("update-address-form");
+                        confirmBtn.attr("data-address-id", e.target.getAttribute("data-address-id"));
+                        modalTitle.text("Cập nhật địa chỉ");
+                        const addressId = parseInt(e.target.getAttribute("data-address-id"));
+                        const address = findAddress(addressId);
+                        if (address) {
+                            nameInputEl.val(`${address.name}`);
+                            phoneInputEl.val(`${address.phone}`);
+                            detailAddressInput.val(`${address.detailAddressDesc}`);
+                            provinceBtnContent.text(`${address.location.province}`);
+                            districtBtnContent.text(`${address.location.district}`);
+                            wardBtnContent.text(`${address.location.ward}`);
+                            provinceCode = address.location.provinceCode;
+                            districtCode = address.location.districtCode;
+                            wardCode = address.location.wardCode;
+                            if (address.isDefault) {
+                                defaultAddressCheckBox.prop("checked", true);
+                            }
+                        }
+                    });
+                });
+            };
+            handleUpdateAddress();
+        };
+        displayAddressList();
+
+        const handleConfirmAddressModalBtnClick = () => {
+            const addressFormModal = $(".address-form-modal");
+
+            confirmBtn.on("click", () => {
+                if (addressFormModalValidator()) {
+                    if (addressFormModal.hasClass("new-address-form")) {
+                        if (!currentAccount.addresses) {
+                            currentAccount.addresses = [];
+                            currentAccount.addresses.push(addressObject);
+                            // refresh address id
+                            currentAccount?.addresses.forEach((address, i) => {
+                                currentAccount.addresses[i].addressId = i + 1;
+                            });
+                        } else {
+                            currentAccount.addresses.push(addressObject);
+                        }
+                    } else if (addressFormModal.hasClass("update-address-form")) {
+                        let updateAddress = findAddress(parseInt(confirmBtn.attr("data-address-id")));
+                        updateAddress = {
+                            ...updateAddress,
+                            name: nameInputEl.val(),
+                            phone: phoneInputEl.val(),
+                            isDefault: defaultAddressCheckBox.prop("checked"),
+                            location: {
+                                province: provinceBtnContent.text(),
+                                district: districtBtnContent.text(),
+                                ward: wardBtnContent.text(),
+                                provinceCode: provinceCode,
+                                districtCode: districtCode,
+                                wardCode: wardCode,
+                            },
+                            detailAddressDesc: detailAddressInput.val(),
+                        };
+                        const updateIndex = currentAccount.addresses.findIndex(
+                            (address) => address.addressId === updateAddress.addressId,
+                        );
+                        currentAccount.addresses[updateIndex] = {
+                            ...updateAddress,
+                        };
+                        updateLocalStorage();
+                    }
+                    updateLocalStorage();
+                    displayAddressList();
+                    clearInput();
+                    location.reload();
+                    addressModal.hide();
+                }
+            });
+        };
+        handleConfirmAddressModalBtnClick();
+
+        const handleAddAddressBtnClick = () => {
+            const addAddressBtn = $(".form.address-form .heading .add-address-btn");
+            const modalTitle = $(".address-form-modal .modal-header .modal-title");
+
+            addAddressBtn.on("click", () => {
+                $(".address-form-modal").addClass("new-address-form");
+                confirmBtn.removeAttr("data-address-id");
+                modalTitle.text("Địa chỉ mới");
+            });
+        };
+        handleAddAddressBtnClick();
+
+        // close modal button click
+        const closeModalBtn = $(".address-form-modal .modal-footer .close-modal-btn");
+        closeModalBtn.on("click", () => {
+            clearInput();
+            addressModal.hide();
         });
     };
-    handleSetUserAvatar();
+    // changeUserAddress();
 
-    const handleSaveChangeButton = () => {
-        const saveChangeButton = $(".form .save-change-btn");
+    const changePassword = () => {
+        mainContent.html(`
+            <form class="password-form form">
+                <div class="title">Thay đổi mật khẩu</div>
+                <table>
+                    <tr>
+                        <td>Mật khẩu hiện tại</td>
+                        <td>
+                            <div class="current-password input-password">
+                                <input type="password" required name="currentPassword" id="currentPassword" />
+                                <div class="alert-message"></div>
+                                <button type="button" class="show-password-btn password-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button type="button" class="hide-password-btn password-btn">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Mật khẩu mới</td>
+                        <td>
+                            <div class="new-password input-password">
+                                <input type="password" required name="newPassword" id="newPassword" />
+                                <div class="alert-message"></div>
+                                <button type="button" class="show-password-btn password-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button type="button" class="hide-password-btn password-btn">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Xác nhận mật khẩu mới</td>
+                        <td>
+                            <div class="confirm-password input-password">
+                                <input type="password" required name="confirmPassword" id="confirmPassword" />
+                                <div class="alert-message"></div>
+                                <button type="button" class="show-password-btn password-btn">
+                                    <i class="fa-solid fa-eye"></i>
+                                </button>
+                                <button type="button" class="hide-password-btn password-btn">
+                                    <i class="fa-solid fa-eye-slash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+                <button type="button" class="confirm-btn">Xác nhận</button>
+            </form>
+        `);
 
-        saveChangeButton.on("click", () => {
-            updateLocalStorage();
+        const currentPasswordInput = $(".form.password-form .current-password input");
+        const newPasswordInput = $(".form.password-form .new-password input");
+        const confirmPasswordInput = $(".form.password-form .confirm-password input");
+        const inputPasswordList = $(".form.password-form .input-password input");
+        const alertMessageList = $(".form.password-form .input-password .alert-message");
+        const hideButtonList = $(".form.password-form .input-password .hide-password-btn");
+        const showButtonList = $(".form.password-form .input-password .show-password-btn");
+        const confirmButton = $(".form.password-form .confirm-btn");
 
-            setTimeout(() => {
-                location.reload();
-            }, 500);
+        // handle hide password
+        hideButtonList.each((index) => {
+            hideButtonList[index].addEventListener("click", () => {
+                setTimeout(() => {
+                    hideButtonList[index].style.display = "none";
+                    showButtonList[index].style.display = "block";
+                    inputPasswordList[index].type = "password";
+                }, 100);
+            });
+        });
+
+        // handle show password
+        showButtonList.each((index) => {
+            showButtonList[index].addEventListener("click", () => {
+                setTimeout(() => {
+                    showButtonList[index].style.display = "none";
+                    hideButtonList[index].style.display = "block";
+                    inputPasswordList[index].type = "text";
+                }, 100);
+            });
+        });
+
+        // handle input password
+        inputPasswordList.each((index) => {
+            const isValidCurrentPassword = () => {
+                if (currentAccount.password !== currentPasswordInput.val()) {
+                    alertMessageList[index].innerText = "Mật khẩu sai!";
+                    currentPasswordInput.parent().addClass("invalid");
+                    currentPasswordInput.parent().removeClass("valid");
+                    return false;
+                } else {
+                    alertMessageList[index].innerText = "";
+                    currentPasswordInput.parent().removeClass("invalid");
+                    currentPasswordInput.parent().addClass("valid");
+                    return true;
+                }
+            };
+            const isValidNewPassword = () => {
+                let isValid;
+                if (newPasswordInput.val() === "") {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Bắt buột phải có mật khẩu!";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else if (newPasswordInput.val().length < 8) {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Mật khẩu phải có ít nhất 8 ký tự!";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else if (!containsNumber(newPasswordInput.val())) {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Mật khẩu phải có ít nhất 1 chữ số!";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else if (!containsUppercase(newPasswordInput.val())) {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Mật khẩu phải có ít nhất 1 chữ in hoa!";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else if (!containsLowercase(newPasswordInput.val())) {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Mật khẩu phải có ít nhất 1 chữ in thường!";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else if (newPasswordInput.val() === currentAccount.password) {
+                    newPasswordInput.parent().addClass("invalid");
+                    alertMessageList[index].innerText = "Mật khẩu phải khác mật khẩu hiện tại";
+                    newPasswordInput.parent().removeClass("valid");
+                    isValid = false;
+                } else {
+                    newPasswordInput.parent().removeClass("invalid");
+                    newPasswordInput.parent().addClass("valid");
+                    alertMessageList[index].innerText = "";
+                    isValid = true;
+                }
+                return isValid;
+            };
+            const isValidConfirmPassword = () => {
+                if (confirmPasswordInput.val() === newPasswordInput.val() && isValidNewPassword()) {
+                    confirmPasswordInput.parent().removeClass("invalid");
+                    confirmPasswordInput.parent().addClass("valid");
+                    alertMessageList[index].innerText = "";
+                    return true;
+                } else {
+                    confirmPasswordInput.parent().addClass("invalid");
+                    confirmPasswordInput.parent().removeClass("valid");
+                    alertMessageList[index].innerText = "Mật khẩu không khớp";
+                    return false;
+                }
+            };
+
+            inputPasswordList[index].addEventListener("change", () => {
+                if (inputPasswordList[index].parentElement.classList.contains("current-password")) {
+                    isValidCurrentPassword();
+                } else if (inputPasswordList[index].parentElement.classList.contains("new-password")) {
+                    isValidNewPassword();
+                } else if (inputPasswordList[index].parentElement.classList.contains("confirm-password")) {
+                    isValidConfirmPassword();
+                }
+            });
+        });
+
+        // handle confirm button click
+        confirmButton.on("click", () => {
+            const isValid =
+                currentPasswordInput.parent().hasClass("valid") &&
+                newPasswordInput.parent().hasClass("valid") &&
+                confirmPasswordInput.parent().hasClass("valid");
+
+            if (isValid) {
+                currentAccount.password = newPasswordInput.val();
+                updateLocalStorage();
+                showToasts("Thay đổi mật khẩu thành công");
+                setTimeout(() => {
+                    location.reload();
+                }, 500);
+            }
         });
     };
-    handleSaveChangeButton();
+    // changePassword();
+
+    const categoryItemClick = () => {
+        const categoryItemList = $(".category ul li.item");
+
+        categoryItemList.each((index) => {
+            categoryItemList[index].addEventListener("click", () => {
+                categoryItemList.each((key) => {
+                    if (categoryItemList[key].classList.contains("selected")) {
+                        categoryItemList[key].classList.remove("selected");
+                    }
+                });
+
+                categoryItemList[index].classList.add("selected");
+                if (categoryItemList[index].classList.contains("selected")) {
+                    if (categoryItemList[index].classList.contains("info")) {
+                        changeUserInfo();
+                    } else if (categoryItemList[index].classList.contains("address")) {
+                        changeUserAddress();
+                    } else if (categoryItemList[index].classList.contains("password")) {
+                        changePassword();
+                    }
+                }
+            });
+        });
+    };
+    categoryItemClick();
+};
+
+const searchPage = () => {
+    const searchInput = $(".navbar--item__search-box input");
+    const mainTitleContent = $(".main .heading .heading__title span");
+    const searchParams = new URLSearchParams(window.location.search);
+    const searchValue = searchParams.get("keyword");
+    searchInput.val(searchValue);
+    mainTitleContent.text(searchValue);
+    document.title = `Kết quả tìm kiếm cho "${searchValue}"`;
+
+    const handleRenderSearchProducts = () => {
+        const productList = $(".main .content .row");
+        productList.html("");
+
+        if (searchValue === "thiệp") {
+            handleRenderAllProductPage(shuffleArray(products));
+        } else if (searchValue === "thiệp giáng sinh") {
+
+        }
+    };
+    handleRenderSearchProducts();
 };
 
 const handleReloadPage = () => {
@@ -1706,19 +2725,23 @@ const handleReloadPage = () => {
     handleRenderDetailProduct();
     handleRenderSuggestProducts();
     handleRenderCartProducts();
+
     handleDeleteSelectedProducts();
-    if (currentPageURL.endsWith("cart.html")) {
+    if (currentPageURL.includes("cart.html")) {
         handleRenderCartProductInCartPage();
     }
-    if (currentPageURL.endsWith("all-product.html")) {
+    if (currentPageURL.includes("all-product.html")) {
         handleRenderAllProductPage(shuffleArray(products));
         handleEventAllProductPage();
     }
-    if (currentPageURL.endsWith("payment.html")) {
+    if (currentPageURL.includes("payment.html")) {
         handlePayOrderProducts();
     }
-    if (currentPageURL.endsWith("profile.html")) {
+    if (currentPageURL.includes("profile.html")) {
         profilePage();
+    }
+    if (currentPageURL.includes("search.html")) {
+        searchPage();
     }
 };
 
