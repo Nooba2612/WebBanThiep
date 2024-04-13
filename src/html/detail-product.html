@@ -93,10 +93,18 @@
                     <li class="menu--item menu--item__category">
                         <a href="">Nhân dịp<i class="fa-duotone fa-chevron-down"></i></a>
                         <ul class="sub-menu">
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20giáng%20sinh">giáng sinh</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20sinh%20nhật">sinh nhật</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20đám%20cưới">đám cưới</a></li>
-                            <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20valentine">valentine</a></li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20giáng%20sinh">giáng sinh</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20sinh%20nhật">sinh nhật</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20đám%20cưới">đám cưới</a>
+                            </li>
+                            <li class="sub-menu--item">
+                                <a href="./search.html?keyword=thiệp%20valentine">valentine</a>
+                            </li>
                             <li class="sub-menu--item"><a href="./search.html?keyword=thiệp%20cảm%20ơn">cảm ơn</a></li>
                         </ul>
                     </li>
@@ -206,6 +214,36 @@
         <div aria-live="polite" aria-atomic="true" class="position-relative">
             <div id="toastContainer" class="toast-container position-fixed start-50 translate-middle-x">
                 <!-- Toast content -->
+            </div>
+        </div>
+
+        <div class="modal-confirm delete-product-confirm">
+            <div
+                class="confirmDeleteProductModal modal fade"
+                id="confirmDeleteProductModal"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Xác nhận xóa sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Bạn có đồng ý loại bỏ sản phẩm này khỏi đơn hàng?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark dismiss-button" data-bs-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-danger accept-button" data-bs-dismiss="modal">
+                                Đồng ý
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
 

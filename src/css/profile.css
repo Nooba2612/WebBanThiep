@@ -185,6 +185,7 @@
     flex: 1;
     margin-right: 20px;
     transition: border-color 0.3s;
+    min-width: 100px;
 }
 
 .form .date-of-birth-input-group > .select:hover {

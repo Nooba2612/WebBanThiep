@@ -570,6 +570,7 @@ input[type="checkbox"]:checked::before {
     display: flex;
     flex: 0.3;
     justify-content: space-evenly;
+    align-items: center;
 }
 
 .navbar--item.navbar--item__login > a {
@@ -596,7 +597,7 @@ input[type="checkbox"]:checked::before {
     line-height: 20px;
     width: 20px;
     text-align: center;
-    top: 21px;
+    top: 5px;
     right: 0px;
     font-size: 0.8rem;
     font-weight: var(--boldFontWeight);

@@ -3,7 +3,7 @@ import { products } from "./products.js";
 /* Variables */
 
 const seacrhBoxInput = $(".navbar--item__search-box input");
-const currentAccount = JSON.parse(localStorage.getItem("currentAccount"));
+const currentAccount = JSON.parse(localStorage.getItem("currentAccount")) || {};
 let registerAccounts;
 let cartItemQuantity;
 let cartProducts;
@@ -469,7 +469,7 @@ const handleRenderCartProductInCartPage = () => {
 
     const handleRenderAddress = () => {
         const addressEl = $(".order-summary__address--content");
-        const defaultAddress = currentAccount.addresses?.find((address) => (address.isDefault = true));
+        const defaultAddress = currentAccount?.addresses?.find((address) => (address.isDefault = true));
 
         addressEl.html(
             defaultAddress
@@ -528,7 +528,7 @@ const handleRenderCartProductInCartPage = () => {
     };
 
     const handleDisplayOrderSummary = () => {
-        const convertToNumber = (priceString) => parseFloat(priceString.replace(/[^0-9.]/g, ""));
+        const convertToNumber = (priceString) => parseFloat(priceString?.replace(/[^0-9.]/g, ""));
         let shippingFee = 0;
         let cost = 0;
         let itemQuantity = 0;
@@ -536,10 +536,10 @@ const handleRenderCartProductInCartPage = () => {
         selectProductCheckBox.each((key, checkbox) => {
             if (checkbox.checked) {
                 const product = cartProducts[key];
-                const productCost = convertToNumber(product.price) * parseInt(product.quantity);
+                const productCost = convertToNumber(product?.price) * parseInt(product?.quantity);
                 cost += productCost;
                 shippingFee = 30;
-                itemQuantity += product.quantity;
+                itemQuantity += product?.quantity;
             }
         });
 
@@ -557,13 +557,17 @@ const handleRenderCartProductInCartPage = () => {
         selectAllCheckBox.on("change", () => {
             if (selectAllCheckBox.prop("checked")) {
                 selectProductCheckBox.each((index) => {
-                    selectProductCheckBox[index].checked = true;
-                    cartProducts[index].checked = true;
+                    if (index <= cartProducts.length - 1) {
+                        selectProductCheckBox[index].checked = true;
+                        cartProducts[index].checked = true;
+                    }
                 });
             } else {
                 selectProductCheckBox.each((index) => {
-                    selectProductCheckBox[index].checked = false;
-                    cartProducts[index].checked = false;
+                    if (index <= cartProducts.length - 1) {
+                        selectProductCheckBox[index].checked = false;
+                        cartProducts[index].checked = false;
+                    }
                 });
             }
             handleDisplayOrderSummary();
@@ -719,12 +723,15 @@ const updateLocalStorage = () => {
         }
     });
     cartItemQuantity = cartProducts.map((product) => product.quantity).reduce((sum, quantity) => sum + quantity, 0);
+    currentAccount.cartItemQuantity = cartItemQuantity;
+    currentAccount.cartProducts = cartProducts;
+    currentAccount.orderProducts = orderProducts;
     $(".navbar--item__cart .items-quantity").text(cartItemQuantity);
-    localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
-    localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
-    localStorage.setItem("registerAccounts", JSON.stringify(registerAccounts));
+    // localStorage.setItem("cartProducts", JSON.stringify(cartProducts));
+    // localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
+    // localStorage.setItem("orderProducts", JSON.stringify(orderProducts));
     localStorage.setItem("currentAccount", JSON.stringify(currentAccount));
-    localStorage.setItem("orderProducts", JSON.stringify(orderProducts));
+    localStorage.setItem("registerAccounts", JSON.stringify(registerAccounts));
 };
 
 const handleDeleteSelectedProducts = () => {
@@ -923,9 +930,9 @@ const handleLogoutAccount = () => {
 };
 
 const handleSuccessLogin = () => {
-    if (currentAccount) {
+    if (currentAccount && currentAccount.username) {
         $(".navbar--item__login").html(`
-                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar});display: ${
+                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount?.avatar});display: ${
             currentAccount.avatar ? "block" : "none"
         };"></div> ${currentAccount.avatar ? "" : '<i class="fa-solid fa-face-awesome"></i>'} <span>${
             currentAccount.username
@@ -1184,36 +1191,38 @@ const handleEventAllProductPage = () => {
     });
 
     // handle add to cart
-    addToCartBtn.on("click", (e) => {
-        const productId = e.target.getAttribute("data-product-id");
+    addToCartBtn.each((index) => {
+        addToCartBtn[index].addEventListener("click", (e) => {
+            const productId = e.currentTarget.getAttribute("data-product-id");
 
-        products.forEach((product) => {
-            if (productId === product.id) {
-                let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
+            products.forEach((product) => {
+                if (productId === product.id) {
+                    let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
 
-                products.forEach((product) => {
-                    if (productId === product.id) {
-                        if (isDuplicateProduct === -1) {
-                            cartProducts.push(product);
+                    products.forEach((product) => {
+                        if (productId === product.id) {
+                            if (isDuplicateProduct === -1) {
+                                cartProducts.push(product);
 
-                            cartProducts[cartProducts.length - 1].quantity = 1;
-                        } else {
-                            cartProducts[isDuplicateProduct].quantity =
-                                parseInt(cartProducts[isDuplicateProduct].quantity) + 1;
+                                cartProducts[cartProducts.length - 1].quantity = 1;
+                            } else {
+                                cartProducts[isDuplicateProduct].quantity =
+                                    parseInt(cartProducts[isDuplicateProduct].quantity) + 1;
+                            }
                         }
-                    }
-                });
+                    });
 
-                cartItemQuantity = cartProducts
-                    .map((product) => product.quantity)
-                    .reduce((sum, quantity) => sum + quantity, 0);
+                    cartItemQuantity = cartProducts
+                        .map((product) => product.quantity)
+                        .reduce((sum, quantity) => sum + quantity, 0);
 
-                showToasts(`Đã thêm sản phẩm vào giỏ hàng. <span><i class="fa-regular fa-cart-circle-check"></i>`);
+                    showToasts(`Đã thêm sản phẩm vào giỏ hàng. <span><i class="fa-regular fa-cart-circle-check"></i>`);
 
-                handleRenderCartProducts();
+                    handleRenderCartProducts();
 
-                updateLocalStorage();
-            }
+                    updateLocalStorage();
+                }
+            });
         });
     });
 
@@ -3106,11 +3115,13 @@ const profilePage = () => {
 
                     setDefaultAddressBtnList.each((index) => {
                         setDefaultAddressBtnList[index].addEventListener("click", (e) => {
-                            currentAccount.addresses.forEach((address, i) => {
+                            currentAccount?.addresses?.forEach((address, i) => {
+                                address.isDefault = false;
+                            });
+
+                            currentAccount?.addresses?.forEach((address, i) => {
                                 if (address.addressId === parseInt(e.target.getAttribute("data-address-id"))) {
                                     currentAccount.addresses[i].isDefault = true;
-                                } else {
-                                    currentAccount.addresses[i].isDefault = false;
                                 }
                                 displayAddressList();
                                 updateLocalStorage();
@@ -3458,23 +3469,30 @@ const searchPage = () => {
 
         if (searchValue === "thiệp") {
             handleRenderAllProductPage(shuffleArray(products));
-        } else if (searchValue === "thiệp giáng sinh") {
+        } else if (searchValue.includes("giáng sinh")) {
             handleRenderAllProductPage(getProductWithType("christmas"));
-        } else if (searchValue === "thiệp sinh nhật") {
+        } else if (searchValue.includes("sinh nhật")) {
             handleRenderAllProductPage(getProductWithType("birthday"));
-        } else if (searchValue === "thiệp đám cưới") {
+        } else if (searchValue.includes("đám cưới")) {
             handleRenderAllProductPage(getProductWithType("wedding"));
-        } else if (searchValue === "thiệp valentine") {
+        } else if (searchValue.includes("valentine")) {
             handleRenderAllProductPage(getProductWithType("valentine"));
-        } else if (searchValue === "thiệp cảm ơn") {
+        } else if (searchValue.includes("cảm ơn")) {
             handleRenderAllProductPage(getProductWithType("thanks"));
-        } else if (searchValue === "thiệp ngày nhà giáo việt nam") {
+        } else if (searchValue.includes("ngày nhà giáo việt nam")) {
             handleRenderAllProductPage(getProductWithType("teacherday"));
-        } else if (searchValue === "thiệp tết") {
+        } else if (searchValue.includes("tết")) {
             handleRenderAllProductPage(getProductWithType("newyear"));
         } else {
             handleRenderAllProductPage([]);
         }
+
+        // handle search product id
+        products.forEach((product) => {
+            if (searchValue.includes(product.id)) {
+                handleRenderAllProductPage([product]);
+            }
+        });
     };
     handleRenderSearchProducts();
 };
@@ -3494,8 +3512,7 @@ const purchasePage = () => {
                 e.target.classList.add("active");
 
                 if (index === 0 || index === 1) {
-                    emptyOrderEl.css("display", "none");
-                    productList.css("display", "flex");
+                    handleEmptyOrder();
                 } else {
                     emptyOrderEl.css("display", "flex");
                     productList.css("display", "none");
@@ -3559,7 +3576,7 @@ const purchasePage = () => {
             productList.css("display", "none");
         } else {
             emptyOrderEl.css("display", "none");
-            productList.css("display", "flex");
+            productList.css("display", "block");
         }
     };
     handleEmptyOrder();
@@ -3627,10 +3644,13 @@ const purchasePage = () => {
 };
 
 const handleReloadPage = () => {
-    cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
-    cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
+    // cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
+    // cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
+    // orderProducts = JSON.parse(localStorage.getItem("orderProducts")) || [];
+    cartItemQuantity = currentAccount?.cartItemQuantity || 0;
+    cartProducts = currentAccount?.cartProducts || [];
+    orderProducts = currentAccount?.orderProducts || [];
     registerAccounts = JSON.parse(localStorage.getItem("registerAccounts")) || [];
-    orderProducts = JSON.parse(localStorage.getItem("orderProducts")) || [];
     const spinnerLoading = $(".loading.spinner");
 
     window.addEventListener("beforeunload", () => {

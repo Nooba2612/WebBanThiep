@@ -3,34 +3,175 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Sitemap</title>
-        <link rel="stylesheet" href="../assets/icons/fontawesome-pro-6.5.1-web/css/all.min.css" />
-        <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="../vendor/jquery/slick/slick.css" />
-        <link rel="stylesheet" href="../vendor/jquery/slick/slick-theme.css" />
-        <link rel="shortcut icon" href="../assets/images/favicon.ico?v=0" type="image/x-icon" />
-        <link rel="stylesheet" href="../css/sitemap.css" />
-        <link rel="stylesheet" href="../css/styles.css" />
+        <title>ThiepVipPro - Sitemap</title>
     </head>
+    <link rel="stylesheet" href="../assets/icons/fontawesome-pro-6.5.1-web/css/all.min.css" />
+    <link rel="stylesheet" href="../vendor/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../vendor/jquery/slick/slick.css" />
+    <link rel="stylesheet" href="../vendor/jquery/slick/slick-theme.css" />
+    <link rel="shortcut icon" href="../assets/images/favicon.ico?v=0" type="image/x-icon" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <style>
+        header.header {
+            border-bottom: 3px solid var(--primaryColor);
+        }
+
+        .header .header__title {
+            display: flex;
+            place-content: center start;
+            align-items: center;
+            margin-left: 40px;
+        }
+
+        .header .header__title--logo {
+            width: 250px;
+        }
+
+        .header .header__title--text {
+            font-size: 1.4rem;
+            border-left: 3px solid var(--blackColor);
+            padding: 15px;
+        }
+
+        .main {
+            background-color: var(--primaryColor);
+            padding: 10px 0;
+        }
+
+        .main .content {
+            font-size: 1.1rem;
+        }
+
+        .main .content .title {
+            width: 100%;
+            text-align: center;
+        }
+
+        .link-list .item {
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+
+        .link-list .item:hover {
+            background-color: #dddcdc;
+            font-weight: bold;
+        }
+    </style>
     <body>
-        <div class="wrapper">
-            <h1 class="title">SITEMAP</h1>
-            <div class="link-list container">
-                <div class="row">
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./index.html">Trang chủ</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./login.html">Trang đăng nhập/đăng ký</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./search.html?keyword=thiệp">Trang tìm kiếm</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./cart.html">Trang giỏ hàng</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./payment.html">Trang thanh toán</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./purchase.html">Trang đơn hàng</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./profile.html">Trang thông tin tài khoản</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./detail-product.html?id=001">Trang chi tiết sản phẩm</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./all-product.html">Trang tất cả sản phẩm</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./about-us.html">Trang người thực hiện</a></div>
-                    <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start"><a class="p-4" href="./sitemap.html">Trang sitemap</a></div>
+        <header class="header">
+            <div class="header-top">
+                <div class="carousel-content container-lg">
+                    <div class="content active">Chào mừng đến với ThiepVipPro.com</div>
+                    <div class="content">Nhiều ưu đãi đang chờ đón bạn</div>
+                    <div class="content">Nhân dịp khai trương ưu đãi lên đến 70%</div>
                 </div>
             </div>
-        </div>
+            <div class="header__title">
+                <a href="../html/index.html" class="header__title--logo">
+                    <img src="../assets/images/logos/thiepvippro-logo.png" alt="logo" />
+                </a>
+                <span class="header__title--text">Sitemap</span>
+            </div>
+        </header>
+
+        <main class="main">
+            <div style="max-width: 1200px; margin: 0 auto; background-color: var(--whiteColor); padding: 20px">
+                <div class="content">
+                    <h1 class="title">SITEMAP</h1>
+                    <div class="link-list container">
+                        <div class="row">
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./index.html">Trang chủ</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./login.html">Trang đăng nhập/đăng ký</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./search.html?keyword=thiệp">Trang tìm kiếm</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./cart.html">Trang giỏ hàng</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./payment.html">Trang thanh toán</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./purchase.html">Trang đơn hàng</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./profile.html">Trang thông tin tài khoản</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./detail-product.html?id=001">Trang chi tiết sản phẩm</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./all-product.html">Trang tất cả sản phẩm</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./about-us.html">Trang người thực hiện</a>
+                            </div>
+                            <div class="item col-lg-3 col-md-4 col-sm-5 col-xs-12 text-start">
+                                <a class="p-4" href="./sitemap.html">Trang sitemap</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer__heading"></div>
+            <div class="footer__content">
+                <div class="wrapper">
+                    <div class="footer__logo"><img src="../assets/images/logos/thiepvippro-logo.png" alt="" /></div>
+                    <div class="footer__services">
+                        <h4 class="footer__services--title">DỊCH VỤ</h4>
+                        <ul class="list">
+                            <li class="item"><a href="#">Điều khoản sử dụng</a></li>
+                            <li class="item"><a href="#">Chính sách bảo mật thông tin cá nhân</a></li>
+                            <li class="item"><a href="#">Chính sách bảo mật thanh toán</a></li>
+                            <li class="item"><a href="#">Giới thiệu ThiepVipPro</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer__helps">
+                        <h4 class="footer__title">HỖ TRỢ</h4>
+                        <ul class="list">
+                            <li class="item"><a href="#">Chính sách đổi - trả - hoàn tiền</a></li>
+                            <li class="item"><a href="#">Chính sách bảo hành - bồi hoàn</a></li>
+                            <li class="item"><a href="#">Chính sách vận chuyển</a></li>
+                            <li class="item"><a href="#">Chính sách khách sỉ</a></li>
+                            <li class="item"><a href="#">Phương thức thanh toán và xuất HĐ</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer__contact">
+                        <h4 class="footer__contact--title">LIÊN HỆ</h4>
+                        <ul class="list">
+                            <li class="item footer__contact--phone">
+                                <i class="fa-solid fa-phone"></i>
+                                <span>Hotline: 0999999999</span>
+                            </li>
+                            <li class="item footer__contact--email">
+                                <i class="fa-solid fa-envelope"></i>
+                                <span>Email: support@thiepvipro.com</span>
+                            </li>
+                            <li class="item footer__contact--address">
+                                <i class="fa-solid fa-location-dot"></i>
+                                <span>Địa chỉ: Số 12 Nguyễn Văn Bảo, Phường 4, Quận Gò Vấp, Thành phố Hồ Chí Minh</span>
+                            </li>
+                            <li class="footer__contact--socials">
+                                <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                                <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                                <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                                <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__copyright">
+                Copyright © 2024 Thiep Vip Pro. Powered by <span>DangPhucNguyen</span> <i class="fa-solid fa-check"></i>
+            </div>
+        </footer>
     </body>
     <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="../vendor/jquery/jquery-3.7.1.min.js"></script>
