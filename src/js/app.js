@@ -7,29 +7,14 @@ const currentAccount = JSON.parse(localStorage.getItem("currentAccount"));
 let registerAccounts;
 let cartItemQuantity;
 let cartProducts;
+let orderProducts;
 const currentPageURL = window.location.href;
 
 /* Functions */
-const handleNullFeature = () => {
-    alert("Chức năng đang được chúng tôi phát triển");
-};
 
 const containsNumber = (str) => /\d/.test(str);
 const containsUppercase = (str) => /[A-Z]/.test(str);
 const containsLowercase = (str) => /[a-z]/.test(str);
-
-const handleSubmitForm = (e) => {
-    e.preventDefault();
-    console.log(seacrhBoxInput.val());
-    seacrhBoxInput.val("");
-};
-
-const handleEnterPressForm = (e) => {
-    if (e.keyCode === 13) {
-        console.log(seacrhBoxInput.val());
-        seacrhBoxInput.val("");
-    }
-};
 
 const handleClearInput = () => {
     seacrhBoxInput.val("");
@@ -78,10 +63,7 @@ const handleHeaderIntroAnimation = () => {
 const handleQuickViewButtonClick = (e) => {
     const currentProductId = e.currentTarget.getAttribute("data-product-id");
     const cartList = $(".cart .cart__product-list");
-
-    const currentProduct = products.find((product) => {
-        return product.id === currentProductId ? product : null;
-    });
+    const currentProduct = products.find((product) => product.id === currentProductId);
 
     $(".product-quickview .modal .modal-content .product-info").html(`
             <div class="product-info--image">
@@ -430,6 +412,14 @@ const handleRenderCartProductInCartPage = () => {
         $(".cart-page").css("display", "block");
     }
 
+    const resetOrderProduct = () => {
+        cartProducts.forEach((product) => {
+            product.checked = false;
+            updateLocalStorage();
+        });
+    };
+    resetOrderProduct();
+
     const renderCartItems = () => {
         // reset cart items
         cartList.html("");
@@ -476,6 +466,27 @@ const handleRenderCartProductInCartPage = () => {
         // update product quantity
     };
     renderCartItems();
+
+    const handleRenderAddress = () => {
+        const addressEl = $(".order-summary__address--content");
+        const defaultAddress = currentAccount.addresses?.find((address) => (address.isDefault = true));
+
+        addressEl.html(
+            defaultAddress
+                ? `<div class="order-summary__address--content">
+                <div class="name">${defaultAddress.name},</div>
+                <div class="phone">${defaultAddress.phone},</div>
+                <div class="location">
+                    <i class="fa-regular fa-location-dot"></i>
+                    <span>${defaultAddress.detailAddressDesc} ,${defaultAddress.location.ward}, ${defaultAddress.location.district},${defaultAddress.location.province}</span>
+                </div>
+            </div>`
+                : `<div class="order-summary__address--content" style="font-size: 1.1rem">
+                Chưa có địa chỉ
+            </div>`,
+        );
+    };
+    handleRenderAddress();
 
     const handleDeleteProductButtonClick = () => {
         const deleteButton = $(".cart__product-list .cart__product-list--item .delete-product-button");
@@ -713,6 +724,7 @@ const updateLocalStorage = () => {
     localStorage.setItem("cartItemQuantity", JSON.stringify(cartItemQuantity));
     localStorage.setItem("registerAccounts", JSON.stringify(registerAccounts));
     localStorage.setItem("currentAccount", JSON.stringify(currentAccount));
+    localStorage.setItem("orderProducts", JSON.stringify(orderProducts));
 };
 
 const handleDeleteSelectedProducts = () => {
@@ -860,16 +872,23 @@ const handleDeleteSelectedProducts = () => {
     handleSelectAllProduct();
 };
 
+const handleSearchProduct = () => {
+    const clearInputBtn = $(".navbar--item__search-box .clear-input-btn");
+    const searchBtn = $(".navbar--item__search-box .submit-button");
+    const searchInput = $(".navbar--item__search-box input");
+
+    clearInputBtn.on("click", () => {
+        searchInput.val("");
+    });
+
+    searchBtn.on("click", (e) => {
+        if (searchInput.val() === "") {
+            e.preventDefault();
+        }
+    });
+};
+
 const handleEvents = () => {
-    // handle click
-    $(".navbar--item__search-box .clear-input-btn").on("click", () => {
-        handleClearInput();
-    });
-
-    $(".navbar--item__search-box .submit-button").on("click", (e) => {
-        handleSubmitForm(e);
-    });
-
     $(".products .products__list .products__item .buy-button").on("click", (e) => {
         handleQuickViewButtonClick(e);
     });
@@ -879,16 +898,19 @@ const handleEvents = () => {
     });
 
     $(".footer .list .item").on("click", () => {
-        handleNullFeature();
+        showToasts("Chức năng đang được phát triển");
     });
 
     $(".footer .footer__contact .footer__contact--socials a").on("click", () => {
-        handleNullFeature();
+        showToasts("Chức năng đang được phát triển");
     });
 
-    // handle keydown
-    $(".navbar--item__search-box input").on("keydown", (e) => {
-        handleEnterPressForm(e);
+    $(".header .menu--list .menu--item__offers").on("click", () => {
+        showToasts("Chức năng đang được phát triển");
+    });
+
+    $(".header .menu--list .menu--item__news").on("click", () => {
+        showToasts("Chức năng đang được phát triển");
     });
 };
 
@@ -903,9 +925,11 @@ const handleLogoutAccount = () => {
 const handleSuccessLogin = () => {
     if (currentAccount) {
         $(".navbar--item__login").html(`
-                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar})"></div> ${
-            currentAccount.avatar ? "" : '<i class="fa-solid fa-face-awesome"></i>'
-        } <span>${currentAccount.username}</span></a>
+                <a href="#" ><div class="avatar" style="background-image: url(${currentAccount.avatar});display: ${
+            currentAccount.avatar ? "block" : "none"
+        };"></div> ${currentAccount.avatar ? "" : '<i class="fa-solid fa-face-awesome"></i>'} <span>${
+            currentAccount.username
+        }</span></a>
                 <ul class="account-manipulation">
                     <li>
                         <a href="./profile.html"><i class="fa-solid fa-user"></i><span>Thông tin tài khoản</span></a>
@@ -1096,7 +1120,25 @@ const handleRenderSuggestProducts = () => {
 
 const handleRenderAllProductPage = (productArray) => {
     const productList = $(".main .content .row");
+    const mainEl = $(".main");
+    const notFoundResultEl = $(".not-found-result");
+    const showMoreBtn = $(".main .content__show-more-btn");
+
     productList.html("");
+
+    if (productArray.length === 0) {
+        notFoundResultEl.css("display", "flex");
+        mainEl.css("display", "none");
+    } else {
+        notFoundResultEl.css("display", "none");
+        mainEl.css("display", "block");
+    }
+
+    if (productArray.length <= 16) {
+        showMoreBtn.css("display", "none");
+    } else {
+        showMoreBtn.css("display", "flex");
+    }
 
     // handle render all product
     productArray.forEach((product) => {
@@ -1132,6 +1174,14 @@ const handleRenderAllProductPage = (productArray) => {
 const handleEventAllProductPage = () => {
     const addToCartBtn = $(".main .content .product-item .product-operator .add-to-cart-btn");
     const buyBtn = $(".main .content .product-item .product-operator .buy-button");
+    const quickviewBtnList = $(".main .content .product-item .quick-view-button");
+
+    // handle quickview button click
+    quickviewBtnList.each((index) => {
+        quickviewBtnList[index].addEventListener("click", (e) => {
+            handleQuickViewButtonClick(e);
+        });
+    });
 
     // handle add to cart
     addToCartBtn.on("click", (e) => {
@@ -1251,12 +1301,12 @@ const handleEventAllProductPage = () => {
 
     // handle show more products button
     const showMoreProductsBtn = $(".main .content__show-more-btn");
+
     showMoreProductsBtn.on("click", () => {
         const productList = $(".main .content .row.product-list");
         const currentMaxHeight = parseInt(productList.css("max-height"));
-        const aProductHeight = 493;
+        const aProductHeight = 520;
         const rowWillShow = 3;
-
         // if not remain products the show more button will be hidden
         if (Math.ceil(currentMaxHeight / aProductHeight) >= Math.ceil(products.length / 4)) {
             showMoreProductsBtn.css("display", "none");
@@ -1318,6 +1368,705 @@ const handlePayOrderProducts = () => {
     };
     renderOrderProductsList();
 
+    const handleRenderAddressContent = (currentAddress) => {
+        const addressEl = $(".main .address .address__content");
+
+        const defaultAddress = currentAccount.addresses?.find((address) => (address.isDefault = true));
+        const address = currentAddress || defaultAddress;
+        addressEl.html(
+            address
+                ? `<span class="address__content--name">${address.name} (+84) ${address.phone}</span>
+            <span class="address__content--location"
+                >${address.detailAddressDesc}, ${address.location.ward}, ${address.location.district}, ${address.location.province}</span
+            >
+            <button class="address__content--change-address-btn" data-bs-toggle="modal" data-bs-target="#selectAddressModal">Thay đổi</button>`
+                : `<div>Chưa có địa chỉ nhận hàng</div>
+            <button class="address__content--change-address-btn" data-bs-toggle="modal" data-bs-target="#selectAddressModal">Thêm địa chỉ</button>`,
+        );
+    };
+    handleRenderAddressContent();
+
+    const handleChangeAddressBtnClick = () => {
+        const changeAddressBtn = $(".main .address .address__content .address__content--change-address-btn");
+        const addressListEl = $(".modal-select-address .modal-body .address-list");
+        const selectAddressForm = $(".modal-select-address .modal-body .select-address-form");
+        const inputAddressForm = $(".modal-select-address .modal-body .input-address-form");
+        const modalTitle = $(".modal-select-address .modal-header");
+        const provinceSelectionBtn = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .province-select",
+        );
+        const districtSelectionBtn = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .district-select",
+        );
+        const wardSelectionBtn = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .ward-select",
+        );
+        const addressSelectionBtnList = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .select",
+        );
+        const provinceSelectionsBox = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .province-option-box",
+        );
+        const districtSelectionsBox = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .district-option-box",
+        );
+        const wardSelectionsBox = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .ward-option-box",
+        );
+        const selectionsBoxList = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .option-box",
+        );
+        const provinceBtnContent = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .province-select span",
+        );
+        const districtBtnContent = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .district-select span",
+        );
+        const wardBtnContent = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .ward-select span",
+        );
+        const nameInputAlert = $(
+            ".modal-select-address .modal-body .input-address-form .input-group .name-input .alert-message",
+        );
+        const phoneInputAlert = $(
+            ".modal-select-address .modal-body .input-address-form .input-group .phone-input .alert-message",
+        );
+        const addressSelectAlertList = $(
+            ".modal-select-address .modal-body .input-address-form .address-select-group .select .alert-message",
+        );
+
+        const detailAddressInputAlert = $(".modal-select-address .modal-body .address-description .alert-message");
+        const defaultAddressCheckBox = $(".modal-select-address .modal-body .set-default-address-btn input");
+        const nameInputEl = $(".modal-select-address .modal-body .input-address-form .input-group .name-input input");
+        const phoneInputEl = $(".modal-select-address .modal-body .input-address-form .input-group .phone-input input");
+        const detailAddressInput = $(".modal-select-address .modal-body .address-description textarea");
+
+        let provinceOptionList, districtOptionList, wardOptionList;
+        let provinceCode, districtCode, wardCode;
+        let addressObject = {};
+
+        // change address click
+        changeAddressBtn.on("click", () => {
+            const renderAddressList = () => {
+                const defaultAddress = currentAccount.addresses?.find((address) => address.isDefault === true);
+                const addressArray = currentAccount.addresses?.filter((address) => address.isDefault === false);
+
+                // reset address list
+                addressListEl.html("");
+
+                // render default address
+                defaultAddress &&
+                    addressListEl.append(`
+                    <li class="item default-address">
+                        <input
+                            type="checkbox"
+                            class="address-option"
+                            name="addressOption"
+                            id="addressOption"
+                            value="${defaultAddress.addressId}"
+                        />
+                        <div class="address-content">
+                            <div class="d-flex justify-content-start align-items-center mb-2">
+                                <div class="name">${defaultAddress.name}</div>
+                                <div class="phone">(+84) ${defaultAddress.phone}</div>
+                            </div>
+                            <div class="address">
+                            ${defaultAddress.detailAddressDesc}, ${defaultAddress.location.ward}, 
+                            ${defaultAddress.location.district}, 
+                            ${defaultAddress.location.province}
+                            </div>
+                            <div class="default-tag">Mặc định</div>
+                        </div>
+                        <button class="update-address-btn" data-address-id="${defaultAddress.addressId}">Cập nhật</button>
+                    </li>
+                `);
+
+                // render address list not contains default address
+                addressArray &&
+                    addressArray.forEach((address) => {
+                        addressListEl.append(`
+                        <li class="item">
+                            <input
+                                type="checkbox"
+                                class="address-option"
+                                name="addressOption"
+                                id="addressOption"
+                                value="${address.addressId}"
+                            />
+                            <div class="address-content">
+                                <div class="d-flex justify-content-start align-items-center mb-2">
+                                    <div class="name">${address.name}</div>
+                                    <div class="phone">(+84) ${address.phone}</div>
+                                </div>
+                                <div class="address">
+                                    ${address.detailAddressDesc}, 
+                                    ${address.location.ward}, 
+                                    ${address.location.district}, 
+                                    ${address.location.province}
+                                </div>
+                            </div>
+                            <button class="update-address-btn" data-address-id="${address.addressId}">Cập nhật</button>
+                        </li>
+                    `);
+                    });
+            };
+            renderAddressList();
+
+            const handleChangeAddress = () => {
+                const selectAddressRadioList = $(
+                    ".modal-select-address .modal-body .address-list .item .address-option",
+                );
+                const addressContentList = $(".modal-select-address .modal-body .address-list .item .address-content");
+                const confirmBtn = $(
+                    ".modal-select-address .select-address-form .select-address-btn-group .confirm-select-btn",
+                );
+
+                let addressChecked = currentAccount.addresses?.find((address) => address.isDefault === true);
+                selectAddressRadioList.each((i) => {
+                    if (addressChecked.addressId === parseInt(selectAddressRadioList[i].value)) {
+                        selectAddressRadioList[i].checked = true;
+                    } else {
+                        selectAddressRadioList[i].checked = false;
+                    }
+
+                    selectAddressRadioList[i].addEventListener("change", (e) => {
+                        selectAddressRadioList.each((key) => {
+                            selectAddressRadioList[key].checked = false;
+                        });
+                        e.target.checked = true;
+                        addressChecked = currentAccount.addresses?.find(
+                            (address) => address.addressId === parseInt(selectAddressRadioList[i].value),
+                        );
+                    });
+
+                    addressContentList[i].addEventListener("click", (e) => {
+                        selectAddressRadioList.each((key) => {
+                            selectAddressRadioList[key].checked = false;
+                        });
+                        selectAddressRadioList[i].checked = true;
+                        addressChecked = currentAccount.addresses.find(
+                            (address) => address.addressId === parseInt(selectAddressRadioList[i].value),
+                        );
+                        console.log(addressChecked);
+                    });
+
+                    confirmBtn.on("click", () => {
+                        handleRenderAddressContent(addressChecked);
+                    });
+                });
+            };
+            handleChangeAddress();
+
+            // fetch API wards, districts, provinces
+            const fetchApiLocationOptions = () => {
+                const activeSelectionEl = (currentIndex) => {
+                    selectionsBoxList.each((index) => {
+                        if (index === currentIndex) {
+                            selectionsBoxList[index].classList.add("active");
+                            addressSelectionBtnList[index].classList.add("active");
+                            addressSelectionBtnList[index].classList.remove("invalid");
+                        } else {
+                            selectionsBoxList[index].classList.remove("active");
+                            addressSelectionBtnList[index].classList.remove("active");
+                        }
+                    });
+                };
+                activeSelectionEl();
+
+                // show province selections address box
+                const handleDisplayProvinceSelectionBox = async () => {
+                    try {
+                        const response = await fetch(
+                            "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/tinh_tp.json",
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+
+                        const data = await response.json();
+
+                        // sort name from A to Z
+                        const provinces = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                        provinceSelectionsBox.html("");
+                        for (const key in provinces) {
+                            const province = provinces[key][1];
+                            provinceSelectionsBox.append(`
+                        <li class="province-option option" province-code="${province.code}">${province.name_with_type}</li>
+                    `);
+                        }
+
+                        provinceOptionList = $(
+                            ".modal-select-address .modal-body .input-address-form .address-select-group .province-option-box .province-option",
+                        );
+
+                        provinceOptionList.each((index) => {
+                            const provinceEl = provinceOptionList[index];
+                            provinceEl.addEventListener("click", () => {
+                                provinceCode = provinceEl.getAttribute("province-code");
+                                addressSelectionBtnList[1].style.cursor = "pointer";
+                                provinceBtnContent.text(provinceEl.innerText);
+                                activeSelectionEl(1);
+                                handleDisplayDistrictSelectionsBox();
+                            });
+                        });
+                    } catch (error) {
+                        console.log(error);
+                    }
+                };
+                handleDisplayProvinceSelectionBox();
+
+                // show district selections address box
+                const handleDisplayDistrictSelectionsBox = async () => {
+                    try {
+                        const response = await fetch(
+                            "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/quan_huyen.json",
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+
+                        const data = await response.json();
+
+                        // sort name from A to Z
+                        const districts = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                        districtSelectionsBox.html("");
+                        for (const key in districts) {
+                            const district = districts[key][1];
+
+                            if (district.parent_code === provinceCode) {
+                                districtSelectionsBox.append(`
+                                    <li class="district-option option" district-code="${district.code}">${district.name_with_type}</li>
+                                `);
+                            }
+                        }
+
+                        districtOptionList = $(
+                            ".modal-select-address .modal-body .input-address-form .address-select-group .district-option-box .district-option",
+                        );
+
+                        if (provinceCode) {
+                            districtOptionList.each((index) => {
+                                const districtEl = districtOptionList[index];
+                                districtEl.addEventListener("click", () => {
+                                    districtCode = districtEl.getAttribute("district-code");
+                                    addressSelectionBtnList[2].style.cursor = "pointer";
+                                    districtBtnContent.text(districtEl.innerText);
+                                    activeSelectionEl(2);
+                                    handleDisplayWardSelectionsBox();
+                                });
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                };
+                // handleDisplayDistrictSelectionsBox();
+
+                // show ward selections address box
+                const handleDisplayWardSelectionsBox = async () => {
+                    try {
+                        const response = await fetch(
+                            "https://raw.githubusercontent.com/sunrise1002/hanhchinhVN/master/dist/xa_phuong.json",
+                        );
+
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+
+                        const data = await response.json();
+
+                        // sort name from A to Z
+                        const wards = Object.entries(data).sort((a, b) => a[1].name.localeCompare(b[1].name));
+                        wardSelectionsBox.html("");
+                        for (const key in wards) {
+                            const ward = wards[key][1];
+
+                            if (ward.parent_code === districtCode) {
+                                wardSelectionsBox.append(`
+                            <li class="ward-option option" ward-code="${ward.code}">${ward.name_with_type}</li>
+                        `);
+                            }
+                        }
+                        wardOptionList = $(
+                            ".modal-select-address .modal-body .input-address-form .address-select-group .ward-option-box .ward-option",
+                        );
+
+                        if (districtCode) {
+                            wardOptionList.each((index) => {
+                                const wardEl = wardOptionList[index];
+                                wardEl.addEventListener("click", () => {
+                                    wardCode = wardEl.getAttribute("ward-code");
+                                    wardBtnContent.text(wardEl.innerText);
+                                    addressSelectionBtnList[2].classList.remove("active");
+                                    selectionsBoxList[2].classList.remove("active");
+                                });
+                            });
+                        }
+                    } catch (error) {
+                        console.log(error);
+                    }
+                };
+                // handleDisplayWardSelectionsBox();
+
+                const handleAddressSelectionButtonClick = () => {
+                    handleDisplayProvinceSelectionBox();
+                    handleDisplayDistrictSelectionsBox();
+                    handleDisplayWardSelectionsBox();
+
+                    addressSelectionBtnList.each((index) => {
+                        addressSelectionBtnList[index].addEventListener("click", () => {
+                            if (addressSelectionBtnList[index].classList.contains("province-select")) {
+                                activeSelectionEl(index);
+                                handleDisplayProvinceSelectionBox();
+                            } else if (
+                                addressSelectionBtnList[index].classList.contains("district-select") &&
+                                provinceCode
+                            ) {
+                                activeSelectionEl(index);
+                                handleDisplayDistrictSelectionsBox();
+                            } else if (
+                                addressSelectionBtnList[index].classList.contains("ward-select") &&
+                                districtCode
+                            ) {
+                                activeSelectionEl(index);
+                                handleDisplayWardSelectionsBox();
+                            }
+                        });
+                    });
+                };
+                handleAddressSelectionButtonClick();
+            };
+            fetchApiLocationOptions();
+
+            const clearInput = () => {
+                nameInputEl.val("");
+                phoneInputEl.val("");
+                detailAddressInput.val("");
+                provinceBtnContent.text("Tỉnh/Thành phố");
+                districtBtnContent.text("Quận/Huyện");
+                wardBtnContent.text("Xã/Phường");
+                provinceCode = districtCode = wardCode = undefined;
+                nameInputAlert.text("");
+                nameInputAlert.parent().removeClass("invalid");
+                phoneInputAlert.text("");
+                phoneInputAlert.parent().removeClass("invalid");
+                addressSelectAlertList[0].innerText = "";
+                addressSelectionBtnList[0].classList.remove("invalid");
+                addressSelectAlertList[1].innerText = "";
+                addressSelectionBtnList[1].classList.remove("invalid");
+                addressSelectAlertList[2].innerText = "";
+                addressSelectionBtnList[2].classList.remove("invalid");
+                detailAddressInput.parent().removeClass("invalid");
+                detailAddressInputAlert.text("");
+                defaultAddressCheckBox.prop("checked", false);
+            };
+
+            const addressFormModalValidator = () => {
+                const regexName = /[A-Za-z]+(?: [A-Za-z'-]+)*/;
+                const regexPhone = /^0\d{9,}$/;
+                const regexSpecialCharacters = /.*[!@#$%^&*()_+={}\[\]:;"'<>,.?/\\|~-].*/;
+
+                const isValidName = () => {
+                    nameInputEl.on("change", () => {
+                        if (nameInputEl.val() === "") {
+                            nameInputAlert.text("Họ và Tên không được để trống");
+                            nameInputAlert.parent().addClass("invalid");
+                        } else if (regexSpecialCharacters.test(nameInputEl.val())) {
+                            nameInputAlert.text("Họ và Tên không được để trống");
+                            nameInputAlert.parent().addClass("invalid");
+                        } else {
+                            nameInputAlert.text("");
+                            nameInputAlert.parent().removeClass("invalid");
+                        }
+                    });
+
+                    nameInputEl.on("input", () => {
+                        nameInputAlert.text("");
+                        nameInputAlert.parent().removeClass("invalid");
+                    });
+
+                    if (nameInputEl.val() === "") {
+                        nameInputAlert.text("Họ và Tên không được để trống");
+                        nameInputAlert.parent().addClass("invalid");
+                        return false;
+                    } else if (regexSpecialCharacters.test(nameInputEl.val())) {
+                        nameInputAlert.text("Họ và Tên không được để trống");
+                        nameInputAlert.parent().addClass("invalid");
+                        return false;
+                    } else {
+                        nameInputAlert.text("");
+                        nameInputAlert.parent().removeClass("invalid");
+                        return true;
+                    }
+                };
+
+                isValidName();
+
+                const isValidPhone = () => {
+                    phoneInputEl.on("change", () => {
+                        if (phoneInputEl.val() === "") {
+                            phoneInputAlert.text("Số điện thoại không được để trống");
+                            phoneInputAlert.parent().addClass("invalid");
+                        } else if (!regexPhone.test(phoneInputEl.val())) {
+                            phoneInputAlert.text("Số điện thoại không hợp lệ");
+                            phoneInputAlert.parent().addClass("invalid");
+                        } else {
+                            phoneInputAlert.text("");
+                            phoneInputAlert.parent().removeClass("invalid");
+                        }
+                    });
+
+                    phoneInputEl.on("input", () => {
+                        phoneInputAlert.text("");
+                        phoneInputAlert.parent().removeClass("invalid");
+                    });
+
+                    if (phoneInputEl.val() === "") {
+                        phoneInputAlert.text("Số điện thoại không được để trống");
+                        phoneInputAlert.parent().addClass("invalid");
+                        return false;
+                    } else if (!regexPhone.test(phoneInputEl.val())) {
+                        phoneInputAlert.text("Số điện thoại không hợp lệ");
+                        phoneInputAlert.parent().addClass("invalid");
+                        return false;
+                    } else {
+                        phoneInputAlert.text("");
+                        phoneInputAlert.parent().removeClass("invalid");
+                        return true;
+                    }
+                };
+                isValidPhone();
+
+                const isValidAddress = () => {
+                    if (!provinceCode) {
+                        addressSelectAlertList[0].innerText = "Không được bỏ trống";
+                        addressSelectionBtnList[0].classList.add("invalid");
+                    } else {
+                        addressSelectAlertList[0].innerText = "";
+                        addressSelectionBtnList[0].classList.remove("invalid");
+                    }
+                    if (!districtCode) {
+                        addressSelectAlertList[1].innerText = "Không được bỏ trống";
+                        addressSelectionBtnList[1].classList.add("invalid");
+                    } else {
+                        addressSelectAlertList[1].innerText = "";
+                        addressSelectionBtnList[1].classList.remove("invalid");
+                    }
+                    if (!wardCode) {
+                        addressSelectAlertList[2].innerText = "Không được bỏ trống";
+                        addressSelectionBtnList[2].classList.add("invalid");
+                    } else {
+                        addressSelectAlertList[2].innerText = "";
+                        addressSelectionBtnList[2].classList.remove("invalid");
+                    }
+                    if (provinceCode && districtCode && wardCode) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                };
+                isValidAddress();
+
+                const isValidDetailAddress = () => {
+                    detailAddressInput.on("change", () => {
+                        if (detailAddressInput.val().length < 5) {
+                            detailAddressInput.parent().addClass("invalid");
+                            detailAddressInputAlert.text("Địa chỉ quá ngắn. Địa chỉ phải từ 5 ký tự trở lên");
+                        } else {
+                            detailAddressInput.parent().removeClass("invalid");
+                            detailAddressInputAlert.text("");
+                        }
+                    });
+
+                    detailAddressInput.on("input", () => {
+                        detailAddressInput.parent().removeClass("invalid");
+                        detailAddressInputAlert.text("");
+                    });
+
+                    if (detailAddressInput.val().length < 5) {
+                        detailAddressInput.parent().addClass("invalid");
+                        detailAddressInputAlert.text("Địa chỉ quá ngắn. Địa chỉ phải từ 5 ký tự trở lên");
+                        return false;
+                    } else {
+                        detailAddressInput.parent().removeClass("invalid");
+                        detailAddressInputAlert.text("");
+                        return true;
+                    }
+                };
+                isValidDetailAddress();
+
+                const isDefaultAddress = () => {
+                    const setDefaultRadioInput = $(".modal-select-address .modal-body .set-default-address-btn input");
+                    const addressArr = currentAccount?.addresses || [];
+                    addressArr.forEach((address, index) => {
+                        if (setDefaultRadioInput.prop("checked")) {
+                            addressArr[index].isDefault = false;
+                        }
+                    });
+                    return currentAccount?.addresses ? setDefaultRadioInput.prop("checked") : true;
+                };
+                isDefaultAddress();
+
+                if (isValidAddress() && isValidDetailAddress() && isValidName() && isValidPhone()) {
+                    addressObject = {
+                        addressId: (currentAccount.addresses?.length || 0) + 1,
+                        name: nameInputEl.val(),
+                        phone: phoneInputEl.val(),
+                        isDefault: isDefaultAddress(),
+                        location: {
+                            province: provinceBtnContent.text(),
+                            district: districtBtnContent.text(),
+                            ward: wardBtnContent.text(),
+                            provinceCode: provinceCode,
+                            districtCode: districtCode,
+                            wardCode: wardCode,
+                        },
+                        detailAddressDesc: detailAddressInput.val(),
+                    };
+                    return true;
+                } else {
+                    return false;
+                }
+            };
+
+            const handleConfirmAddressModalBtnClick = (updateId) => {
+                const addressFormModal = $(".input-address-form");
+                const confirmBtn = inputAddressForm.hasClass("add-address-form")
+                    ? $(".modal-select-address .add-address-form .address-form-btn-group .confirm-form-btn")
+                    : $(".modal-select-address .update-address-form .address-form-btn-group .confirm-form-btn");
+
+                confirmBtn.on("click", () => {
+                    if (addressFormModalValidator()) {
+                        if (addressFormModal.hasClass("add-address-form")) {
+                            if (!currentAccount.addresses) {
+                                currentAccount.addresses = [];
+                                currentAccount.addresses.push(addressObject);
+                                // refresh address id
+                                currentAccount?.addresses.forEach((address, i) => {
+                                    currentAccount.addresses[i].addressId = i + 1;
+                                });
+                            } else {
+                                currentAccount.addresses.push(addressObject);
+                            }
+                        } else if (addressFormModal.hasClass("update-address-form")) {
+                            let updateAddress = currentAccount.addresses.find(
+                                (address) => address.addressId === updateId,
+                            );
+
+                            updateAddress = {
+                                ...updateAddress,
+                                name: nameInputEl.val(),
+                                phone: phoneInputEl.val(),
+                                isDefault: defaultAddressCheckBox.prop("checked"),
+                                location: {
+                                    province: provinceBtnContent.text(),
+                                    district: districtBtnContent.text(),
+                                    ward: wardBtnContent.text(),
+                                    provinceCode: provinceCode,
+                                    districtCode: districtCode,
+                                    wardCode: wardCode,
+                                },
+                                detailAddressDesc: detailAddressInput.val(),
+                            };
+                            const updateIndex = currentAccount.addresses.findIndex(
+                                (address) => address.addressId === updateAddress.addressId,
+                            );
+                            currentAccount.addresses[updateIndex] = {
+                                ...updateAddress,
+                            };
+                            updateLocalStorage();
+                        }
+                        updateLocalStorage();
+                        renderAddressList();
+                        handleChangeAddress();
+                        clearInput();
+                        // location.reload();
+                        inputAddressForm.css("display", "none");
+                        selectAddressForm.css("display", "block");
+                    }
+                });
+            };
+
+            // handle update address button click
+            const handleUpdateAddressBtnClick = () => {
+                const updateAddressBtnList = $(
+                    ".modal-select-address .modal-body .address-list .item .update-address-btn",
+                );
+                const backBtn = $(".modal-select-address .input-address-form .address-form-btn-group .back-modal-btn");
+
+                updateAddressBtnList.each((index) => {
+                    updateAddressBtnList[index].addEventListener("click", (e) => {
+                        modalTitle.text("Cập nhật địa chỉ");
+
+                        if (!inputAddressForm.hasClass("update-address-form")) {
+                            inputAddressForm.addClass("update-address-form");
+                        }
+
+                        const address = currentAccount.addresses.find(
+                            (address) => address.addressId === parseInt(e.target.getAttribute("data-address-id")),
+                        );
+
+                        if (address) {
+                            nameInputEl.val(`${address.name}`);
+                            phoneInputEl.val(`${address.phone}`);
+                            detailAddressInput.val(`${address.detailAddressDesc}`);
+                            provinceBtnContent.text(`${address.location.province}`);
+                            districtBtnContent.text(`${address.location.district}`);
+                            wardBtnContent.text(`${address.location.ward}`);
+                            provinceCode = address.location.provinceCode;
+                            districtCode = address.location.districtCode;
+                            wardCode = address.location.wardCode;
+                            if (address.isDefault) {
+                                defaultAddressCheckBox.prop("checked", true);
+                            }
+                        }
+
+                        handleConfirmAddressModalBtnClick(parseInt(e.target.getAttribute("data-address-id")));
+
+                        inputAddressForm.css("display", "block");
+                        selectAddressForm.css("display", "none");
+                    });
+                });
+
+                backBtn.on("click", () => {
+                    inputAddressForm.css("display", "none");
+                    selectAddressForm.css("display", "block");
+                    modalTitle.text("Địa chỉ của tôi");
+                    inputAddressForm.removeClass("update-address-form");
+                });
+            };
+            handleUpdateAddressBtnClick();
+
+            // const handle add new address button click
+            const handleAddNewAddressBtnClick = () => {
+                const addAddressBtn = $(".modal-select-address .modal-body .add-address-btn");
+                const backBtn = $(".modal-select-address .input-address-form .address-form-btn-group .back-modal-btn");
+
+                addAddressBtn.on("click", () => {
+                    modalTitle.text("Địa chỉ mới");
+                    inputAddressForm.css("display", "block");
+                    selectAddressForm.css("display", "none");
+                    if (!inputAddressForm.hasClass("add-address-form")) {
+                        inputAddressForm.addClass("add-address-form");
+                    }
+                    handleConfirmAddressModalBtnClick();
+                });
+
+                backBtn.on("click", () => {
+                    inputAddressForm.css("display", "none");
+                    selectAddressForm.css("display", "block");
+                    modalTitle.text("Địa chỉ của tôi");
+                    inputAddressForm.removeClass("add-address-form");
+                    clearInput();
+                });
+            };
+            handleAddNewAddressBtnClick();
+        });
+    };
+    handleChangeAddressBtnClick();
+
     // render summary order products
     const displayOrderSummary = () => {
         const priceEl = $(
@@ -1352,6 +2101,10 @@ const handlePayOrderProducts = () => {
         const paidButton = $(".order-product-confirm .paid-button");
 
         paidButton.on("click", () => {
+            orderProducts = cartProducts.filter((product) => product.checked === true);
+            cartProducts = [];
+            updateLocalStorage();
+
             setTimeout(() => {
                 window.location.href = "./purchase.html";
             }, 1000);
@@ -1414,7 +2167,9 @@ const handlePayOrderProducts = () => {
                 }
             });
 
-            if (!hasPaymentMethod) {
+            if (!currentAccount.addresses) {
+                showToasts(`Chưa thêm địa chỉ!`);
+            } else if (!hasPaymentMethod) {
                 showToasts(`Chưa chọn phương thức thanh toán!`);
             } else {
                 if (!paymentMethodElList[0].classList.contains("selected")) {
@@ -1423,6 +2178,9 @@ const handlePayOrderProducts = () => {
                     handlePay();
                 } else {
                     setTimeout(() => {
+                        orderProducts = cartProducts.filter((product) => product.checked === true);
+                        cartProducts = [];
+                        updateLocalStorage();
                         window.location.href = "./purchase.html";
                     }, 1000);
                 }
@@ -2441,7 +3199,7 @@ const profilePage = () => {
                     updateLocalStorage();
                     displayAddressList();
                     clearInput();
-                    location.reload();
+                    // location.reload();
                     addressModal.hide();
                 }
             });
@@ -2685,10 +3443,14 @@ const searchPage = () => {
     const searchInput = $(".navbar--item__search-box input");
     const mainTitleContent = $(".main .heading .heading__title span");
     const searchParams = new URLSearchParams(window.location.search);
-    const searchValue = searchParams.get("keyword");
+    const searchValue = searchParams.get("keyword").toLocaleLowerCase().trim().replace(/\s+/g, " ");
     searchInput.val(searchValue);
     mainTitleContent.text(searchValue);
     document.title = `Kết quả tìm kiếm cho "${searchValue}"`;
+
+    const getProductWithType = (productType) => {
+        return products.filter((product) => product.type === productType);
+    };
 
     const handleRenderSearchProducts = () => {
         const productList = $(".main .content .row");
@@ -2697,16 +3459,178 @@ const searchPage = () => {
         if (searchValue === "thiệp") {
             handleRenderAllProductPage(shuffleArray(products));
         } else if (searchValue === "thiệp giáng sinh") {
-
+            handleRenderAllProductPage(getProductWithType("christmas"));
+        } else if (searchValue === "thiệp sinh nhật") {
+            handleRenderAllProductPage(getProductWithType("birthday"));
+        } else if (searchValue === "thiệp đám cưới") {
+            handleRenderAllProductPage(getProductWithType("wedding"));
+        } else if (searchValue === "thiệp valentine") {
+            handleRenderAllProductPage(getProductWithType("valentine"));
+        } else if (searchValue === "thiệp cảm ơn") {
+            handleRenderAllProductPage(getProductWithType("thanks"));
+        } else if (searchValue === "thiệp ngày nhà giáo việt nam") {
+            handleRenderAllProductPage(getProductWithType("teacherday"));
+        } else if (searchValue === "thiệp tết") {
+            handleRenderAllProductPage(getProductWithType("newyear"));
+        } else {
+            handleRenderAllProductPage([]);
         }
     };
     handleRenderSearchProducts();
+};
+
+const purchasePage = () => {
+    const categoryItemElList = $(".main .category .category-item");
+    const productListEl = $(".main .content .product-list");
+    const emptyOrderEl = $(".main .content .empty-order");
+    const productList = $(".main .content .product-list");
+
+    const handleCategoryItemClick = () => {
+        categoryItemElList.each((index) => {
+            categoryItemElList[index].addEventListener("click", (e) => {
+                categoryItemElList.each((i) => {
+                    categoryItemElList[i].classList.remove("active");
+                });
+                e.target.classList.add("active");
+
+                if (index === 0 || index === 1) {
+                    emptyOrderEl.css("display", "none");
+                    productList.css("display", "flex");
+                } else {
+                    emptyOrderEl.css("display", "flex");
+                    productList.css("display", "none");
+                }
+            });
+        });
+    };
+    handleCategoryItemClick();
+
+    const renderOrderProductList = () => {
+        productListEl.html("");
+
+        orderProducts &&
+            orderProducts.forEach((product) => {
+                productListEl.append(`
+                <li class="product-item">
+                    <div class="product-item__content">
+                        <div class="product-item__image">
+                            <img src="../assets/images/products/product-${product.id}.jpg" alt="product image" />
+                        </div>
+                        <div
+                            style="
+                                flex: 1;
+                                height: 78px;
+                                display: flex;
+                                flex-direction: column;
+                                align-items: flex-start;
+                                justify-content: space-around;
+                            "
+                        >
+                            <div class="product-item__name">
+                                <a href="../html/detail-product.html?id=${product.id}">
+                                    ${product.name}
+                                </a>
+                            </div>
+                            <div class="product-item__id">Mã: <span>${product.id}</span></div>
+                            <div class="product-item__quantity">
+                                <i class="fa-solid fa-xmark"></i> <span>${product.quantity}</span>
+                            </div>
+                        </div>
+                        <div class="product-item__price"><span>₫${product.price}</span></div>
+                    </div>
+                    <div class="checkout-price">Thành tiền: <span>₫${(
+                        parseFloat(product.price) * product.quantity
+                    ).toFixed(3)}</span></div>
+                    <div class="product-item__action">
+                        <div class="order-product-status">Chờ xác nhận</div>
+                        <button type="button" class="cancel-product-btn" data-product-id="${
+                            product.id
+                        }">Hủy đơn</button>
+                    </div>
+                </li>
+            `);
+            });
+    };
+    renderOrderProductList();
+
+    const handleEmptyOrder = () => {
+        if (orderProducts.length === 0) {
+            emptyOrderEl.css("display", "flex");
+            productList.css("display", "none");
+        } else {
+            emptyOrderEl.css("display", "none");
+            productList.css("display", "flex");
+        }
+    };
+    handleEmptyOrder();
+
+    const handleCancelOrderBtnClick = () => {
+        const cancelOrderModal = new bootstrap.Modal("#orderCancelModal");
+        const backModalBtn = $(".modal-confirm.order-cancel-modal .modal-content .button-group .back-btn");
+        const confirmCancelOrderBtn = $(
+            ".modal-confirm.order-cancel-modal .modal-content .button-group .confirm-cancel-order-btn",
+        );
+        const cancelOrderReasonList = $(
+            ".modal-confirm.order-cancel-modal .modal-content .cancel-reason-list .reason-item input[type='radio']",
+        );
+
+        const resetCancelReasonList = () => {
+            cancelOrderReasonList.each((index) => {
+                cancelOrderReasonList[index].checked = false;
+            });
+        };
+
+        cancelOrderReasonList.each((index) => {
+            cancelOrderReasonList[index].addEventListener("change", () => {
+                confirmCancelOrderBtn.addClass("valid");
+            });
+        });
+
+        const handleCancelOrderBtnClick = () => {
+            const cancelBtnList = $(
+                ".main .content .product-list .product-item .product-item__action .cancel-product-btn",
+            );
+            cancelBtnList.each((index) => {
+                cancelBtnList[index].addEventListener("click", (e) => {
+                    cancelOrderModal.show();
+                    confirmCancelOrderBtn.attr("data-product-id", `${e.target.getAttribute("data-product-id")}`);
+                });
+            });
+        };
+        handleCancelOrderBtnClick();
+
+        // confirm button click
+        confirmCancelOrderBtn.on("click", (e) => {
+            if (e.target.classList.contains("valid")) {
+                orderProducts.forEach((product, index) => {
+                    if (e.target.getAttribute("data-product-id") === product.id) {
+                        orderProducts.splice(index, 1);
+                        renderOrderProductList();
+                        handleCancelOrderBtnClick();
+                        resetCancelReasonList();
+                        updateLocalStorage();
+                        handleEmptyOrder();
+                        cancelOrderModal.hide();
+                    }
+                });
+            }
+        });
+
+        // back button click
+        backModalBtn.on("click", (e) => {
+            resetCancelReasonList();
+            confirmCancelOrderBtn.removeClass("valid");
+            cancelOrderModal.hide();
+        });
+    };
+    handleCancelOrderBtnClick();
 };
 
 const handleReloadPage = () => {
     cartItemQuantity = JSON.parse(localStorage.getItem("cartItemQuantity")) || 0;
     cartProducts = JSON.parse(localStorage.getItem("cartProducts")) || [];
     registerAccounts = JSON.parse(localStorage.getItem("registerAccounts")) || [];
+    orderProducts = JSON.parse(localStorage.getItem("orderProducts")) || [];
     const spinnerLoading = $(".loading.spinner");
 
     window.addEventListener("beforeunload", () => {
@@ -2725,6 +3649,8 @@ const handleReloadPage = () => {
     handleRenderDetailProduct();
     handleRenderSuggestProducts();
     handleRenderCartProducts();
+    handleEvents();
+    handleSearchProduct();
 
     handleDeleteSelectedProducts();
     if (currentPageURL.includes("cart.html")) {
@@ -2742,10 +3668,13 @@ const handleReloadPage = () => {
     }
     if (currentPageURL.includes("search.html")) {
         searchPage();
+        handleEventAllProductPage();
+    }
+    if (currentPageURL.includes("purchase.html")) {
+        purchasePage();
     }
 };
 
 $(document).ready(() => {
     handleReloadPage();
-    handleEvents();
 });

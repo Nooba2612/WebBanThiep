@@ -34,11 +34,7 @@
                 <div class="address">
                     <div class="address__title"><i class="fa-regular fa-location-dot"></i>Địa chỉ giao hàng</div>
                     <div class="address__content">
-                        <span class="address__content--name">Đặng Phúc Nguyên (+84) 0328906284</span>
-                        <span class="address__content--location"
-                            >89/29, Đường Số 59, Phường 14, Quận Gò Vấp, TP. Hồ Chí Minh</span
-                        >
-                        <button class="address__content--change-address-btn">Thay đổi</button>
+                        <!-- address content -->
                     </div>
                 </div>
 
@@ -319,6 +315,98 @@
                                     Đã thanh toán
                                 </button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-select-address">
+            <div
+                class="modal fade selectAddressModal"
+                id="selectAddressModal"
+                data-bs-keyboard="false"
+                data-bs-backdrop="static"
+                tabindex="-1"
+                aria-labelledby="modalLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">Địa chỉ của tôi</div>
+                        <div class="modal-body">
+                            <div class="select-address-form">
+                                <ul class="address-list"></ul>
+                                <div class="w-100 text-center">
+                                    <button class="add-address-btn">
+                                        <i class="fa-solid fa-plus-large"></i> <span>Thêm địa chỉ</span>
+                                    </button>
+                                </div>
+                                <div class="select-address-btn-group">
+                                    <button type="button" class="exit-modal-btn" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="button" class="confirm-select-btn" data-bs-dismiss="modal">
+                                        Xác nhận
+                                    </button>
+                                </div>
+                            </div>
+
+                            <form class="input-address-form">
+                                <div class="input-group d-flex align-items-center justify-content-between">
+                                    <div class="name-input input">
+                                        <input type="text" name="username" id="username" placeholder="Họ và tên" />
+                                        <div class="alert-message"></div>
+                                    </div>
+                                    <div class="phone-input input">
+                                        <input type="text" name="phone" id="phone" placeholder="Số điện thoại" />
+                                        <div class="alert-message"></div>
+                                    </div>
+                                </div>
+                                <div class="address-select-group d-flex align-items-center justify-content-between">
+                                    <div class="province-select select">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>Tỉnh/Thành phố</span><i class="fa-solid fa-caret-down"></i>
+                                        </div>
+                                        <div class="alert-message"></div>
+                                    </div>
+                                    <div class="district-select select">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>Quận/Huyện</span><i class="fa-solid fa-caret-down"></i>
+                                        </div>
+                                        <div class="alert-message"></div>
+                                    </div>
+                                    <div class="ward-select select">
+                                        <div class="d-flex align-items-center justify-content-between">
+                                            <span>Xã/Phường</span><i class="fa-solid fa-caret-down"></i>
+                                        </div>
+                                        <div class="alert-message"></div>
+                                    </div>
+                                    <ul class="option-box province-option-box">
+                                        <!-- province selections -->
+                                    </ul>
+                                    <ul class="option-box district-option-box">
+                                        <!-- district selections -->
+                                    </ul>
+                                    <ul class="option-box ward-option-box">
+                                        <!-- ward selections -->
+                                    </ul>
+                                </div>
+                                <div class="address-description">
+                                    <textarea
+                                        name="addressDescription"
+                                        id="addressDescription"
+                                        placeholder="Địa chỉ cụ thể"
+                                    ></textarea>
+                                    <div class="alert-message"></div>
+                                </div>
+                                <div class="set-default-address-btn d-flex align-items-center">
+                                    <input type="checkbox" name="isDefaultAddress" id="isDefaultAddress" />
+                                    <span class="ms-2">Đặt làm địa chỉ mặc định</span>
+                                </div>
+                                <div class="address-form-btn-group">
+                                    <button type="button" class="modal-btn back-modal-btn">Trở lại</button>
+                                    <button type="button" class="modal-btn confirm-form-btn">Xác nhận</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>

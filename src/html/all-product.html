@@ -29,9 +29,9 @@
                         </a>
                     </div>
 
-                    <form class="search-form" action="" method="get">
+                    <form class="search-form" action="./search.html" method="get">
                         <div class="navbar--item__search-box">
-                            <input type="text" name="search-box" placeholder="Nhập nội dung tìm kiếm" id="search-box" />
+                            <input type="text" name="keyword" placeholder="Nhập nội dung tìm kiếm" id="search-box" />
                             <div class="clear-input-btn">
                                 <i class="fa-solid fa-circle-xmark"></i>
                             </div>
@@ -103,13 +103,13 @@
                         </ul>
                     </li>
 
-                    <li class="menu--item menu--item__offers"><a href="">Ưu đãi</a></li>
-                    <li class="menu--item menu--item__news"><a href="">Tin tức</a></li>
+                    <li class="menu--item menu--item__offers"><a href="#">Ưu đãi</a></li>
+                    <li class="menu--item menu--item__news"><a href="#">Tin tức</a></li>
                     <li class="menu--item menu--item__contact">
                         <a href="">Liên hệ<i class="fa-duotone fa-chevron-down"></i></a>
                         <ul class="sub-menu">
-                            <li class="sub-menu--item"><a href="">Về chúng tôi</a></li>
-                            <li class="sub-menu--item"><a href="">Sitemap</a></li>
+                            <li class="sub-menu--item"><a href="./about-us.html">Về chúng tôi</a></li>
+                            <li class="sub-menu--item"><a href="./sitemap.html">Sitemap</a></li>
                         </ul>
                     </li>
                 </ul>
@@ -225,6 +225,36 @@
                         </button>
                         <div class="product-info">
                             <!-- Product info -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-confirm delete-product-confirm">
+            <div
+                class="confirmDeleteProductModal modal fade"
+                id="confirmDeleteProductModal"
+                data-bs-backdrop="static"
+                data-bs-keyboard="false"
+                tabindex="-1"
+                aria-labelledby="staticBackdropLabel"
+                aria-hidden="true"
+            >
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Xác nhận xóa sản phẩm</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">Bạn có đồng ý loại bỏ sản phẩm này khỏi đơn hàng?</div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-dark dismiss-button" data-bs-dismiss="modal">
+                                Hủy
+                            </button>
+                            <button type="button" class="btn btn-danger accept-button" data-bs-dismiss="modal">
+                                Đồng ý
+                            </button>
                         </div>
                     </div>
                 </div>

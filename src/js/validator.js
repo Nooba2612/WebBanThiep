@@ -271,7 +271,6 @@ const containsUppercase = (str) => /[A-Z]/.test(str);
 const containsLowercase = (str) => /[a-z]/.test(str);
 
 const handleShowPassword = () => {
-    F;
     const hideLoginPasswordButton = $(".login-form .input .hide-password-btn");
     const showLoginPasswordButton = $(".login-form .input .show-password-btn");
     const hideRegisterPasswordButton = $(".register-form .input .hide-password-btn");

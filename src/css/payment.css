@@ -307,3 +307,319 @@ main.main {
 .order-product-confirm .paid-button:hover button {
     opacity: 0.7;
 }
+
+.modal-select-address .modal-dialog {
+    max-width: 700px;
+}
+
+.modal-select-address .modal-content {
+    border-radius: 3px;
+}
+
+.modal-select-address .modal-header {
+    font-size: 1.3rem;
+}
+
+.modal-select-address .modal-body .address-list {
+    max-height: 480px;
+    min-height: 480px;
+    width: 100%;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-select-address .modal-body .address-list .item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    min-height: 90px;
+    border-bottom: 1px solid var(--primaryColor);
+    margin-bottom: 30px;
+}
+
+.modal-select-address .modal-body .address-list .item:last-child {
+    border-bottom: none;
+}
+
+.modal-select-address .modal-body .address-list .item .address-content {
+    flex: 1;
+    padding: 0 30px 20px;
+}
+
+.modal-select-address .modal-body .address-list .item .address-content .name {
+    margin-right: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    border-right: 2px solid var(--primaryColor);
+    font-size: 1.2rem;
+}
+
+.modal-select-address .modal-body .address-list .item .address-content .name,
+.modal-select-address .modal-body .address-list .item .address-content .address {
+    font-size: 1.2rem;
+    color: var(--primaryColor);
+}
+
+.modal-select-address .modal-body .address-list .item .address-content .address {
+    font-size: 1rem;
+    max-width: 100%;
+    font-weight: 600;
+    text-wrap: balance;
+    text-overflow: ellipsis;
+}
+
+.modal-select-address .modal-body .address-list .item.default-address .address-content .default-tag {
+    margin-top: 20px;
+    border: 2px solid var(--activeColor);
+    width: 100px;
+    text-align: center;
+    padding: 5px 10px;
+    color: var(--activeColor);
+    border-radius: 3px;
+}
+
+.modal-select-address .modal-body .address-list .item .address-option {
+    margin-top: 5px;
+}
+
+.modal-select-address .modal-body .address-list .item .update-address-btn {
+    color: #1086c5;
+}
+
+.modal-select-address .modal-body .add-address-btn {
+    padding: 10px 20px;
+    border: 2px solid var(--activeColor);
+    border-radius: 3px;
+    color: var(--activeColor);
+    transition: all 0.3s;
+    margin: 10px auto 0;
+}
+
+.modal-select-address .modal-body .add-address-btn:hover {
+    background-color: rgb(226, 226, 226);
+}
+
+.modal-select-address .select-address-form .select-address-btn-group {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid rgb(217, 217, 217);
+}
+
+.modal-select-address .select-address-form .select-address-btn-group .exit-modal-btn,
+.modal-select-address .select-address-form .select-address-btn-group .confirm-select-btn {
+    border: 2px solid;
+    padding: 10px 20px;
+    border-radius: 3px;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.modal-select-address .select-address-form .select-address-btn-group .exit-modal-btn {
+    border-color: var(--alertColor);
+    color: var(--alertColor);
+    margin-right: 20px;
+}
+
+.modal-select-address .select-address-form .select-address-btn-group .exit-modal-btn:hover {
+    background-color: rgb(244, 244, 244);
+}
+
+.modal-select-address .select-address-form .select-address-btn-group .confirm-select-btn {
+    border-color: var(--blackColor);
+    background-color: var(--blackColor);
+    color: var(--whiteColor);
+}
+
+.modal-select-address .select-address-form .select-address-btn-group .confirm-select-btn:hover {
+    opacity: 0.7;
+}
+
+.modal-select-address .modal-body .input-address-form {
+    display: none;
+}
+
+.modal-select-address .modal-body .input-address-form .input-group .input {
+    border: 3px solid var(--primaryColor);
+    position: relative;
+    flex: 1;
+    max-width: 320px;
+    padding: 10px 20px;
+    margin-bottom: 35px;
+    font-size: 0.9rem;
+    border-radius: 3px !important;
+    font-weight: 500;
+    transition: all 0.3s;
+}
+
+.modal-select-address .modal-body .input-address-form .input-group .input.invalid {
+    border-color: var(--alertColor);
+    box-shadow: 0px 0px 5px 2px var(--alertColor);
+}
+
+.modal-select-address .modal-body .input-address-form .input-group .input .alert-message {
+    position: absolute;
+    width: 100%;
+    top: 47px;
+    left: 0;
+    text-align: start;
+    color: var(--alertColor);
+}
+
+.modal-select-address .modal-body .input-address-form .input-group .input.active {
+    border-color: var(--activeColor);
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group,
+.modal-select-address .modal-body .address-description {
+    margin-bottom: 50px;
+    font-size: 0.9rem;
+    border: 1px solid var(--primaryColor);
+    position: relative;
+    transition: all 0.3s;
+}
+
+.modal-select-address .modal-body .address-description.invalid {
+    border-color: var(--alertColor);
+    box-shadow: 0px 0px 7px 3px var(--alertColor);
+}
+.modal-select-address .modal-body .address-description .alert-message {
+    position: absolute;
+    bottom: -25px;
+    font-weight: 500;
+    color: var(--alertColor);
+    width: 100%;
+    text-align: start;
+    left: 0;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group {
+    position: relative;
+    margin-bottom: 35px;
+    border: none;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .select.invalid {
+    border-color: var(--alertColor);
+    box-shadow: 0px 0px 5px 2px var(--alertColor);
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .select .alert-message {
+    position: absolute;
+    top: 55px;
+    font-weight: 500;
+    color: var(--alertColor);
+    width: 100%;
+    text-align: start;
+    left: 0;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group::before {
+    content: "";
+    position: absolute;
+    right: 0;
+    width: 100%;
+    background-color: transparent;
+    height: 5px;
+    top: 49px;
+    cursor: pointer;
+    z-index: 99;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .select {
+    border: 3px solid var(--primaryColor);
+    flex: 1;
+    max-width: 210px;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: 500;
+    transition: all 0.3s;
+    position: relative;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .select.active {
+    color: var(--activeColor);
+    border-color: var(--activeColor);
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .district-select,
+.modal-select-address .modal-body .input-address-form .address-select-group .ward-select {
+    cursor: no-drop;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .option-box {
+    position: absolute;
+    border: 2px solid var(--primaryColor);
+    width: 100%;
+    left: 0;
+    top: 54px;
+    background-color: var(--whiteColor);
+    max-height: 160px;
+    overflow-y: auto;
+    z-index: 99;
+    display: none;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .option-box.active {
+    display: block;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .option-box .option {
+    padding: 15px 20px;
+    font-weight: 600;
+    transition: background-color 0.2s;
+    cursor: pointer;
+}
+
+.modal-select-address .modal-body .input-address-form .address-select-group .option-box .option:hover {
+    background-color: rgb(205, 205, 205);
+}
+
+.modal-select-address .modal-body .address-description textarea {
+    width: 100%;
+    resize: none;
+    padding: 10px;
+    height: 100px;
+}
+
+.modal-select-address .input-address-form .modal-btn {
+    border: 1px solid var(--primaryColor);
+    border-radius: 3px;
+    padding: 10px 20px;
+    color: var(--whiteColor);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.modal-select-address .input-address-form .select-address-btn-group .close-modal-btn {
+    background-color: var(--activeColor);
+}
+
+.modal-select-address .input-address-form .select-address-btn-group .confirm-btn {
+    background-color: var(--blackColor);
+}
+
+.modal-select-address .input-address-form .address-form-btn-group {
+    float: right;
+}
+
+.modal-select-address .input-address-form .address-form-btn-group .modal-btn {
+    border: 1px solid var(--primaryColor);
+    border-radius: 3px;
+    padding: 10px 20px;
+    color: var(--whiteColor);
+    transition: all 0.3s;
+    font-weight: 500;
+}
+
+.modal-select-address .input-address-form .address-form-btn-group .back-modal-btn {
+    background-color: var(--activeColor);
+}
+
+.modal-select-address .input-address-form .address-form-btn-group .confirm-form-btn {
+    background-color: var(--blackColor);
+}

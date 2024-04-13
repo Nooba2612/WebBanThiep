@@ -1,0 +1,42 @@
+body {
+    background: linear-gradient(90deg, rgba(238, 174, 202, 1) 0%, rgba(148, 187, 233, 1) 100%);
+    padding: 50px;
+}
+
+.wrapper {
+    width: 90%;
+    margin: auto;
+    background-color: var(--whiteColor);
+    padding: 20px 50px 50px;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    font-weight: bold;
+    background: -webkit-linear-gradient(#bafaf2, #35f39d);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.link-list .item {
+    transition: all 0.3s linear;
+    border-radius: 4px;
+    background: white;
+}
+
+.link-list .item:hover {
+    background: linear-gradient(90deg, rgba(164, 119, 227, 1) 0%, rgba(148, 233, 233, 1) 100%);
+}
+
+.link-list .item:hover a {
+    color: var(--whiteColor);
+}
+
+.link-list .item a {
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.2s;
+}
+
