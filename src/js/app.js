@@ -883,6 +883,9 @@ const handleSearchProduct = () => {
     const clearInputBtn = $(".navbar--item__search-box .clear-input-btn");
     const searchBtn = $(".navbar--item__search-box .submit-button");
     const searchInput = $(".navbar--item__search-box input");
+    const suggestSearchBoxEl = $(".navbar--item__search-box .suggest-search-box");
+    const suggestProductListEl = $(".navbar--item__search-box .suggest-search-box .product-list");
+    const moreBtn = $(".navbar--item__search-box .suggest-search-box .more a");
 
     clearInputBtn.on("click", () => {
         searchInput.val("");
@@ -893,6 +896,78 @@ const handleSearchProduct = () => {
             e.preventDefault();
         }
     });
+
+    const renderSuggestProductList = (searchValue) => {
+        suggestProductListEl.html("");
+        if (searchValue !== "") {
+            suggestSearchBoxEl.addClass("appear");
+        } else {
+            suggestSearchBoxEl.removeClass("appear");
+        }
+
+        let hasProduct = false;
+        products.forEach((product) => {
+            if (
+                product.id === searchValue ||
+                product.name.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                product.occasion.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                product.type.toLowerCase().includes(searchValue.trim().toLowerCase())
+            ) {
+                hasProduct = true;
+                suggestProductListEl.append(`
+                    <li class="product-item">
+                        <a href="./detail-product.html?id=${product.id}">
+                            <div class="product-img">
+                                <img src="../assets/images/products/product-${product.id}.jpg" alt="" />
+                            </div>
+                            <div class="product-info">
+                                <div class="name">${product.name}</div>
+                                <div class="occasion">${product.occasion}</div>
+                            </div>
+                        </a>
+                    </li>
+                `);
+                moreBtn.parent().css("display", "block");
+                moreBtn.attr("href", `./search.html?keyword=${product.occasion.toLowerCase().trim()}`);
+            }
+        });
+        if (!hasProduct) {
+            suggestProductListEl.html("");
+            suggestProductListEl.html(`
+                <div style="padding: 10px; font-size: 0.9rem; text-align: center; color: var(--activeColor);">Không có sản phẩm</div>
+            `);
+            moreBtn.parent().css("display", "none");
+        }
+    };
+
+    const handleSearchSuggest = () => {
+        const debouncedSearch = useDebounce((value) => {
+            renderSuggestProductList(value);
+        }, 800);
+
+        searchInput.on("input", (e) => {
+            if (searchInput.val().trim() === "") {
+                suggestSearchBoxEl.removeClass("appear");
+            }
+            debouncedSearch(e.currentTarget.value);
+        });
+    };
+
+    const useDebounce = (callback, delay) => {
+        let timerId;
+
+        return function (...args) {
+            const context = this;
+
+            clearTimeout(timerId);
+
+            timerId = setTimeout(() => {
+                callback.apply(context, args);
+            }, delay);
+        };
+    };
+
+    handleSearchSuggest();
 };
 
 const handleEvents = () => {
@@ -3454,7 +3529,7 @@ const searchPage = () => {
     const searchInput = $(".navbar--item__search-box input");
     const mainTitleContent = $(".main .heading .heading__title span");
     const searchParams = new URLSearchParams(window.location.search);
-    const searchValue = searchParams.get("keyword").toLocaleLowerCase().trim().replace(/\s+/g, " ");
+    const searchValue = searchParams.get("keyword")?.toLowerCase().trim().replace(/\s+/g, " ");
     searchInput.val(searchValue);
     mainTitleContent.text(searchValue);
     document.title = `Kết quả tìm kiếm cho "${searchValue}"`;
@@ -3467,32 +3542,18 @@ const searchPage = () => {
         const productList = $(".main .content .row");
         productList.html("");
 
-        if (searchValue === "thiệp") {
-            handleRenderAllProductPage(shuffleArray(products));
-        } else if (searchValue.includes("giáng sinh")) {
-            handleRenderAllProductPage(getProductWithType("christmas"));
-        } else if (searchValue.includes("sinh nhật")) {
-            handleRenderAllProductPage(getProductWithType("birthday"));
-        } else if (searchValue.includes("đám cưới")) {
-            handleRenderAllProductPage(getProductWithType("wedding"));
-        } else if (searchValue.includes("valentine")) {
-            handleRenderAllProductPage(getProductWithType("valentine"));
-        } else if (searchValue.includes("cảm ơn")) {
-            handleRenderAllProductPage(getProductWithType("thanks"));
-        } else if (searchValue.includes("ngày nhà giáo việt nam")) {
-            handleRenderAllProductPage(getProductWithType("teacherday"));
-        } else if (searchValue.includes("tết")) {
-            handleRenderAllProductPage(getProductWithType("newyear"));
-        } else {
-            handleRenderAllProductPage([]);
-        }
-
-        // handle search product id
+        let productFoundArr = [];
         products.forEach((product) => {
-            if (searchValue.includes(product.id)) {
-                handleRenderAllProductPage([product]);
+            if (
+                product.id === searchValue ||
+                product.name.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                product.occasion.toLowerCase().includes(searchValue.trim().toLowerCase()) ||
+                product.type.toLowerCase().includes(searchValue.trim().toLowerCase())
+            ) {
+                productFoundArr.push(product);
             }
         });
+        handleRenderAllProductPage(productFoundArr);
     };
     handleRenderSearchProducts();
 };

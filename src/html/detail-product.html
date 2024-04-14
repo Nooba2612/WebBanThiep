@@ -31,14 +31,20 @@
 
                     <form class="search-form" action="./search.html" method="get">
                         <div class="navbar--item__search-box">
-                            <input type="text" name="keyword" placeholder="Nhập nội dung tìm kiếm" id="search-box" />
+                            <input
+                                type="text"
+                                name="keyword"
+                                placeholder="Nhập nội dung tìm kiếm"
+                                id="search-box"
+                                autocomplete="off"
+                            />
                             <div class="clear-input-btn">
                                 <i class="fa-solid fa-circle-xmark"></i>
                             </div>
                             <button class="submit-button" type="submit">
                                 <i class="fa-solid fa-magnifying-glass"></i>
                             </button>
-                            <div class="suggest-search--list">
+                            <div class="commitment--list">
                                 <ul>
                                     <li class="suggest-search--item">
                                         <span><i class="fa-solid fa-badge-check"></i>Đảm bảo uy tín</span>
@@ -50,6 +56,13 @@
                                         <span><i class="fa-solid fa-medal"></i>Yên tâm về chất lượng</span>
                                     </li>
                                 </ul>
+                            </div>
+                            <div class="suggest-search-box">
+                                <div class="suggest-search-box__heading">Gợi ý</div>
+                                <ul class="product-list">
+                                    <!-- product-list -->
+                                </ul>
+                                <div class="more"><a href="./search.html">Xem thêm</a></div>
                             </div>
                         </div>
                     </form>
