@@ -938,6 +938,11 @@ const handleSearchProduct = () => {
             `);
             moreBtn.parent().css("display", "none");
         }
+
+        // handle click outside
+        document.addEventListener("click", () => {
+            suggestSearchBoxEl.removeClass("appear");
+        });
     };
 
     const handleSearchSuggest = () => {
