@@ -389,7 +389,7 @@ const handleRenderCartProducts = () => {
 
     $(".navbar--item__cart .items-quantity").text(cartItemQuantity);
 
-    if (currentAccount) {
+    if (currentAccount?.id) {
         $(".navbar--item__cart .products-list .footer .go-to-cart a").attr("href", "./cart.html");
     } else {
         $(".navbar--item__cart .products-list .footer .go-to-cart a").attr("href", "./login.html");
@@ -1102,7 +1102,7 @@ const handleRenderDetailProduct = () => {
     const increaseButton = $(".product-info .product-info__control .product-info__control--increase");
     const decreaseButton = $(".product-info .product-info__control .product-info__control--decrease");
     const addToCartButton = $(".product-info .add-to-cart-btn");
-    const buyButton = $(".product-info .buy-btn");
+    const buyButton = $(".product-info .buy-btn a");
 
     decreaseButton.on("click", () => {
         parseInt(inputValue.val()) > 1 ? inputValue.val(parseInt(inputValue.val()) - 1) : 1;
@@ -1149,6 +1149,7 @@ const handleRenderDetailProduct = () => {
     });
 
     buyButton.on("click", () => {
+        buyButton.attr("href", currentAccount?.id ? "./cart.html" : "./login.html");
         products.forEach((product) => {
             if (productId === product.id) {
                 let isDuplicateProduct = cartProducts.findIndex((product) => product.id === productId);
@@ -1336,7 +1337,7 @@ const handleEventAllProductPage = () => {
             }
         });
 
-        window.location.href = "./cart.html";
+        window.location.href = currentAccount?.id ? "./cart.html" : "./login.html";
     });
 
     // arrange product occasion A-Z
@@ -3096,7 +3097,7 @@ const profilePage = () => {
                 });
 
             if (currentAccount) {
-                currentAccount?.addresses.length !== 0
+                currentAccount?.addresses?.length !== 0
                     ? addressListEl.html(`<div class="heading">Danh sách địa chỉ</div>`)
                     : addressListEl.html(`<div class="heading">Bạn chưa thêm địa chỉ</div>`);
                 defaultAddress &&
